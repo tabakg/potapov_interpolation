@@ -15,6 +15,7 @@ Please see section 6.2 in our manuscript for details: http://arxiv.org/abs/1510.
 
 import numpy as np
 import sympy as sp
+import functions as f
 sp.init_printing()
 r,tau,z,theta = sp.symbols('r tau z theta', complex=True)
 import pprint
@@ -25,7 +26,7 @@ import numpy.linalg as la
 def limit_T(f,z0,N=10,eps=1e-4):
     '''
     Takes possibly matrix-valued function f and its simple pole z0 and returns
-    limit_{z \to val} f(z)(z-z0). Estimates the value based on N surrounding
+    limit_{z \to val} f(z). Estimates the value based on N surrounding
     points at a distance eps.
 
     Args:
@@ -36,7 +37,7 @@ def limit_T(f,z0,N=10,eps=1e-4):
         placed.
 
     Returns:
-         The estimated value of limit_{z \to val} f(z)(z-z0).
+         The estimated value of limit_{z \to val}.
 
     '''
     dim = f(0).shape[0]
@@ -98,7 +99,7 @@ def get_Potapov_vecs(T,poles):
     found_vecs = []
     for pole in poles:
         L = la.inv(Potapov_prod(pole,poles,found_vecs,N))*\
-            limit_T(lambda z: (z-pole)*T(z),pole)
+            f.limit(lambda z: (z-pole)*T(z),pole)
         [eigvals,eigvecs] = la.eig(L)
         index = np.argmax(map(abs,eigvals))
         big_vec = np.asmatrix(eigvecs[:,index])
