@@ -243,7 +243,8 @@ def linspace(c1,c2,num=50):
     y1 = c1.imag
     x2 = c2.real*(num-1.)/num+x1*(1.)/num
     y2 = c2.imag*(num-1.)/num+y1*(1.)/num
-    return [real+imag*1j for real,imag in zip(np.linspace(x1,x2,num=num),np.linspace(y1,y2,num=num)) ]
+    return [real+imag*1j for real,imag in zip(np.linspace(x1,x2,num=num),
+                                              np.linspace(y1,y2,num=num)) ]
 
 
 def get_boundary(x_cent,y_cent,width,height,N):
