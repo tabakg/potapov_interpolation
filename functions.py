@@ -21,7 +21,7 @@ def der(f,z,eps = 1e-5):
         eps(optional[complex number]): number to perturb z to find derivative
 
     Returns:
-        Derivatie of f
+        Derivative of f
     '''
     return (f(z+eps)-f(z-eps))/(2*eps)
 
@@ -50,3 +50,21 @@ def limit(f,z0,N=10,eps=1e-3):
     except:
         print "Something went wrong in estimating the limit."
         return
+
+def spatial_modes(roots,M1,E):
+    '''
+    Obtain the spetial mode profile at each node up to a constant.
+
+    Args:
+        roots: The eigenvalues of the system
+        matrix M1: The connectivity matrix among internal nodes
+        E (matrix-valued function): Time-delay matrix
+
+    Returns:
+        A list of spatial eigenvectors.
+    '''
+    spatial_vecs = []
+    for i in xrange(len(roots)):
+        evals,evecs = la.eig(M1*E(roots[i]))
+        spatial_vecs.append(evecs[:,np.argmin(abs(1.-evals))])
+    return spatial_vecs

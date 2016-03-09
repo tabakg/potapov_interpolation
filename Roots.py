@@ -28,9 +28,6 @@ import math
 import cmath as cm
 from functions import limit
 
-import warnings
-warnings.filterwarnings('error')
-
 def Muller(x1,x2,x3,f,tol = 1e-12,N=400,verbose=False):
     '''
     A method that works well for finding roots locally in the complex plane.
