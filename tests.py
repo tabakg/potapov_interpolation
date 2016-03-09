@@ -1,5 +1,6 @@
 import Potapov as P
 import Roots as R
+import Examples as E
 import numpy as np
 import numpy.testing as testing
 
@@ -85,3 +86,19 @@ def test_Roots_2():
     roots_inside_boundary = R.inside_boundary(roots,x_cent,y_cent,width,height)
     two_sets_almost_equal(np.asarray(roots_inside_boundary)/np.pi,
         [-5.,-4.,-3.,-2.,-1.,-0.,1.,2.,3.,4.,5.] )
+
+def test_example_1():
+    T,T_test,roots,vecs  = E.example1()
+    assert( len(roots) == 3)
+
+def test_example_2():
+    T,T_test,roots,vecs  = E.example2()
+    assert( len(roots) == 7)
+
+def test_example_3():
+    T,T_test,roots,vecs  = E.example3()
+    assert( len(roots) == 11)
+
+def test_example_4():
+    T,T_test,roots,vecs  = E.example4()
+    assert( len(roots) == 4)

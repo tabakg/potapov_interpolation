@@ -4,6 +4,22 @@ Created on Sat Feb 28 20:15:35 2015
 
 @author: gil
 @title: Rootfinder
+
+Find the roots of a function f in the complex plane inside of a rectangular region.
+We implement the method in the following paper:
+
+ Delves, L. M., and J. N. Lyness. "A numerical method for locating the zeros of
+ an analytic function." Mathematics of computation 21.100 (1967): 543-560.
+
+The main idea is to compute contour integrals of functions of the form
+$z^k fp/f$ around the contour, for integer values of k. Here fp denotes the
+derivative of f. The resulting values of the contour integrals are proportional
+to $\sum_i z_i^k$, where i is the index of the roots.
+
+Throughout we denote f_frac = fp/f.
+
+I have also tried several optimizations and strategies for numerical stability.
+
 """
 import numpy as np
 from itertools import chain
@@ -12,7 +28,10 @@ import math
 import cmath as cm
 from functions import limit
 
-def Muller(x1,x2,x3,f,tol = 1e-12,N=400):
+import warnings
+warnings.filterwarnings('error')
+
+def Muller(x1,x2,x3,f,tol = 1e-12,N=400,verbose=False):
     '''
     A method that works well for finding roots locally in the complex plane.
     Uses three points for initial guess, x1,x2,x3.
@@ -22,6 +41,7 @@ def Muller(x1,x2,x3,f,tol = 1e-12,N=400):
         f (function): complex valued function for which to find roots
         tol (optional[float]): tolerance
         N(optional[int]): maximum number of iterations
+        verbose (optional[boolean]): print warnings
 
     Returns:
         estimated root of the function f.
@@ -30,18 +50,21 @@ def Muller(x1,x2,x3,f,tol = 1e-12,N=400):
     x = x3
 
     if x1 == x2:
-        print "Muller needs x1 and x2 different!!!"
-        print "x1 = x2 = ", x1
+        if verbose:
+            print "Muller needs x1 and x2 different!!!"
+            print "x1 = x2 = ", x1
         return x3
 
     if x2 == x3:
-        print "Muller needs x2 and x3 different!!!"
-        print "x2 = x3 = ", x2
+        if verbose:
+            print "Muller needs x2 and x3 different!!!"
+            print "x2 = x3 = ", x2
         return x3
 
     if x1 == x3:
-        print "Muller needs x1 and x3 different!!!"
-        print "x1 = x3 = ", x1
+        if verbose:
+            print "Muller needs x1 and x3 different!!!"
+            print "x1 = x3 = ", x1
         return x3
 
 
@@ -60,8 +83,9 @@ def Muller(x1,x2,x3,f,tol = 1e-12,N=400):
             if abs(f(x3))< tol:
                 return x3
             else:
-                print "Desired tolerance not reached and Muller denominator diverges.",
-                "Please try different parameters in Muller for better results."
+                if verbose:
+                    print "Desired tolerance not reached and Muller denominator diverges.",
+                    "Please try different parameters in Muller for better results."
                 return x3
         else: D = D2
 
@@ -76,40 +100,87 @@ def Muller(x1,x2,x3,f,tol = 1e-12,N=400):
 
 def residues(f_frac,roots):
     '''
-    Finds the resides of the give roots of f_frac
+    Finds the resides of f_frac = fp/f given the location of some roots of f.
+    The roots of f are the poles of f_frac.
 
     Args:
-        f_frac (function):
+        f_frac (function): a complex
+        roots (a list of complex numbers): the roots of f; poles of f_frac
+
+    Returns:
+        A list of residues of f_frac.
+
     '''
     return [limit(lambda z: (z-root)*f_frac(z),root) for root in roots]
 
-## Functions that evaluate the f_frac after some roots and their residues are subtracted.
-## The safe version checks for large values and division by zero.
+
 
 def new_f_frac(f_frac,z0,residues,roots,val=None):
+    '''
+    Functions that evaluate the f_frac after some roots and their residues are subtracted.
+    This function does NOT check to see if there is division by zero of if the
+    values become too large.
+
+    We assume here that the poles are of order 1.
+
+    Givens:
+        f_frac (function): function for which roots will be subtracted
+        z0 (complex number): point where new_f_frac is evaluated
+        residues (list of complex numbers): The corresponding residues to subtract
+        roots (list of complex numbers): The corresponding roots to subtract
+        val (optional[complex number]): We can impose a value f_frac(z0) if we wish.
+
+    Returns:
+        The new value of f_frac(z0) once the chosen poles have been subtracted.
+    '''
     if val == None:
         val = f_frac(z0)
     for res,root in zip(residues,roots):
         val -= res/(z0-root)
     return val
 
-def new_f_frac_safe(f_frac,z0,residues,roots,max_ok,val=None):
+def new_f_frac_safe(f_frac,z0,residues,roots,max_ok,val=None,verbose=False):
+    '''
+    Functions that evaluate the f_frac after some roots and their residues are subtracted.
+    The safe version checks for large values and division by zero.
+    If the value of f_frac(z0) is too large, subtracting the roots of f becomes
+    numerically unstable. In this case, we approximate the new function f_frac
+    by using the limit function.
+
+    We assume here that the poles are of order 1.
+
+    Givens:
+        f_frac (function): function for which roots will be subtracted
+        z0 (complex number): point where new_f_frac is evaluated
+        residues (list of complex numbers): The corresponding residues to subtract
+        roots (list of complex numbers): The corresponding roots to subtract
+        val (optional[complex number]): We can impose a value f_frac(z0) if we wish.
+        max_ok (float) Maximum absolute value of f_frac(z0 to use)
+        verbose (optional[boolean]): print warnings
+
+    Returns:
+        The new value of f_frac(z0) once the chosen poles have been subtracted.
+    '''
     try:
         if val == None:
             val = f_frac(z0)
         if abs(val) < max_ok:
             return new_f_frac(f_frac,z0,residues,roots,val)
         else:
-            #print "val too high. taking limit"
             return limit(lambda z: new_f_frac(f_frac,z,residues,roots),z0)
     except ZeroDivisionError:
-        #print "div by zero in new_f_frac_safe. Using limit"
+        if verbose:
+            print 'division by zero in new_f_frac_safe'
         return limit(lambda z: new_f_frac(f_frac,z,residues,roots),z0)
 
-##given the values y_smooth, locations c, and the number to go up to,
-##find the roots using the polynomial trick.
-
 def find_roots(y_smooth,c,num_roots_to_find):
+    '''
+    given the values y_smooth, locations c, and the number to go up to,
+    find the roots using the polynomial trick.
+
+    Given:
+        y_smooth (list of complex numbers)
+    '''
     p=[0]  ##placeholder
     for i in xrange(1,num_roots_to_find+1):
         p.append(integrate.trapz([el*z**i for el,z in zip(y_smooth,c)],c) )
@@ -119,32 +190,75 @@ def find_roots(y_smooth,c,num_roots_to_find):
         for i in xrange(1,k+1):
             s += (-1.)**(i-1)*e[k-i]*p[i]
         e.append(s / k)
-    coeff = [e[k]*(-1.)**(2.*num_roots_to_find-k)  for k in xrange(0,num_roots_to_find+1)]
+    coeff = [e[k]*(-1.)**(2.*num_roots_to_find-k)
+        for k in xrange(0,num_roots_to_find+1)]
     return np.roots(coeff)
 
 def combine(eps=1e-5,*args):
+    '''
+    chain together several lists and purge redundancies.
+
+    Args:
+        eps (optional[float]): tolerance for purging elements
+        *args (lists): several lists
+
+    Returns:
+        A list of combined elements.
+
+    '''
     lst = list(chain(*args))
     return purge(lst, eps)
 
 def purge(lst,eps=1e-5):
-    if len(lst) > 0:
-        for el in lst[:-1]:
-            if abs(el-lst[-1]) < eps:
-                return purge(lst[:-1],eps)
-        return purge(lst[:-1],eps) + [lst[-1]]
-    else: return []
+    '''
+    Get rid of redundant elements in a list. There is a precision cutoff eps.
 
-## make a linespace method for complex numbers
+    Args:
+        lst (list): elements
+        eps (optional[float]): precision cutoff
+
+    Returns:
+        A list without redundant elements.
+
+    '''
+    if len(lst) == 0:
+        return []
+    for el in lst[:-1]:
+        if abs(el-lst[-1]) < eps:
+            return purge(lst[:-1],eps)
+    return purge(lst[:-1],eps) + [lst[-1]]
+
 def linspace(c1,c2,num=50):
+    '''
+    make a linespace method for complex numbers.
+
+    Given:
+        c1,c2 (complex numbers): The two points along which to draw a line.
+        num (optional [int]): number of points along the line
+
+    Returns:
+        a list of num points starting at c1 and going to c2.
+    '''
     x1 = c1.real
     y1 = c1.imag
     x2 = c2.real*(num-1.)/num+x1*(1.)/num
     y2 = c2.imag*(num-1.)/num+y1*(1.)/num
     return [real+imag*1j for real,imag in zip(np.linspace(x1,x2,num=num),np.linspace(y1,y2,num=num)) ]
 
-## make a rectangle centered at x_cent,y_cent. Find points along this rectangle.
-## I use the convention that width/height make up half the dimensions of the rectangle.
+
 def get_boundary(x_cent,y_cent,width,height,N):
+    '''
+    Make a rectangle centered at x_cent,y_cent. Find points along this rectangle.
+    I use the convention that width/height make up half the dimensions of the rectangle.
+
+    Givens:
+        x_cent,y_cent (floats): the coordinates of the center of the rectangle
+        width,height (float): The (half) width and height of the rectangle
+        N (int): number of points to use along each edge.
+
+    Returns:
+        A list of points along the edge of the rectangle in the complex plane.
+    '''
     c1 = x_cent-width+(y_cent-height)*1j
     c2 = x_cent+width+(y_cent-height)*1j
     c3 = x_cent+width+(y_cent+height)*1j
@@ -154,123 +268,143 @@ def get_boundary(x_cent,y_cent,width,height,N):
             linspace(c3,c4,num=N)+\
             linspace(c4,c1,num=N)
 
-## takes roots and the specification of a rectangular region
-## returns the roots in the interior (or boundary) of the region.
 
 def inside_boundary(roots_near_boundary,x_cent,y_cent,width,height):
-    output =[]
-    for root in roots_near_boundary:
-        X = root.real
-        Y = root.imag
-        if x_cent - width <= X <= x_cent + width and \
-           y_cent - height <= Y <= y_cent + height:
-                output.append(root)
-    return output
+    '''
+    Takes roots and the specification of a rectangular region
+    returns the roots in the interior (and ON the boundary) of the region.
 
-def get_max(y,outlier_coeff):
+    Givens:
+        roots_near_boundary (list of complex numbers): roots near the boundary
+        x_cent,y_cent (floats): coordinates of the center of the region
+        width,height (floats): The (half) width of height of the rectangle
+
+    Returns:
+        Roots in the interior and on the boundary of the rectangle
+    '''
+    return [root for root in roots_near_boundary if
+            x_cent - width <= root.real <= x_cent + width and \
+            y_cent - height <= root.imag <= y_cent + height]
+
+def get_max(y):
+    '''
+    return the IQR + median to determine a maximum permissible value to use
+    in the numerically safe function new_f_frac_safe.
+
+    '''
     q75, q50, q25 = np.percentile(y, [75 , 50, 25])
     IQR = q75-q25
-    return outlier_coeff*(q50+IQR)
-
-## TODO: handle division by zero case.
-def find_outliers(y,max_ok):
-    in_outlier = False
-    outliers = [] ##list of outliers
-    outlier = []  ##each outlier is characterized by a list of consecutive points (i,y[i]) such that y[i] >max_ok
-    for i, el in enumerate(y):
-        if abs(el) > max_ok:
-            in_outlier = True
-        else: in_outlier = False
-        if in_outlier:
-            outlier.append((i,el))
-        if outlier != [] and not(in_outlier):
-            outliers.append(outlier)
-        if not(in_outlier):
-            outlier=[]
-    return outliers
-
-## Just an experiment... maybe this would work better?
-##
+    return q50+IQR
 
 def find_maxes(y):
+    '''
+    Given a list of numbers, find the indices where local maxima happen.
+
+    Givens:
+        y(list of floats)
+
+    Returns:
+        list of indices where maxima occur
+
+    '''
     maxes = []
     for i in xrange(-2,len(y)-2):
-        if y[i] < y[i+1] > y[i+2]:
-            maxes.append(  [(i,y[i]),(i+1,y[1+i]),(i+2,y[i+2] )]   )
+        if y[i-1] < y[i] > y[i+1]:
+            maxes.append(i)
     return maxes
 
+def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
+    max_steps=5,known_roots=[],verbose=False):
+    '''
+    I assume f is analytic with simple (i.e. order one) zeros.
 
-### get_roots method with RECTANGULAR boundary and polynomial thing used.
+    TODO:
+    save values along edges if iterating to a smaller rectangle
+    extend to other kinds of functions, e.g. function with non-simple zeros.
 
+    Givens:
+        f (function): the function for which the roots (i.e. zeros) will be found
+        fp (function): the derivative of f
+        x_cent,y_cent (floats): The center of the rectangle in the complex plane
+        width,height (floats): half the width and height of the rectangular region
+        N (optional[int]): Number of points to sample per edge
+        outlier_coeff (float): multiplier for coefficient used when subtracting
+        poles to improve numerical stability. See new_f_frac_safe.
+        max_step (optional[int]): Number of iterations allowed for algorithm to
+        repeat on smaller rectangles
+        known roots (optional[list of complex numbers]): Roots of f that are
+        already known.
+        verbose (optional[boolean]): print warnings
 
-###   I assume f is analytic with some zeros, and the zeros are simple
-###   In the future we can extend to other situations.
-###
+    Returns:
+        A list of roots for the function f inside the rectangle determined by
+        the values x_cent,y_cent,width, and height.
+    '''
 
-## We take a function f, its derivative fp, a radius $R$ and a number of points PER BOUNDARY N.
-## Optimization to do later: pass down evaluated points in recursion.
-def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=1,max_steps=5,known_roots=[]):
-
-    c = get_boundary(x_cent,y_cent,width,height,N) ##TODO: reuse boundary points when passing into a smaller rectangle
+    c = get_boundary(x_cent,y_cent,width,height,N)
     f_frac = lambda z: fp(z)/(2j*np.pi*f(z))
     y = [f_frac(z) for z in c]
 
-    #print max(y)
-
-    max_ok =  get_max(y,outlier_coeff)
-
-    #outliers = find_outliers(y,max_ok)
-    outliers = find_maxes(y)
-    #print len(outliers)
+    outliers = find_maxes(map(abs,y))
 
     roots_near_boundary = []
-    for outlier in outliers:
-        first = outlier[0]
-        last = outlier[-1]
-        r = Muller(c[first[0]-1], c[last[0]+1], (c[first[0]]+c[last[0]])/2, f)
-        roots_near_boundary.append(r)
-    #print len(roots_near_boundary)
+    for outlier_index in outliers:
+        try:
+            r = Muller(c[outlier_index-2], c[outlier_index+2],
+            (c[outlier_index])/2, f, verbose)
+            roots_near_boundary.append(r)
+        except:
+            pass
 
     subtracted_roots = purge(roots_near_boundary+known_roots)
 
-    #print len(subtracted_roots)
+    ## we don't need the roots far outside the boundary
+    subtracted_roots = inside_boundary(subtracted_roots,
+                                        x_cent,y_cent,width+2.,height+2.)
 
-    ## let's keep subtracting roots that are in the interior or at least close the the boundary
-    ## It would make it a bit inefficient to keep roots from from the boundary.
-    subtracted_roots = (inside_boundary(subtracted_roots,x_cent,y_cent,width+2.,height+2.))
-
-    #print len(subtracted_roots)
-
-
+    max_ok =  abs(outlier_coeff*get_max(y))
     subtracted_residues = residues(f_frac,subtracted_roots)
-    y_smooth = [new_f_frac_safe(f_frac,z_el,subtracted_residues,subtracted_roots,max_ok,y_el) for y_el,z_el in zip(y,c)]
-    I0 = integrate.trapz(y_smooth, c)
+    y_smooth = [new_f_frac_safe(f_frac,z_el,subtracted_residues,
+                                subtracted_roots,max_ok,y_el,verbose)
+                                for y_el,z_el in zip(y,c)]
+    I0 = integrate.trapz(y_smooth, c)  ##approx number of roots not subtracted
 
-    ## Next, divide the situation into two cases. If there's a few roots, find them.
+    ## If there's only a few roots, find them.
     if I0 < 10:
         num_roots_interior = int(round(abs(I0)))
         if num_roots_interior == 0:
             return inside_boundary(subtracted_roots,x_cent,y_cent,width,height)
-        if abs(num_roots_interior-I0)>0.005:
-            print "Warning!! Number of roots may be imprecise for this N. Increase N for greater precision."
-        print "Approx number of roots in current rect = ", abs(I0)
+        if verbose:
+            if abs(num_roots_interior-I0)>0.005:
+                print "Warning!! Number of roots may be imprecise for this N."
+                print "Increase N for greater precision."
+            print "Approx number of roots in current rect = ", abs(I0)
         rough_roots = find_roots(y_smooth,c,num_roots_interior)
         Muller_all = np.vectorize(Muller)
-        interior_roots = purge(Muller_all(rough_roots-1e-5,rough_roots+1e-5,rough_roots,f).tolist())   ##TODO best way to pick points
 
-        #inside_boundary_roots = inside_boundary(roots_near_boundary,x_cent,y_cent,width,height)
+        ##TODO: best way to pick points for Muller method below
+        ##TODO: catch error in case Muller diverges (unlikely for these points)
+
+        interior_roots = purge(Muller_all(rough_roots-1e-5,rough_roots+1e-5,
+                        rough_roots,f,verbose).tolist())
+
         combined_roots = purge(roots_near_boundary + interior_roots)
     else:
         combined_roots = purge(roots_near_boundary)
-    ## if some interior roots are missed (or if there were many roots), we subdivide and search
+    ## if some interior roots are missed or if there were many roots,
+    ## subdivide the rectangle and search recursively.
     if I0>=10 or len(combined_roots) < num_roots_interior and max_steps != 0:
-        x_list = [x_cent - width / 2.,x_cent - width / 2.,x_cent + width / 2.,x_cent + width / 2.]
-        y_list = [y_cent - height / 2.,y_cent + height / 2.,y_cent - height / 2.,y_cent + height / 2.]
+        x_list = [x_cent - width / 2.,x_cent - width / 2.,
+                  x_cent + width / 2.,x_cent + width / 2.]
+        y_list = [y_cent - height / 2.,y_cent + height / 2.,
+                  y_cent - height / 2.,y_cent + height / 2.]
         for x,y in zip(x_list,y_list):
-            roots_from_subrectangle  = get_roots_rect(f,fp,x,y,width/2.,height/2.,N,outlier_coeff,\
-                                             max_steps=max_steps-1,known_roots=combined_roots)
+            roots_from_subrectangle  = get_roots_rect(f,fp,x,y,
+                width/2.,height/2.,N,outlier_coeff,
+                max_steps=max_steps-1,known_roots=combined_roots)
             combined_roots = purge(combined_roots + roots_from_subrectangle)
     elif max_steps == 0:
-        print "max_steps exceeded. Some interior roots have not been located."
+        if verbose:
+            print "max_steps exceeded. Some interior roots might be missing."
 
     return inside_boundary(combined_roots,x_cent,y_cent,width,height)

@@ -23,31 +23,6 @@ import matplotlib.pyplot as plt
 import numpy.linalg as la
 
 
-def limit_T(f,z0,N=10,eps=1e-4):
-    '''
-    Takes possibly matrix-valued function f and its simple pole z0 and returns
-    limit_{z \to val} f(z). Estimates the value based on N surrounding
-    points at a distance eps.
-
-    Args:
-        f (function): the function for which the limit will be found.
-        z0 (complex number): The value at which the limit is evaluated.
-        N (int): number of points used in the estimate.
-        eps (optional[float]): distance from z0 at which estimating points are
-        placed.
-
-    Returns:
-         The estimated value of limit_{z \to val}.
-
-    '''
-    dim = f(0).shape[0]
-    t=np.linspace(0.,2.*np.pi*(N-1.)/N,num=N)
-    c=np.exp(1j*t)*eps
-    s = np.zeros((dim,dim))
-    for c_el in c:
-        s  = s + f(z0 + c_el)
-    return s / float(N)
-
 def plot(L,dx,func,(i,j),*args):
     '''
     A nice function for plotting components of matrix-valued functions.

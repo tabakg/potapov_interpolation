@@ -11,6 +11,20 @@ Functions used by other files.
 
 import numpy as np
 
+def der(f,z,eps = 1e-5):
+    '''
+    Estimate the derivative of the function f at z
+
+    Given:
+        f (function): the function to use
+        z (complex number): point to evaluate
+        eps(optional[complex number]): number to perturb z to find derivative
+
+    Returns:
+        Derivatie of f
+    '''
+    return (f(z+eps)-f(z-eps))/(2*eps)
+
 def limit(f,z0,N=10,eps=1e-3):
     '''
     Takes possibly matrix-valued function f and its simple pole z0 and returns
