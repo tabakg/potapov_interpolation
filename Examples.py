@@ -137,6 +137,7 @@ def example2(max_freq = 10., max_linewidth = 0.5):
     roots = Roots.get_roots_rect(T_denom,Tp_denom,0,0,max_linewidth,max_freq,N=1000)
     return example_helper(T,roots)
 
+##figure 8 in the paper
 def example3(max_freq = 60., max_linewidth = 1.):
     '''
     Two inputs and two outputs, with four delays and third mirror
@@ -195,6 +196,7 @@ def example3(max_freq = 60., max_linewidth = 1.):
     roots  = Roots.get_roots_rect(T_denom,Tp_denom,0,0,max_linewidth,max_freq,N=5000)
     return example_helper(T,roots)
 
+## Figure 10 in the paper
 def example4(max_freq = 50., max_linewidth = 3.):
     '''
     Two inputs and two outputs, with free delay (i.e. not in a loop).
@@ -296,12 +298,7 @@ def example5(max_freq = 50., max_linewidth = 3.):
     roots = Roots.get_roots_rect(T_denom,Tp_denom,0,0,max_linewidth,max_freq,N=1000)
     return example_helper(T,roots)
 
-
-#Like example 3, but with Pade
-
 ## Figure 14 in the paper
-
-## don't need to feed in anything, just run 'as is'
 def example6_pade():
     '''
     This example is the same as example 3, but we return a Pade approximation
