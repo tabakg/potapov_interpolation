@@ -5,6 +5,13 @@ The code in Potapov.py implements the procedure for finding Blaschke-Potapov pro
 
 We provide several examples in Examples.py, including those that appear in our paper. 
 
-
 ## State-space representation
 Given a rational matrix-valued function, we also construct the matrices ABCD that give the state-space representation of the system.
+
+The file Time_Sims.py shows how the system can be integrated in time using the ABCD
+
+## Other files
+
+The file functions.py contains functions that have been useful in the project.
+
+The file Roots.py gives an implementation of the root-finding procedure in the complex plane.
