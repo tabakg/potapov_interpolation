@@ -68,3 +68,34 @@ def spatial_modes(roots,M1,E):
         evals,evecs = la.eig(M1*E(roots[i]))
         spatial_vecs.append(evecs[:,np.argmin(abs(1.-evals))])
     return spatial_vecs
+
+
+
+## Pade stuff
+def factorial(n):
+    end = 1
+    for k in xrange(1,n+1):
+        end *= k
+    return end
+
+# denominator of symmetric Pade approximation of e^{-s} of order n
+def pade_approx(n):
+    output = [0]*(n+1)
+    for k in xrange(0,n+1):
+        output[n-k] = float(factorial(2*n-k)) * factorial(n) / \
+                      float((factorial(2*n) )* factorial(k) * factorial(n - k) )
+    return output
+
+def pade_roots(n):
+    return np.roots(pade_approx(n))
+
+def Q(z,n):
+    coeffs = pade_approx(n)
+    sum = 0
+    for i in xrange(0,n+1):
+        sum += coeffs[i]*pow(z,n-i)
+    return sum
+
+## approximates e^z
+def Pade(n,z):
+    return Q(z,n)/Q(-z,n)
