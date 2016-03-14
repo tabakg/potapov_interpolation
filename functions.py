@@ -69,17 +69,26 @@ def spatial_modes(roots,M1,E):
         spatial_vecs.append(evecs[:,np.argmin(abs(1.-evals))])
     return spatial_vecs
 
-
-
-## Pade stuff
 def factorial(n):
+    '''
+    Find the factorial of n.
+    Args:
+        n (integer)
+    Returns:
+        factorial of n
+    '''
     end = 1
     for k in xrange(1,n+1):
         end *= k
     return end
 
-# denominator of symmetric Pade approximation of e^{-s} of order n
 def pade_approx(n):
+    '''
+    Args:
+        n (integer)
+    Returns:
+        Denominator of symmetric Pade approximation of e^{-s} of order n
+    '''
     output = [0]*(n+1)
     for k in xrange(0,n+1):
         output[n-k] = float(factorial(2*n-k)) * factorial(n) / \
@@ -87,15 +96,44 @@ def pade_approx(n):
     return output
 
 def pade_roots(n):
+    '''
+    Extract roots of Pade polynomial.
+    Args:
+        n (integer)
+    Returns:
+        Roots of Pade polynomial.
+    '''
     return np.roots(pade_approx(n))
 
 def Q(z,n):
+    '''
+    Numerator of Pade pproximation of e^z
+
+    args:
+        n (integer): order of approximation
+        z (complex number):
+
+    Returns:
+        Value of Numerator of Pade approximation.
+
+
+    '''
     coeffs = pade_approx(n)
     sum = 0
     for i in xrange(0,n+1):
         sum += coeffs[i]*pow(z,n-i)
     return sum
 
-## approximates e^z
 def Pade(n,z):
+    '''
+    Pade pproximation of e^z
+
+    args:
+        n (integer): order of approximation
+        z (complex number):
+
+    Returns:
+        Value of Pade approximation.
+
+    '''
     return Q(z,n)/Q(-z,n)
