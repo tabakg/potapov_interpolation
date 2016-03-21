@@ -69,241 +69,232 @@ def plot_all(L,dx,labels,colors,lw,name,*args):
     bbox_inches="tight")
     return None
 
-def example_helper(T,roots):
+class Example():
+    def __init__(self,max_freq=30.,max_linewidth=1.,N=1000):
+        self.max_freq = max_freq
+        self.max_linewidth = max_linewidth
+        self.N = N
+        self.Potapov_ran = False
+
+    def make_roots(self):
+        self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,0,0,
+            self.max_linewidth,self.max_freq,N=self.N)
+
+    def make_T_Testing(self):
+        self.T_testing = Potapov.get_Potapov(self.T,self.roots)
+
+    def make_vecs(self):
+        self.vecs = Potapov.get_Potapov_vecs(self.T,self.roots)
+
+    def run_Potapov(self):
+        self.Potapov_ran = True
+        self.make_roots()
+        #### self.roots =  [r for r in self.roots if r.real <= 0]
+        self.make_T_Testing()
+        self.make_vecs()
+
+    def get_outputs(self):
+        if self.Potapov_ran:
+            return self.T,self.T_testing,self.roots,self.vecs
+        else:
+            print "Must run Potapov to get outputs!!!"
+            return None
+
+class Example1(Example):
     '''
-    Helper method for examples
-
-    Args:
-        T (function): The original
-        roots (list of complex numbers): A list of roots found
-
-    Returns:
-        [T,T_testing,roots,vecs]
-        T (function): The original function
-        T_testing (function): The approximated function
-        roots (list of complex numbers): A list of roots found
-        vecs (list of matrices): A list of the corresponding eigenvectors
+    Single input, single output with a single delay.
     '''
-    T_testing = Potapov.get_Potapov(T,roots)
-    vecs = Potapov.get_Potapov_vecs(T,roots)
-    return [T,T_testing,roots,vecs]
+    def __init__(self, max_freq=30.,max_linewidth=1.,N=1000,
+            tau = 0.3,r = 0.8):
+        Example.__init__(self, max_freq,max_linewidth,N)
 
-def example1(max_freq = 30., max_linewidth = 1.):
+        self.tau = tau
+        self.r = r
+
+        self.T = lambda z: np.matrix([(np.exp(-z*self.tau) - self.r)/
+                                        (1.-self.r* np.exp(-z*self.tau))])
+        self.T_denom = lambda z: (1.-self.r* np.exp(-z*self.tau))
+        self.Tp_denom = lambda z: der(self.T_denom,z)
+
+class Example2(Example):
     '''
-    single input, single output with a single delay
-
-    Args:
-        max_freq (float): maximum frequency to look at in the complex plane
-        max_linewidth (float): maximum linewidth to look at in the complex plane
-
-    Returns:
-        [T,T_testing,roots,vecs]
-        T (function): The original function
-        T_testing (function): The approximated function
-        roots (list of complex numbers): A list of roots found
-        vecs (list of matrices): A list of the corresponding eigenvectors
+    Two inputs, two outputs with a delay (i.e. Fabry-Perot).
     '''
-    tau = 0.3
-    r = 0.8
-    T = lambda z: np.matrix([(np.exp(-z*tau) - r)/(1.-r* np.exp(-z*tau))])
-    T_denom = lambda z: (1.-r* np.exp(-z*tau))
-    Tp_denom = lambda z: der(T_denom,z)
-    roots = Roots.get_roots_rect(T_denom,Tp_denom,0,0,max_linewidth,max_freq,N=1000)
-    return example_helper(T,roots)
+    def __init__(self, max_freq=10.,max_linewidth=0.5,N=1000):
+        Example.__init__(self, max_freq,max_linewidth,N)
+        r = 0.9
+        tau = 1.
+        dim = 2
+        e = lambda z: np.exp(-z*tau)
+        self.T_denom = lambda z: (1.-r**2* e(z)**2)
+        self.T = lambda z: -r*np.eye(dim) + ((1.-r**2.)/self.T_denom(z)) * \
+            np.matrix([[r*e(z)**2,e(z)],[e(z),r*e(z)**2]])
+        self.Tp_denom = lambda z: der(self.T_denom,z)
 
-def example2(max_freq = 10., max_linewidth = 0.5):
-    '''
-    two inputs, two outputs with a delay (i.e. Fabry-Perot)
-
-    Args:
-        max_freq (float): maximum frequency to look at in the complex plane
-        max_linewidth (float): maximum linewidth to look at in the complex plane
-
-    Returns:
-        [T,T_testing,roots,vecs]
-        T (function): The original function
-        T_testing (function): The approximated function
-        roots (list of complex numbers): A list of roots found
-        vecs (list of matrices): A list of the corresponding eigenvectors
-    '''
-    r = 0.9
-    tau = 1.
-    N = 2
-    e = lambda z: np.exp(-z*tau)
-    T_denom = lambda z: (1.-r**2* e(z)**2)
-    T = lambda z: -r*np.eye(N) + ((1.-r**2.)/T_denom(z)) * \
-    np.matrix([[r*e(z)**2,e(z)],[e(z),r*e(z)**2]])
-    Tp_denom = lambda z: der(T_denom,z)
-    roots = Roots.get_roots_rect(T_denom,Tp_denom,0,0,max_linewidth,max_freq,N=1000)
-    return example_helper(T,roots)
-
-##figure 8 in the paper
-def example3(max_freq = 60., max_linewidth = 1.):
+class Example3(Example):
     '''
     Two inputs and two outputs, with four delays and third mirror
     This corresponds to figures 7 and 8 in our paper.
-
-    Args:
-        max_freq (float): maximum frequency to look at in the complex plane
-        max_linewidth (float): maximum linewidth to look at in the complex plane
-
-    Returns:
-        [T,T_testing,roots,vecs]
-        T (function): The original function
-        T_testing (function): The approximated function
-        roots (list of complex numbers): A list of roots found
-        vecs (list of matrices): A list of the corresponding eigenvectors
     '''
-    tau1 = 0.1
-    tau2 = 0.23
-    tau3 = 0.1
-    tau4 = 0.17
-    r1 = 0.9
-    r2 = 0.4
-    r3 = 0.8
+    def __init__(self, max_freq=60.,max_linewidth=1.,N=5000,
+                r1=0.9,r2=0.4,r3=0.8,
+                tau1 = 0.1, tau2 = 0.23,tau3 = 0.1,tau4 = 0.17,
+                ):
+        Example.__init__(self, max_freq,max_linewidth,N)
 
-    t1 = np.sqrt(1-r1**2)
-    t2 = np.sqrt(1-r2**2)
-    t3 = np.sqrt(1-r3**2)
 
-    N = 4
+        self.r1 = r1
+        self.r2 = r2
+        self.r3 = r3
+        self.delays =[tau1,tau2,tau3,tau4]
 
-    M1 = np.matrix([[0,-r1,0,0],
-                    [-r2,0,t2,0],
-                   [0,0,0,-r3],
-                   [t2,0,r2,0]])
+        t1 = np.sqrt(1-r1**2)
+        t2 = np.sqrt(1-r2**2)
+        t3 = np.sqrt(1-r3**2)
 
-    M2 = np.matrix([[t1,0],
-                    [0,0],
-                    [0,t3],
-                    [0,0]])
+        dim = 4
 
-    M3 = np.matrix([[0,t1,0,0],
-                    [0,0,0,t3]])
+        M1 = np.matrix([[0,-r1,0,0],
+                        [-r2,0,t2,0],
+                       [0,0,0,-r3],
+                       [t2,0,r2,0]])
+        self.M1 = M1
 
-    M4 = np.matrix([[r1,0],
-                    [0,r3]])
+        M2 = np.matrix([[t1,0],
+                        [0,0],
+                        [0,t3],
+                        [0,0]])
 
-    E = lambda z: np.matrix([[np.exp(-tau1*z),0,0,0],
-                         [0,np.exp(-tau2*z),0,0],
-                         [0,0,np.exp(-tau3*z),0],
-                         [0,0,0,np.exp(-tau4*z)]])
+        M3 = np.matrix([[0,t1,0,0],
+                        [0,0,0,t3]])
 
-    T_denom = lambda z: la.det(np.eye(N) - M1*E(z))
-    Tp_denom = lambda z: der(T_denom,z)
+        M4 = np.matrix([[r1,0],
+                        [0,r3]])
 
-    T = lambda z: M3*E(z)*la.inv(np.eye(N) - M1*E(z))*M2+M4
-    roots  = Roots.get_roots_rect(T_denom,Tp_denom,0,0,max_linewidth,max_freq,N=5000)
-    return example_helper(T,roots)
+        E = lambda z: np.matrix([[np.exp(-tau1*z),0,0,0],
+                             [0,np.exp(-tau2*z),0,0],
+                             [0,0,np.exp(-tau3*z),0],
+                             [0,0,0,np.exp(-tau4*z)]])
+        self.E = E
 
-## Figure 10 in the paper
-def example4(max_freq = 50., max_linewidth = 3.):
+        self.T_denom = lambda z: la.det(np.eye(dim) - M1*E(z))
+        self.Tp_denom = lambda z: der(self.T_denom,z)
+        self.T = lambda z: M3*E(z)*la.inv(np.eye(dim) - M1*E(z))*M2+M4
+
+class Example4(Example):
     '''
     Two inputs and two outputs, with free delay (i.e. not in a loop).
     This corresponds to figures 9 and 10 in our paper.
-
-    Args:
-        max_freq (float): maximum frequency to look at in the complex plane
-        max_linewidth (float): maximum linewidth to look at in the complex plane
-
-    Returns:
-        [T,T_testing,roots,vecs]
-        T (function): The original function
-        T_testing (function): The approximated function
-        roots (list of complex numbers): A list of roots found
-        vecs (list of matrices): A list of the corresponding eigenvectors
     '''
-    tau1 = 0.1
-    tau2 = 0.039
-    tau3 = 0.11
-    tau4 = 0.08
-    r = 0.9
-    t = np.sqrt(1-r**2)
-    M = 4
+    def __init__(self, max_freq=100.,max_linewidth=3.,N=5000):
+        Example.__init__(self, max_freq,max_linewidth,N)
 
-    M1 = np.matrix([[0,0,-r,0],
-                    [r,0,0,0],
-                   [0,r,0,t],
-                   [t,0,0,0]])
+        tau1 = 0.1
+        tau2 = 0.039
+        tau3 = 0.11
+        tau4 = 0.08
+        r = 0.9
+        t = np.sqrt(1-r**2)
+        dim = 4
 
-    M2 = np.matrix([[t,0],
-                    [0,t],
-                    [0,0],
-                    [0,-r]])
+        M1 = np.matrix([[0,0,-r,0],
+                        [r,0,0,0],
+                       [0,r,0,t],
+                       [t,0,0,0]])
 
-    M3 = np.matrix([[0,0,t,0],
-                    [0,t,0,-r]])
+        self.M1 = M1
 
-    M4 = np.matrix([[r,0],
-                    [0,0]])
+        M2 = np.matrix([[t,0],
+                        [0,t],
+                        [0,0],
+                        [0,-r]])
 
-    E = lambda z: np.matrix([[np.exp(tau1*z),0,0,0],
-                         [0,np.exp(tau2*z),0,0],
-                         [0,0,np.exp(tau3*z),0],
-                         [0,0,0,np.exp(tau4*z)]])
+        M3 = np.matrix([[0,0,t,0],
+                        [0,t,0,-r]])
 
-    T_denom = lambda z: la.det(np.eye(M) - M1*E(z))
-    Tp_denom = lambda z: der(T_denom,z)
-    T = lambda z: M3*E(z)*la.inv(np.eye(M) - M1*E(z))*M2+M4
-    roots = Roots.get_roots_rect(T_denom,Tp_denom,0,0,max_linewidth,max_freq,N=2000)
-    return example_helper(T,roots)
+        M4 = np.matrix([[r,0],
+                        [0,0]])
 
-def example5(max_freq = 50., max_linewidth = 3.):
+        E = lambda z: np.matrix([[np.exp(-tau1*z),0,0,0],
+                             [0,np.exp(-tau2*z),0,0],
+                             [0,0,np.exp(-tau3*z),0],
+                             [0,0,0,np.exp(-tau4*z)]])
+
+        self.T_denom = lambda z: la.det(np.eye(dim) - M1*E(z))
+        self.Tp_denom = lambda z: der(self.T_denom,z)
+        self.T = lambda z: M3*E(z)*la.inv(np.eye(dim) - M1*E(z))*M2+M4
+
+class Example5(Example):
     '''
     Modified example 4, with analytic term.
-
-    Args:
-        max_freq (float): maximum frequency to look at in the complex plane
-        max_linewidth (float): maximum linewidth to look at in the complex plane
-
-    Returns:
-        [T,T_testing,roots,vecs]
-        T (function): The original function
-        T_testing (function): The approximated function
-        roots (list of complex numbers): A list of roots found
-        vecs (list of matrices): A list of the corresponding eigenvectors
     '''
-    tau1 = 0.1
-    tau2 = 0.039
-    tau3 = 0.11
-    tau4 = 0.08
-    r = 0.9
-    t = np.sqrt(1-r**2)
-    M = 4
+    def __init__(self, max_freq=50.,max_linewidth=3.,N=1000):
+        Example.__init__(self, max_freq ,max_linewidth,N)
+        tau1 = 0.1
+        tau2 = 0.039
+        tau3 = 0.11
+        tau4 = 0.08
+        r = 0.9
+        t = np.sqrt(1-r**2)
+        dim = 4
 
-    M1 = np.matrix([[0,0,-r,0],
-                    [r,0,0,0],
-                   [0,r,0,t],
-                   [t,0,0,0]])
+        M1 = np.matrix([[0,0,-r,0],
+                        [r,0,0,0],
+                       [0,r,0,t],
+                       [t,0,0,0]])
 
-    M2 = np.matrix([[t,0],
-                    [0,t],
-                    [0,0],
-                    [0,-r]])
+        M2 = np.matrix([[t,0],
+                        [0,t],
+                        [0,0],
+                        [0,-r]])
 
-    M3 = np.matrix([[0,0,t,0],
-                    [0,t,0,-r]])
+        M3 = np.matrix([[0,0,t,0],
+                        [0,t,0,-r]])
 
-    M4 = np.matrix([[r,0],
-                    [0,0]])
+        M4 = np.matrix([[r,0],
+                        [0,0]])
 
-    E = lambda z: np.matrix([[np.exp((tau1+tau4)*z),0,0,0],
-                         [0,np.exp((tau2-tau4)*z),0,0],
-                         [0,0,np.exp(tau3*z),0],
-                         [0,0,0,1.]])
+        E = lambda z: np.matrix([[np.exp(-(tau1+tau4)*z),0,0,0],
+                             [0,np.exp(-(tau2-tau4)*z),0,0],
+                             [0,0,np.exp(-tau3*z),0],
+                             [0,0,0,1.]])
 
-    T_denom = lambda z: la.det(np.eye(M) - M1*E(z))
-    Tp_denom = lambda z: der(T_denom,z)
-    T = lambda z: M3*E(z)*la.inv(np.eye(M) - M1*E(z))*M2+M4
-    roots = Roots.get_roots_rect(T_denom,Tp_denom,0,0,max_linewidth,max_freq,N=1000)
-    return example_helper(T,roots)
+        self.T_denom = lambda z: la.det(np.eye(dim) - M1*E(z))
+        self.Tp_denom = lambda z: der(self.T_denom,z)
+        self.T = lambda z: M3*E(z)*la.inv(np.eye(dim) - M1*E(z))*M2+M4
 
-## Figure 14 in the paper
+def example1(max_freq = 30., max_linewidth = 1.0):
+    E = Example1(max_freq = max_freq, max_linewidth = max_linewidth)
+    E.run_Potapov()
+    return E.get_outputs()
+
+def example2(max_freq = 10., max_linewidth = 0.5):
+    E = Example2(max_freq = max_freq, max_linewidth = max_linewidth)
+    E.run_Potapov()
+    return E.get_outputs()
+
+def example3(max_freq = 60., max_linewidth = 1.):
+    E = Example3(max_freq = max_freq, max_linewidth = max_linewidth)
+    E.run_Potapov()
+    return E.get_outputs()
+
+def example4(max_freq = 50., max_linewidth = 3.):
+    E = Example4(max_freq = max_freq, max_linewidth = max_linewidth)
+    E.run_Potapov()
+    return E.get_outputs()
+
+def example5(max_freq = 50., max_linewidth = 3.):
+    E = Example5(max_freq = max_freq, max_linewidth = max_linewidth)
+    E.run_Potapov()
+    return E.get_outputs()
+
 def example6_pade():
     '''
     This example is the same as example 3, but we return a Pade approximation
     instead of a Potapov approximation. Instead of returnings roots, etc., we
-    return a different kind of function (see below)
+    return a different kind of function (see below).
+
+    This is used for figure 14 of our paper.
 
     Returns:
         A matrix-valued function T(z,n). n is the order of the approximation
@@ -321,7 +312,7 @@ def example6_pade():
     t2 = np.sqrt(1-r2**2)
     t3 = np.sqrt(1-r3**2)
 
-    N = 4
+    dim = 4
 
     M1 = np.matrix([[0,-r1,0,0],
                     [-r2,0,t2,0],
@@ -355,7 +346,7 @@ def example6_pade():
                          [0,0,Pade(ns[2],-tau3*z),0],
                          [0,0,0,Pade(ns[3],-tau4*z)]])
 
-    T = lambda z,n: M3*E(z,n)*la.inv(np.eye(N) - M1*E(z,n))*M2+M4
+    T = lambda z,n: M3*E(z,n)*la.inv(np.eye(dim) - M1*E(z,n))*M2+M4
     return T
 
 def plot3D(f,points = 2000):
@@ -372,48 +363,45 @@ def plot3D(f,points = 2000):
     return
 
 if __name__ == "__main__":
+    print 'Running Examples.py'
 
     ################
     ## Plot for complex-valued functions with and without time delay
     ## This part uses mpmath
     ################
-
-    #tau = 1.
-    #r = 0.8
-
-    #T,T_1,roots1,vecs1 = example1(max_freq = 500)
-
-    #a = 1
-    #f = lambda z: (mp.exp(-z*tau) - r)/(1.-r* mp.exp(-z*tau))*mp.exp(-z*tau)
-    #f2 = lambda z: (mp.exp(-z*tau) - r)/(1.-r* mp.exp(-z*tau))
-    #plot3D(f,points = 5000)
-    #plot3D(f2,points = 500000)
+    # tau=1.; r=0.8
+    # E = Example1(max_freq = 500., max_linewidth = 1.0,tau=tau,r=r)
+    # E.run_Potapov()
+    #
+    # T,T_1,roots1,vecs1 = E.get_outputs()
+    #
+    # f = lambda z: (mp.exp(-z*tau) - r)/(1.-r* mp.exp(-z*tau))*mp.exp(-z*tau)
+    # f2 = lambda z: (mp.exp(-z*tau) - r)/(1.-r* mp.exp(-z*tau))
+    # plot3D(f,points = 5000)
+    # plot3D(f2,points = 500000)
 
     ################
     ## Input/output plot for example 1
     ################
 
-    T,T_1,roots1,vecs1 = example1(max_freq = 500)
-
-    print T(0.)
-    print T_1(0.)
-
-    print T(-30+3j)
-    print T_1(-30+3j)
-
-    L = 100.
-    dx = 0.3
-
-    T,T_1,roots1,vecs2 = example1(max_freq = 30)
-    T,T_2,roots2,vecs2 = example1(max_freq = 50)
-    T,T_3,roots3,vecs3 = example1(max_freq = 80)
-    T,T_4,roots4,vecs4 = example1(max_freq = 100)
-
-    r_lst = [roots1,roots2,roots3,roots4]
-    labels = ['Original T'] + ['Potapov T of Order '+str(len(r)) for r in r_lst]
-    colors = ['b','r--','y--','m--','c--']
-
-    plot_all(L,dx,labels,colors,0.5,'example_tmp.pdf',T,T_1,T_2,T_3,T_4)
+    # L = 100.
+    # dx = 0.3
+    # freqs = [30.,50.,80.,100.]
+    # T_ls = []; roots_ls = []; vecs_ls = []
+    #
+    # for freq in freqs:
+    #     E = Example1(max_freq = freq)
+    #     E.run_Potapov()
+    #     T,T_,roots,vecs = E.get_outputs()
+    #     T_ls.append(T_)
+    #     roots_ls.append(roots)
+    #     vecs_ls.append(vecs)
+    #
+    # labels = ['Original T'] + ['Potapov T of Order '+str(len(r))
+    #                             for r in roots_ls]
+    # colors = ['b','r--','y--','m--','c--']
+    #
+    # plot_all(L,dx,labels,colors,0.5,'example_tmp.pdf',T,*T_ls)
 
     ################
     ## Input/output plot for example 3
@@ -421,66 +409,75 @@ if __name__ == "__main__":
 
     # L = 100.
     # dx = 0.3
+    # freqs = [30.,50.,80.,100.]
+    # T_ls = []; roots_ls = []; vecs_ls = []
     #
-    # T,T_1,roots1,vecs1 = example3(max_freq = 30)
-    # T,T_2,roots2,vecs2 = example3(max_freq = 50)
-    # T,T_3,roots3,vecs3 = example3(max_freq = 80)
-    # T,T_4,roots4,vecs4 = example3(max_freq = 100, )
+    # for freq in freqs:
+    #     E = Example3(max_freq = freq)
+    #     E.run_Potapov()
+    #     T,T_,roots,vecs = E.get_outputs()
+    #     T_ls.append(T_)
+    #     roots_ls.append(roots)
+    #     vecs_ls.append(vecs)
     #
-    # r_lst = [roots1,roots2,roots3,roots4]
-    # labels = ['Original T'] + ['Potapov T of Order '+str(len(r)) for r in r_lst]
+    # labels = ['Original T'] + ['Potapov T of Order '+str(len(r))
+    #                             for r in roots_ls]
     # colors = ['b','r--','y--','m--','c--']
     #
-    # plot_all(L,dx,labels,colors,0.5,'figure_8_v3.pdf',T,T_1,T_2,T_3,T_4)
-
-    ###
-
-    ###
-
-    ############
-
-    #example4(max_freq = 10,plot=True)
+    # plot_all(L,dx,labels,colors,0.5,'figure_8_v3.pdf',T,*T_ls)
 
     ################
     ## Input/output plot for example 4
     ################
 
-    # L = 100.
-    # dx = 0.05
+    L = 100.
+    dx = 0.05
+    freqs = [50.,80.,100.,125.]
+    T_ls = []; roots_ls = []; vecs_ls = []
 
-    # T,T_1,roots1,vecs1 = example4(max_freq = 30)  ## left out below
-    # T,T_2,roots2,vecs2 = example4(max_freq = 50)
-    # T,T_3,roots3,vecs3 = example4(max_freq = 80)
-    # T,T_4,roots4,vecs4 = example4(max_freq = 100)
-    # T,T_5,roots5,vecs5 = example4(max_freq = 125)
-    #
-    # T_correct,T_1_correct,roots1_correct,vecs1_correct = example5(max_freq = 30)
-    #
-    # r_lst = [roots2,roots3,roots4,roots5]
-    # labels = ['Original T','T with feedforward removed'] + \
-    #           ['Potapov T of Order ' +str(len(r)) for r in r_lst]
-    # colors = ['b','black','r--','y--','m--','c--']
-    #
-    # plot_all(L,dx,labels,colors, 0.5,'figure_10_v3.pdf',
-    #                 T,T_correct,T_1,T_2,T_3,T_4)
+    for freq in freqs:
+        E = Example4(max_freq = freq)
+        E.run_Potapov()
+        T,T_,roots,vecs = E.get_outputs()
+        T_ls.append(T_)
+        roots_ls.append(roots)
+        vecs_ls.append(vecs)
+
+    E5 = Example5(max_freq=30.)
+    E5.run_Potapov()
+    T_correct,T_1_correct,roots1_correct,vecs1_correct = E5.get_outputs()
+    T_ls = [T_correct] + T_ls
+
+    labels = ['Original T','T with feedforward removed'] + \
+              ['Potapov T of Order ' +str(len(r)) for r in roots_ls]
+    colors = ['b','black','r--','y--','m--','c--']
+
+    plot_all(L,dx,labels,colors, 0.5,'figure_10_v4.pdf',
+                    T,*T_ls)
 
     #################
     ### Input/output plot for example 5
     #################
-
+    #
     # L = 100.
     # dx = 0.05
+    # freqs = [30.,50.,65.,80.]
+    # T_ls = []; roots_ls = []; vecs_ls = []
     #
-    # T,T_1,roots1,vecs1 = example5(max_freq = 30)
-    # T,T_2,roots2,vecs2 = example5(max_freq = 50)
-    # T,T_3,roots3,vecs3 = example5(max_freq = 65)
-    # T,T_4,roots4,vecs4 = example5(max_freq = 80)
+    # for freq in freqs:
+    #     E = Example5(max_freq = freq)
+    #     E.run_Potapov()
+    #     T,T_,roots,vecs = E.get_outputs()
+    #     T_ls.append(T_)
+    #     roots_ls.append(roots)
+    #     vecs_ls.append(vecs)
     #
-    # r_lst = [roots1,roots2,roots3,roots4]
-    # labels = ['Original T'] + ['Potapov T of Order ' + str(len(r)) for r in r_lst]
+    # labels = ['Original T'] + ['Potapov T of Order '+str(len(r))
+    #                             for r in roots_ls]
     # colors = ['b','r--','y--','m--','c--']
     #
-    # plot_all(L,dx,labels,colors,0.5,'example_tmp2.pdf',T,T_1,T_2,T_3,T_4)
+    # plot_all(L,dx,labels,colors,0.5,'example_tmp2.pdf',T,*T_ls)
+
 
     #################
     ### Input/output plot for example 6

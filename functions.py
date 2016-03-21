@@ -10,6 +10,7 @@ Functions used by other files.
 """
 
 import numpy as np
+import numpy.linalg as la
 
 def der(f,z,eps = 1e-5):
     '''
@@ -50,24 +51,6 @@ def limit(f,z0,N=10,eps=1e-3):
     except:
         print "Something went wrong in estimating the limit."
         return
-
-def spatial_modes(roots,M1,E):
-    '''
-    Obtain the spetial mode profile at each node up to a constant.
-
-    Args:
-        roots: The eigenvalues of the system
-        matrix M1: The connectivity matrix among internal nodes
-        E (matrix-valued function): Time-delay matrix
-
-    Returns:
-        A list of spatial eigenvectors.
-    '''
-    spatial_vecs = []
-    for i in xrange(len(roots)):
-        evals,evecs = la.eig(M1*E(roots[i]))
-        spatial_vecs.append(evecs[:,np.argmin(abs(1.-evals))])
-    return spatial_vecs
 
 def factorial(n):
     '''
@@ -137,3 +120,76 @@ def Pade(n,z):
 
     '''
     return Q(z,n)/Q(-z,n)
+
+def spatial_modes(roots,M1,E):
+    '''
+    Obtain the spetial mode profile at each node up to a constant.
+
+    Args:
+        roots: The eigenvalues of the system
+        matrix M1: The connectivity matrix among internal nodes
+        E (matrix-valued function): Time-delay matrix
+
+    Returns:
+        A list of spatial eigenvectors.
+    '''
+    spatial_vecs = []
+    for i in xrange(len(roots)):
+        evals,evecs = la.eig(M1*E(roots[i]))
+        spatial_vecs.append(evecs[:,np.argmin(abs(1.-evals))])
+    return spatial_vecs
+
+def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
+                                func=lambda z : z.imag):
+    '''
+    This function integrates two spatial modes against each other
+    along the various delays of the system. Each delay follows a
+    node in the system.
+
+    The frequency is assumed to be the imaginary part of each root.
+
+    Args:
+        root1,root2 (complex number): the two roots
+        v1,v2 (column matrices): the amplitude of each mode at the
+        various nodes
+        delays (list of floats): The duration of each delay following
+        each node in the system
+        eps (optional[float]): under tolerance eps, assume the two
+        roots are identical. The analytic expression of the intensity
+        changes in this case.
+        func (optional[funciton]): used to transform the roots. Default
+        value is set to lambda z: z.imag, meaning we take the frequency
+        of each mode.
+
+    Returns:
+        The inner product of the two modes.
+        Sanity check: if root1==root2 and v1==v2, returns real value.
+    '''
+    s = 0j
+    for delay,e1,e2 in zip(delays,v1,v2):
+        if abs(func(root1-root2)) < eps:
+            s+=e1*e2.H*delay
+        else:
+            s += e1*e2.H*1j*(np.exp(-1j*delay*func(root1-root2)) - 1. )/func(root1-root2)
+    return s[0,0]
+
+def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-7,
+                                func=lambda z : z.imag):
+    '''
+    Given a list of roots and a list of vectors representing the
+    electric field at each node of the corresponding nodes, compute
+    the normalized matrix representing the inner products among the
+    various modes.
+    '''
+    dim = len(roots)
+    norms = [0]*dim
+    for i,(root,v) in enumerate(zip(roots,modes)):
+        norms[i] = inner_product_of_two_modes(root,root,v,v,delays,eps=eps,
+                                        func=func)
+    inner_prods = np.zeros((dim,dim),dtype='complex_')
+    for i in range(dim):
+        for j in range(dim):
+            inner_prods[i,j] = ((inner_product_of_two_modes(roots[i],roots[j],
+                                modes[i],modes[j],delays)) /
+                                np.sqrt(norms[i]*norms[j]) )
+    return inner_prods
