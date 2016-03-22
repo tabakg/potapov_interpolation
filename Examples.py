@@ -263,31 +263,6 @@ class Example5(Example):
         self.Tp_denom = lambda z: der(self.T_denom,z)
         self.T = lambda z: M3*E(z)*la.inv(np.eye(dim) - M1*E(z))*M2+M4
 
-def example1(max_freq = 30., max_linewidth = 1.0):
-    E = Example1(max_freq = max_freq, max_linewidth = max_linewidth)
-    E.run_Potapov()
-    return E.get_outputs()
-
-def example2(max_freq = 10., max_linewidth = 0.5):
-    E = Example2(max_freq = max_freq, max_linewidth = max_linewidth)
-    E.run_Potapov()
-    return E.get_outputs()
-
-def example3(max_freq = 60., max_linewidth = 1.):
-    E = Example3(max_freq = max_freq, max_linewidth = max_linewidth)
-    E.run_Potapov()
-    return E.get_outputs()
-
-def example4(max_freq = 50., max_linewidth = 3.):
-    E = Example4(max_freq = max_freq, max_linewidth = max_linewidth)
-    E.run_Potapov()
-    return E.get_outputs()
-
-def example5(max_freq = 50., max_linewidth = 3.):
-    E = Example5(max_freq = max_freq, max_linewidth = max_linewidth)
-    E.run_Potapov()
-    return E.get_outputs()
-
 def example6_pade():
     '''
     This example is the same as example 3, but we return a Pade approximation
@@ -430,30 +405,30 @@ if __name__ == "__main__":
     ## Input/output plot for example 4
     ################
 
-    L = 100.
-    dx = 0.05
-    freqs = [50.,80.,100.,125.]
-    T_ls = []; roots_ls = []; vecs_ls = []
-
-    for freq in freqs:
-        E = Example4(max_freq = freq)
-        E.run_Potapov()
-        T,T_,roots,vecs = E.get_outputs()
-        T_ls.append(T_)
-        roots_ls.append(roots)
-        vecs_ls.append(vecs)
-
-    E5 = Example5(max_freq=30.)
-    E5.run_Potapov()
-    T_correct,T_1_correct,roots1_correct,vecs1_correct = E5.get_outputs()
-    T_ls = [T_correct] + T_ls
-
-    labels = ['Original T','T with feedforward removed'] + \
-              ['Potapov T of Order ' +str(len(r)) for r in roots_ls]
-    colors = ['b','black','r--','y--','m--','c--']
-
-    plot_all(L,dx,labels,colors, 0.5,'figure_10_v4.pdf',
-                    T,*T_ls)
+    # L = 100.
+    # dx = 0.05
+    # freqs = [50.,80.,100.,125.]
+    # T_ls = []; roots_ls = []; vecs_ls = []
+    #
+    # for freq in freqs:
+    #     E = Example4(max_freq = freq)
+    #     E.run_Potapov()
+    #     T,T_,roots,vecs = E.get_outputs()
+    #     T_ls.append(T_)
+    #     roots_ls.append(roots)
+    #     vecs_ls.append(vecs)
+    #
+    # E5 = Example5(max_freq=30.)
+    # E5.run_Potapov()
+    # T_correct,T_1_correct,roots1_correct,vecs1_correct = E5.get_outputs()
+    # T_ls = [T_correct] + T_ls
+    #
+    # labels = ['Original T','T with feedforward removed'] + \
+    #           ['Potapov T of Order ' +str(len(r)) for r in roots_ls]
+    # colors = ['b','black','r--','y--','m--','c--']
+    #
+    # plot_all(L,dx,labels,colors, 0.5,'figure_10_v4.pdf',
+    #                 T,*T_ls)
 
     #################
     ### Input/output plot for example 5
@@ -483,7 +458,8 @@ if __name__ == "__main__":
     ### Input/output plot for example 6
     #################
 
-    # T_orig,T_1,roots1,vecs1 = example3(max_freq = 4)
+    # E = Example3()
+    # T_orig,T_1,roots1,vecs1 = E.get_outputs()
     # T = example6_pade()
     #
     # L = 100.
@@ -503,45 +479,47 @@ if __name__ == "__main__":
     ## make scatter plot for the roots and poles of example 3
     ###########
 
-    #import matplotlib.patches as patches
-    #
-    #
-    #T,T_4,roots4,vecs4 = example3(max_freq = 400)
-    #fig = plt.figure(figsize=(3,10))
-    #
-    #ax2 = fig.add_subplot(111)
-    #ax2.add_patch(
-    #    patches.Rectangle(
-    #        (0.3,-0),
-    #        0.5,
-    #        100,
-    #        fill=False      # remove background
-    #    )
-    #)
-    #
-    #ax2 = fig.add_subplot(111)
-    #ax2.add_patch(
-    #    patches.Rectangle(
-    #        (0.3,-0),
-    #        0.5,
-    #        200,
-    #        fill=False      # remove background
-    #    )
-    #)
-    #fig.suptitle('Zero-polt scatter plot', fontsize=20)
-    #
-    #
-    #plt.xlim(-1.,1.)
-    #plt.ylim(-400,400)
-    #
-    #plt.xlabel('linewidth', fontsize=18)
-    #plt.ylabel('frequency', fontsize=16)
-    #plt.scatter(map(lambda z: z.real, roots4),map(lambda z: z.imag, roots4))
-    #poles = map(lambda z: -z, roots4)
-    #
-    #plt.scatter(map(lambda z: z.real, poles),map(lambda z: z.imag, poles),c="red")
-    #
-    #plt.show()
+    import matplotlib.patches as patches
+
+
+    E = Example3(max_freq = 400.)
+    E.run_Potapov()
+    T,T_3,roots3,vecs3 = E.get_outputs()
+    fig = plt.figure(figsize=(3,10))
+
+    ax2 = fig.add_subplot(111)
+    ax2.add_patch(
+       patches.Rectangle(
+           (0.3,-0),
+           0.5,
+           100,
+           fill=False      # remove background
+       )
+    )
+
+    ax2 = fig.add_subplot(111)
+    ax2.add_patch(
+       patches.Rectangle(
+           (0.3,-0),
+           0.5,
+           200,
+           fill=False      # remove background
+       )
+    )
+    fig.suptitle('Zero-polt scatter plot', fontsize=20)
+
+
+    plt.xlim(-1.,1.)
+    plt.ylim(-400,400)
+
+    plt.xlabel('linewidth', fontsize=18)
+    plt.ylabel('frequency', fontsize=16)
+    plt.scatter(map(lambda z: z.real, roots3),map(lambda z: z.imag, roots3))
+    poles = map(lambda z: -z, roots3)
+
+    plt.scatter(map(lambda z: z.real, poles),map(lambda z: z.imag, poles),c="red")
+
+    plt.show()
 
 
     ##########
@@ -553,7 +531,9 @@ if __name__ == "__main__":
     #import matplotlib.patches as patches
     #
     #
-    #T,T_4,roots4,vecs4 = example4(max_freq = 400)
+    # E = Example4(max_freq = 400.)
+    # E.run_Potapov()
+    # T,T_4,roots4,vecs4 = E.get_outputs()
     #scl = 1
     #fig = plt.figure(figsize=(6*scl,10*scl))
     #

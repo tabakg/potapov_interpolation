@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import Examples
 import Potapov
 
-def time_sim(example, omega = 0., t1=150, dt=0.05, freq=None,
+def time_sim(Example, omega = 0., t1=150, dt=0.05, freq=None,
                 port_in = 0, port_out = [0,1], kind='FP',
              ):
     '''
@@ -23,7 +23,9 @@ def time_sim(example, omega = 0., t1=150, dt=0.05, freq=None,
     omega indicates the frequency of driving. omega = 0 is DC.
     port_in and port_out are where the system is driven.
     '''
-    T,T_testing,poles,vecs = example(freq) if freq != None else example()
+    E = Example(max_freq = freq) if freq != None else Example()
+    E.run_Potapov()
+    T,T_testing,poles,vecs = E.get_outputs()
     print "number of poles is ", len(poles)
     num = len(poles)
     [A,B,C,D] = Potapov.get_Potapov_ABCD(poles,vecs)
@@ -88,27 +90,27 @@ if __name__ == "__main__":
     Setting it to 1 only gets the pole at zero.
     '''
     ###########################################
-    #eg = Examples.example2
-    #kind = 'FP'  ## Fabry-Perot
-    #time_sim(eg,port_out = 1,t1=50,dt=0.0005, freq = 1.)
+    eg = Examples.Example2
+    kind = 'FP'  ## Fabry-Perot
+    time_sim(eg,port_out = [1],t1=50,dt=0.0005, freq = 1.)
     ###########################################
 
     '''
     Run several simulations of FP
     '''
 
-    eg = Examples.example2
-    kind = 'FP'  ## Fabry-Perot
-
-    for num in xrange(0,7):
-        time_sim(eg,port_out = [0,1],t1=50,freq = 1.+np.pi*num,\
-        kind=kind)
-    ###########################################
+    # eg = Examples.Example2
+    # kind = 'FP'  ## Fabry-Perot
+    #
+    # for num in xrange(5,7):
+    #     time_sim(eg,port_out = [0,1],t1=50,freq = 1.+np.pi*num,\
+    #     kind=kind)
+    # ###########################################
 
     '''
     Run a double - Fabry Perot (i.e. three mirrors)
     '''
-    #eg = Examples.example3
+    #eg = Examples.Example3
     #kind = 'DFP' ##'double'-Fabry-Perot
     #for num in xrange(105,106):
     #    time_sim(eg,port_out = 1,t1=10,dt=0.0001,freq = 1+np.pi*num,\
