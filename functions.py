@@ -170,7 +170,8 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
         if abs(func(root1-root2)) < eps:
             s+=e1*e2.H*delay
         else:
-            s += e1*e2.H*1j*(np.exp(-1j*delay*func(root1-root2)) - 1. )/func(root1-root2)
+            s += (e1*e2.H*1j*(np.exp(-1j*delay*func(root1-root2)) - 1. )
+                        /func(root1-root2) )
     return s[0,0]
 
 def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-7,

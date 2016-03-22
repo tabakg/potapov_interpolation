@@ -89,7 +89,7 @@ class Example():
     def run_Potapov(self):
         self.Potapov_ran = True
         self.make_roots()
-        #### self.roots =  [r for r in self.roots if r.real <= 0]
+        self.roots =  [r for r in self.roots if r.real <= 0]
         self.make_T_Testing()
         self.make_vecs()
 
