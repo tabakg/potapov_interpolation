@@ -154,9 +154,7 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
         various nodes
         delays (list of floats): The duration of each delay following
         each node in the system
-        eps (optional[float]): under tolerance eps, assume the two
-        roots are identical. The analytic expression of the intensity
-        changes in this case.
+        eps(optional[float]): cutoff for two frequencies being equal
         func (optional[funciton]): used to transform the roots. Default
         value is set to lambda z: z.imag, meaning we take the frequency
         of each mode.
@@ -183,6 +181,21 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
     various modes.
 
     TODO: add weights for different delays to account for geometry.
+
+    Args:
+        roots (list of complex numbers): The roots of the various eigenmodes
+        modes (list of column matrices): the amplitudes of the modes at
+        various nodes
+        delays (list of floats): The duration of each delay following
+        each node in the system
+        eps(optional[float]): cutoff for two frequencies being equal
+        func (optional[funciton]): used to transform the roots. Default
+        value is set to lambda z: z.imag, meaning we take the frequency
+        of each mode.
+
+    Returns:
+        A matrix of normalized inner products representing the geometric
+        overlap of the various given modes in the system.
     '''
     dim = len(roots)
     norms = [0]*dim
@@ -218,6 +231,29 @@ def make_nonlinear_interaction(roots, modes, delays, delay_index,
 
     If the indices of refraction n(omega_i) are given, we use them to compute
     the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.
+
+    Args:
+        roots (list of complex numbers): The roots of the various eigenmodes
+        modes (list of column matrices): the amplitudes of the modes at
+        various nodes
+        delays (list of floats): The duration of each delay following
+        each node in the system
+        delay_index (int): the index representing the delay line along which
+        the nonlinearity lies.
+        start_nonlin (float): the beginning of the nonlinearity
+        end_nonlin (float): the end of the nonlinearity
+        plus_or_minus_arr (array of 1s and -1s): Creation/annihilation of
+        a photon in each of the given modes
+        indices_of_refraction (list of floats): the indices of refraction
+        corresponding to the various modes
+        eps(optional[float]): cutoff for two frequencies being equal
+        func (optional[funciton]): used to transform the roots. Default
+        value is set to lambda z: z.imag, meaning we take the frequency
+        of each mode.
+
+    Returns:
+        A matrix of normalized inner products representing the geometric
+        overlap of the various given modes in the system.
     '''
 
     if start_nonlin < 0:
