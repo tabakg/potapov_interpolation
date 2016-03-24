@@ -168,19 +168,21 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
     s = 0j
     for delay,e1,e2 in zip(delays,v1,v2):
         if abs(func(root1-root2)) < eps:
-            s+=e1*e2.H*delay
+            s+=e1*np.conj(e2)*delay
         else:
             s += (e1*e2.H*1j*(np.exp(-1j*delay*func(root1-root2)) - 1. )
                         /func(root1-root2) )
     return s[0,0]
 
-def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-7,
+def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
                                 func=lambda z : z.imag):
     '''
     Given a list of roots and a list of vectors representing the
     electric field at each node of the corresponding nodes, compute
     the normalized matrix representing the inner products among the
     various modes.
+
+    TODO: add weights for different delays to account for geometry.
     '''
     dim = len(roots)
     norms = [0]*dim
@@ -194,3 +196,58 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-7,
                                 modes[i],modes[j],delays)) /
                                 np.sqrt(norms[i]*norms[j]) )
     return inner_prods
+
+def make_nonlinear_interaction(roots, modes, delays, delay_index,
+                                start_nonlin,end_nonlin,plus_or_minus_arr,
+                                indices_of_refraction = None,
+                                eps=1e-12,func=lambda z : z.imag):
+    '''
+    This function takes several (say M) roots and their corresponding modes,
+    as well as the (N) delay lengths of the network, and determines the term
+    we need to add to the Hamiltonian corresponding to the resulting
+    nonlinearity. We assume there is a crystal going from start_nonlin to
+    end_nonlin. The plus_or_minus_arr is an array of length m of 1 or -1
+    used to determined whether a mode corresponds to a creation (1, a^\dag)
+    or annihilation (-1,a) operator. The corresponding electric field integrated
+    will be E^\dag for 1 and E for -1.
+
+    The k-vectors are computed from the following formula:
+    k = omega / v_p = omega n(omega) / c.
+
+    Below we assume c == 1.
+
+    If the indices of refraction n(omega_i) are given, we use them to compute
+    the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.
+    '''
+
+    if start_nonlin < 0:
+        raise Exception('start_nonlin must be greater than 0.')
+
+    if end_nonlin > delays[delay_index]:
+        raise Exception('end_nonlin must be less than the delay of index delay_index.')
+
+    M = len(roots)
+    if len(modes) != M:
+        raise Exception('number of modes different than number of roots.')
+
+    if indices_of_refraction == None:
+        indices_of_refraction = [1.] * M
+
+    def pick_conj(m,sign):
+        if sign == 1:
+            return m
+        elif sign == -1:
+            return np.conj(m)
+        else:
+            raise Exception('bad input value -- must be 1 or -1.')
+
+    ms = [m_vec[delay_index,0] for m_vec in modes]
+    delta_k = sum([n*func(root)*sign for n,root,sign
+           in zip(indices_of_refraction,roots,plus_or_minus_arr)])
+    const = np.prod([pick_conj(m,sign) for m,sign in zip(ms,plus_or_minus_arr)])
+
+    if abs(delta_k) < eps: ## delta_k \approx 0
+        return const * (end_nonlin - start_nonlin)
+    else:
+        return const * 1j * (np.exp(-1j*delta_k*end_nonlin) -
+                             np.exp(-1j*delta_k*start_nonlin) ) / delta_k
