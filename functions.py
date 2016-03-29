@@ -211,7 +211,7 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
     return inner_prods
 
 def make_nonlinear_interaction(roots, modes, delays, delay_index,
-                                start_nonlin,end_nonlin,plus_or_minus_arr,
+                                start_nonlin,duration_nonlin,plus_or_minus_arr,
                                 indices_of_refraction = None,
                                 eps=1e-12,func=lambda z : z.imag):
     '''
@@ -219,10 +219,10 @@ def make_nonlinear_interaction(roots, modes, delays, delay_index,
     as well as the (N) delay lengths of the network, and determines the term
     we need to add to the Hamiltonian corresponding to the resulting
     nonlinearity. We assume there is a crystal going from start_nonlin to
-    end_nonlin. The plus_or_minus_arr is an array of length m of 1 or -1
-    used to determined whether a mode corresponds to a creation (1, a^\dag)
-    or annihilation (-1,a) operator. The corresponding electric field integrated
-    will be E^\dag for 1 and E for -1.
+    and has length duration_nonlin. The plus_or_minus_arr is an array of
+    length m of 1 or -1 used to determined whether a mode corresponds to a
+    creation (1, a^\dag) or annihilation (-1,a) operator. The corresponding
+    electric field integrated will be E^\dag for 1 and E for -1.
 
     The k-vectors are computed from the following formula:
     k = omega / v_p = omega n(omega) / c.
@@ -241,7 +241,7 @@ def make_nonlinear_interaction(roots, modes, delays, delay_index,
         delay_index (int): the index representing the delay line along which
         the nonlinearity lies.
         start_nonlin (float): the beginning of the nonlinearity
-        end_nonlin (float): the end of the nonlinearity
+        duration_nonlin (float): duration of the nonlinearity
         plus_or_minus_arr (array of 1s and -1s): Creation/annihilation of
         a photon in each of the given modes
         indices_of_refraction (list of floats): the indices of refraction
@@ -258,9 +258,10 @@ def make_nonlinear_interaction(roots, modes, delays, delay_index,
 
     if start_nonlin < 0:
         raise Exception('start_nonlin must be greater than 0.')
-
-    if end_nonlin > delays[delay_index]:
-        raise Exception('end_nonlin must be less than the delay of index delay_index.')
+    if duration_nonlin < 0:
+        raise Exception('duration_nonlin must be greater than 0.')
+    if duration_nonlin + start_nonlin > delays[delay_index]:
+        raise Exception('duration_nonlin + start_nonlin must be less than the delay of index delay_index.')
 
     M = len(roots)
     if len(modes) != M:
@@ -283,7 +284,7 @@ def make_nonlinear_interaction(roots, modes, delays, delay_index,
     const = np.prod([pick_conj(m,sign) for m,sign in zip(ms,plus_or_minus_arr)])
 
     if abs(delta_k) < eps: ## delta_k \approx 0
-        return const * (end_nonlin - start_nonlin)
+        return const * duration_nonlin
     else:
-        return const * 1j * (np.exp(-1j*delta_k*end_nonlin) -
+        return const * 1j * (np.exp(-1j*delta_k*(duration_nonlin - start_nonlin)) -
                              np.exp(-1j*delta_k*start_nonlin) ) / delta_k
