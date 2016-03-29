@@ -161,6 +161,28 @@ def normalize(vec):
     '''
     return vec / la.norm(vec)
 
+def estimate_D(A,B,C,T,z):
+    '''
+    Estimate the scattering matrix S=D using the ABC matrices
+    the transfer function T at a frequency z = i \omega.
+
+    Try to satisfy
+    T(z) = D + C(zI-A)^{1}B
+
+    Args:
+        A,B,C (matrices): The A,B, and C matrices of the
+        state-space representation
+        T (matrix-valued function): The input/output function
+        to estimate
+        z (complex number): the location at which the scattering
+        matrix will be estimated
+    Returns:
+        The estimated S=D scaterring matrix based on the value of
+        the function T and the ABC matrices.
+    '''
+    N = np.shape(A)[0]
+    return T(z)+C*la.inv(A-z*np.eye(N))*B
+
 def get_ABCD(val, vec):
     '''
     Make the ABCD model of a single Potapov factor given some eigenvalue
@@ -171,15 +193,16 @@ def get_ABCD(val, vec):
     Args:
         val (complex number): an eigenvalue
         vec (complex-valued matrix): an eigenvector
-
+        sym (optiona[boolean]): Modify B and C so that B = C.H
     Returns:
         A list [A,B,C,D] of four matrices representing the ABCD model.
 
     '''
     N = vec.shape[0]
-    return [val*vec.H*vec, vec.H, vec*(val+val.conjugate()), np.eye(N)]
+    q = np.sqrt( -(val+val.conjugate()) )
+    return [val*vec.H*vec, -q*vec.H, q*vec, np.eye(N)]
 
-def get_Potapov_ABCD(poles,vecs):
+def get_Potapov_ABCD(poles,vecs,T=None,z=None):
     '''
     Combine the ABCD models for the different degrees of freedom.
 
@@ -205,5 +228,8 @@ def get_Potapov_ABCD(poles,vecs):
         A = np.vstack((A_first_row_block,A_second_row_block))
         B = np.vstack(( B1, B2*D1))
         C = np.hstack(( D2*C1, C2))
-        D = D2*D1
+        if T != None and z != None:
+            D = estimate_D(A,B,C,T,z)
+        else:
+            D = D2*D1
         return [A,B,C,D]
