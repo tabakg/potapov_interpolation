@@ -210,7 +210,7 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
                                 np.sqrt(norms[i]*norms[j]) )
     return inner_prods
 
-def make_nonlinear_interaction(roots, modes, delays, delay_index,
+def make_nonlinear_interaction(roots, modes, delays, delay_indices,
                                 start_nonlin,duration_nonlin,plus_or_minus_arr,
                                 indices_of_refraction = None,
                                 eps=1e-12,func=lambda z : z.imag):
@@ -227,7 +227,8 @@ def make_nonlinear_interaction(roots, modes, delays, delay_index,
     The k-vectors are computed from the following formula:
     k = omega / v_p = omega n(omega) / c.
 
-    Below we assume c == 1.
+    Below we assume c == 1. We can modify the frequencies or n's to make the
+    units work.
 
     If the indices of refraction n(omega_i) are given, we use them to compute
     the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.
@@ -238,14 +239,18 @@ def make_nonlinear_interaction(roots, modes, delays, delay_index,
         various nodes
         delays (list of floats): The duration of each delay following
         each node in the system
-        delay_index (int): the index representing the delay line along which
-        the nonlinearity lies.
-        start_nonlin (float): the beginning of the nonlinearity
+        delay_indices (int OR list/tuple of ints): the index representing the
+        delay line along which the nonlinearity lies. If given a list/tuple then
+        the nonlinearity interacts the N different modes.
+        start_nonlin (float OR list/tuple of floats): the beginning of the
+        nonlinearity. If a list/tuple then each nonlinearity begins at a
+        different time along its corresponding delay line.
         duration_nonlin (float): duration of the nonlinearity
         plus_or_minus_arr (array of 1s and -1s): Creation/annihilation of
         a photon in each of the given modes
-        indices_of_refraction (list of floats): the indices of refraction
-        corresponding to the various modes
+        indices_of_refraction (float/int or list/tuple of float/int): the
+        indices of refraction corresponding to the various modes. If float or
+        int then all are the same.
         eps(optional[float]): cutoff for two frequencies being equal
         func (optional[funciton]): used to transform the roots. Default
         value is set to lambda z: z.imag, meaning we take the frequency
@@ -256,19 +261,40 @@ def make_nonlinear_interaction(roots, modes, delays, delay_index,
         overlap of the various given modes in the system.
     '''
 
-    if start_nonlin < 0:
-        raise Exception('start_nonlin must be greater than 0.')
-    if duration_nonlin < 0:
-        raise Exception('duration_nonlin must be greater than 0.')
-    if duration_nonlin + start_nonlin > delays[delay_index]:
-        raise Exception('duration_nonlin + start_nonlin must be less than the delay of index delay_index.')
-
     M = len(roots)
     if len(modes) != M:
         raise Exception('number of modes different than number of roots.')
 
+    if type(delay_indices) == int:
+        delay_indices = [delay_indices] * M
+    elif type(delay_indices) != list and type(delay_indices) != tuple:
+        raise Exception('delay_indices must be an int or a list/tuple')
+
+    if type(start_nonlin) == int or type(start_nonlin) == float:
+        start_nonlin = [start_nonlin] * M
+    elif type(start_nonlin) != list and type(start_nonlin) != tuple:
+        raise Exception('start_nonlin must be an int/float or a list/tuple')
+
+    if duration_nonlin < 0:
+        raise Exception('duration_nonlin must be greater than 0.')
+
+    for delay_index,start_loc in zip(delay_indices,start_nonlin):
+        if start_loc < 0:
+            raise Exception('each element of start_nonlin must be greater than 0.')
+        if duration_nonlin + start_loc > delays[delay_index]:
+            raise Exception('duration_nonlin + start_loc must be less than the '
+                           +'delay of index delay_index for start_loc in '
+                           +'start_nonlin and delay_index in delay_indices.')
+
     if indices_of_refraction == None:
         indices_of_refraction = [1.] * M
+    elif (type(indices_of_refraction) == float or
+          type(indices_of_refraction) == int):
+        indices_of_refraction = [float(indices_of_refraction)] * M
+    elif (type(indices_of_refraction) != list and
+          type(indices_of_refraction) != tuple):
+        raise Exception('indices_of_refraction is not a float, integer, list, '
+                       +'tuple, or None.')
 
     def pick_conj(m,sign):
         if sign == 1:
@@ -278,13 +304,13 @@ def make_nonlinear_interaction(roots, modes, delays, delay_index,
         else:
             raise Exception('bad input value -- must be 1 or -1.')
 
-    ms = [m_vec[delay_index,0] for m_vec in modes]
+    ms = [m_vec[delay_index,0] for m_vec,delay_index in zip(modes,delay_indices)]
     delta_k = sum([n*func(root)*sign for n,root,sign
            in zip(indices_of_refraction,roots,plus_or_minus_arr)])
-    const = np.prod([pick_conj(m,sign) for m,sign in zip(ms,plus_or_minus_arr)])
+    const = np.prod([pick_conj(m*np.exp(-1j*delta_k*start_loc),sign)
+            for m,sign,start_loc in zip(ms,plus_or_minus_arr,start_nonlin)])
 
     if abs(delta_k) < eps: ## delta_k \approx 0
         return const * duration_nonlin
     else:
-        return const * 1j * (np.exp(-1j*delta_k*(duration_nonlin - start_nonlin)) -
-                             np.exp(-1j*delta_k*start_nonlin) ) / delta_k
+        return 1j*const*(np.exp(-1j*delta_k*duration_nonlin) - 1 ) / delta_k
