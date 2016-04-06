@@ -18,7 +18,9 @@ import itertools
 
 class Hamiltonian():
     def __init__(self,roots,modes,delays,delay_indices,start_nonlin,
-        duration_nonlin,indices_of_refraction,chi_order,photons_annihilated):
+        duration_nonlin,
+        indices_of_refraction = 1.,chi_order = 3, photons_annihilated = 2,
+        nonlin_coeff = 1.):
         self.roots = roots
         self.modes = modes
         self.delays = delays
@@ -32,6 +34,7 @@ class Hamiltonian():
         self.a = [sp.symbols('a_'+str(i)) for i in range(self.m)]
         self.a_H = [sp.symbols('a^H_'+str(i)) for i in range(self.m)]
         self.H = None
+        self.nonlin_coeff = nonlin_coeff
 
     def make_nonlin_term_sp(self,combination,pm_arr):
         '''
@@ -153,7 +156,7 @@ class Hamiltonian():
         '''
         H_nonlin = self.make_nonlin_H(eps)
         H_lin = self.make_lin_H(Omega)
-        self.H = H_nonlin + H_lin
+        self.H = H_lin + H_nonlin * self.nonlin_coeff
         return self.H
 
     def make_eq_motion(self,):

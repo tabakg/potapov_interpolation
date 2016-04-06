@@ -107,16 +107,15 @@ if __name__ == "__main__":
     B_d = -double_up(C.H)
 
     ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,0,0,0.1,1000.,3,2)
-    H = ham.make_H(A_d)
+    H = ham.make_H(-1j*A_d)
     eq_mot = ham.make_eq_motion()
-
 
     a_in = lambda t: np.asmatrix([1e-6]*np.shape(D_d)[-1]).T  ## make a sample input function
 
     f = make_f(eq_mot,B_d,a_in)
     f_lin = make_f_lin(A_d,B_d,a_in)
 
-    Y = run_ODE(f_lin, a_in, C_d, D_d, 2*M, T = 100, dt = 0.01)
+    Y = run_ODE(f, a_in, C_d, D_d, 2*M, T = 100, dt = 0.01)  ## select f here.
 
     for i in range(2):
         plt.plot([abs(y)[i][0,0] for y in Y ])
