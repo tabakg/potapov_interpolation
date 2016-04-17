@@ -159,6 +159,20 @@ class Hamiltonian():
         self.H = H_lin + H_nonlin * self.nonlin_coeff
         return self.H
 
+    def make_sp_conj(self,A):
+        '''
+        Returns the symbolic conjugate of A.
+        Args:
+            A (symbolic expression in symbols a[i] and a_H[i])
+        Returns:
+            The complex conjugate of A
+        '''
+        A_H = sp.conjugate(A)
+        for i in range(len(self.a)):
+            A_H = A_H.subs(sp.conjugate(self.a[i]),self.a_H[i])
+            A_H = A_H.subs(sp.conjugate(self.a_H[i]),self.a[i])
+        return A_H
+
     def make_eq_motion(self,):
         '''
         Input is a tuple or list, output is a matrix vector.
@@ -170,7 +184,8 @@ class Hamiltonian():
             The equations of motion take an array as an input and return a column
             vector as an output.
         '''
+        A_H = self.make_sp_conj(self.H)
         diff_ls = ([1j*sp.diff(self.H,var) for var in self.a_H] +
-                  [-1j*sp.diff(self.H,var) for var in self.a])
+                   [-1j*sp.diff(A_H,var) for var in self.a])
         fs = [sp.lambdify( tuple(self.a+self.a_H),expression) for expression in diff_ls ]
         return lambda arr: (np.asmatrix([ f(* arr ) for f in fs])).T
