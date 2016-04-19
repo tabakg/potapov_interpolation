@@ -109,8 +109,10 @@ class Example1(Example):
         Example.__init__(self, max_freq,max_linewidth,N)
 
         self.tau = tau
+        self.delays = [tau]
         self.r = r
-
+        self.M1=np.matrix([[r]])
+        self.E = lambda z: np.exp(-z*self.tau)
         self.T = lambda z: np.matrix([(np.exp(-z*self.tau) - self.r)/
                                         (1.-self.r* np.exp(-z*self.tau))])
         self.T_denom = lambda z: (1.-self.r* np.exp(-z*self.tau))
@@ -120,12 +122,17 @@ class Example2(Example):
     '''
     Two inputs, two outputs with a delay (i.e. Fabry-Perot).
     '''
-    def __init__(self, max_freq=10.,max_linewidth=0.5,N=1000):
+    def __init__(self, max_freq=10.,max_linewidth=10.,N=1000,
+                    r=0.9,tau = 1.):
         Example.__init__(self, max_freq,max_linewidth,N)
-        r = 0.9
-        tau = 1.
-        dim = 2
+        self.r = r
+        self.delays = [tau]
         e = lambda z: np.exp(-z*tau)
+        dim = 2
+
+        self.M1 = np.matrix([[0,r],[r,0]])
+        self.E = lambda z: np.matrix([[e(z),0],[0,e(z)]])
+
         self.T_denom = lambda z: (1.-r**2* e(z)**2)
         self.T = lambda z: -r*np.eye(dim) + ((1.-r**2.)/self.T_denom(z)) * \
             np.matrix([[r*e(z)**2,e(z)],[e(z),r*e(z)**2]])
@@ -193,6 +200,7 @@ class Example4(Example):
         tau2 = 0.039
         tau3 = 0.11
         tau4 = 0.08
+        self.delays = [tau1,tau2,tau3,tau4]
         r = 0.9
         t = np.sqrt(1-r**2)
         dim = 4
@@ -219,6 +227,7 @@ class Example4(Example):
                              [0,np.exp(-tau2*z),0,0],
                              [0,0,np.exp(-tau3*z),0],
                              [0,0,0,np.exp(-tau4*z)]])
+        self.E = E
 
         self.T_denom = lambda z: la.det(np.eye(dim) - M1*E(z))
         self.Tp_denom = lambda z: der(self.T_denom,z)
@@ -234,6 +243,8 @@ class Example5(Example):
         tau2 = 0.039
         tau3 = 0.11
         tau4 = 0.08
+        self.delays = [tau1,tau2,tau3,tau4]
+
         r = 0.9
         t = np.sqrt(1-r**2)
         dim = 4
@@ -242,6 +253,7 @@ class Example5(Example):
                         [r,0,0,0],
                        [0,r,0,t],
                        [t,0,0,0]])
+        self.M1=M1
 
         M2 = np.matrix([[t,0],
                         [0,t],
@@ -258,6 +270,7 @@ class Example5(Example):
                              [0,np.exp(-(tau2-tau4)*z),0,0],
                              [0,0,np.exp(-tau3*z),0],
                              [0,0,0,1.]])
+        self.E=E
 
         self.T_denom = lambda z: la.det(np.eye(dim) - M1*E(z))
         self.Tp_denom = lambda z: der(self.T_denom,z)

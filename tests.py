@@ -1,6 +1,7 @@
 import Potapov as P
 import Roots as R
-import Examples as E
+import Examples
+import functions
 import numpy as np
 import numpy.testing as testing
 
@@ -88,17 +89,41 @@ def test_Roots_2():
         [-5.,-4.,-3.,-2.,-1.,-0.,1.,2.,3.,4.,5.] )
 
 def test_example_1():
-    T,T_test,roots,vecs  = E.example1()
+    Ex = Examples.Example1()
+    Ex.run_Potapov()
+    E = Ex.E
+    roots = Ex.roots
+    M1 = Ex.M1
+    delays = Ex.delays
+    modes = functions.spatial_modes(roots,M1,E)
     assert( len(roots) == 3)
 
 def test_example_2():
-    T,T_test,roots,vecs  = E.example2()
+    Ex = Examples.Example2()
+    Ex.run_Potapov()
+    E = Ex.E
+    roots = Ex.roots
+    M1 = Ex.M1
+    delays = Ex.delays
+    modes = functions.spatial_modes(roots,M1,E)
     assert( len(roots) == 7)
 
 def test_example_3():
-    T,T_test,roots,vecs  = E.example3()
+    Ex = Examples.Example3()
+    Ex.run_Potapov()
+    E = Ex.E
+    roots = Ex.roots
+    M1 = Ex.M1
+    delays = Ex.delays
+    modes = functions.spatial_modes(roots,M1,E)
     assert( len(roots) == 11)
 
 def test_example_4():
-    T,T_test,roots,vecs  = E.example4()
-    assert( len(roots) == 4)
+    Ex = Examples.Example4()
+    Ex.run_Potapov()
+    E = Ex.E
+    roots = Ex.roots
+    M1 = Ex.M1
+    delays = Ex.delays
+    modes = functions.spatial_modes(roots,M1,E)
+    assert( len(roots) == 8)

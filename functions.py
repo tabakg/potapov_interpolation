@@ -245,7 +245,7 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
         start_nonlin (float OR list/tuple of floats): the beginning of the
         nonlinearity. If a list/tuple then each nonlinearity begins at a
         different time along its corresponding delay line.
-        duration_nonlin (float): duration of the nonlinearity
+        duration_nonlin (float): duration of the nonlinearity in terms of length.
         plus_or_minus_arr (array of 1s and -1s): Creation/annihilation of
         a photon in each of the given modes
         indices_of_refraction (float/int or list/tuple of float/int): the
@@ -304,11 +304,11 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
         else:
             raise Exception('bad input value -- must be 1 or -1.')
 
-    ms = [m_vec[delay_index,0] for m_vec,delay_index in zip(modes,delay_indices)]
+    values_at_nodes = [m_vec[delay_index,0] for m_vec,delay_index in zip(modes,delay_indices)]
     delta_k = sum([n*func(root)*sign for n,root,sign
            in zip(indices_of_refraction,roots,plus_or_minus_arr)])
     const = np.prod([pick_conj(m*np.exp(-1j*delta_k*start_loc),sign)
-            for m,sign,start_loc in zip(ms,plus_or_minus_arr,start_nonlin)])
+            for m,sign,start_loc in zip(values_at_nodes,plus_or_minus_arr,start_nonlin)])
 
     if abs(delta_k) < eps: ## delta_k \approx 0
         return const * duration_nonlin
