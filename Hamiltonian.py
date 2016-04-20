@@ -36,7 +36,6 @@ class Hamiltonian():
         self.photons_annihilated=photons_annihilated
         self.m = len(roots)
         self.a = [BosonOp('a_'+str(i)) for i in range(self.m)]
-#        self.a_H = [sp.symbols('a^H_'+str(i)) for i in range(self.m)]
         self.H = 0.
         self.nonlin_coeff = nonlin_coeff
 
@@ -162,20 +161,6 @@ class Hamiltonian():
         H_lin = self.make_lin_H(Omega)
         self.H = H_lin + H_nonlin * self.nonlin_coeff
         return self.H
-
-    # def make_sp_conj(self,A):
-    #     '''
-    #     Returns the symbolic conjugate of A.
-    #     Args:
-    #         A (symbolic expression in symbols a[i] and a_H[i])
-    #     Returns:
-    #         The complex conjugate of A
-    #     '''
-    #     A_H = sp.conjugate(A)
-    #     for i in range(len(self.a)):
-    #         A_H = A_H.subs(sp.conjugate(self.a[i]),self.a_H[i])
-    #         A_H = A_H.subs(sp.conjugate(self.a_H[i]),self.a[i])
-    #     return A_H
 
     def make_eq_motion(self,):
         '''
