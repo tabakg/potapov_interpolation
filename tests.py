@@ -137,6 +137,16 @@ def test_example_4():
     assert( len(roots) == 8)
 
 def test_Hamiltonian(eps=1e-5):
+    '''
+    This method tests various methods in Hamiltonian and Time_Sims_nonlin.
+    In particular, we compare the output from the classical equations of motion
+    that results directly from the ABCD model versus the classical Hamiltonian
+    equations of motion when we set the coefficient of the nonlinearity to zero.
+
+    Args:
+        eps[optional(float)]: how closely each point in time along the two
+        tested trajectories should match.
+    '''
     Ex = Examples.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=10.)
     Ex.run_Potapov()
     modes = functions.spatial_modes(Ex.roots,Ex.M1,Ex.E)

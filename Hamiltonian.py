@@ -178,19 +178,24 @@ class Hamiltonian():
             vector as an output.
         '''
 
+        ## c-numbers
         b = [sp.symbols('b'+str(i)) for i in range(self.m)]
         b_H = [sp.symbols('b_H'+str(i)) for i in range(self.m)]
 
         ## Hamiltonian is not always Hermitian. We use its complex conjugate.
         H_H = Dagger(self.H)
 
-        def subs_c_number(expression):
+        def subs_c_number(expression,i):
             return expression.subs(self.a[i],b[i]).subs(Dagger(self.a[i]),b_H[i])
 
+        H_c_numbers = self.H
+        H_H_c_numbers = H_H
         for i in range(self.m):
-            H_c_numbers = subs_c_number(self.H)
-            H_H_c_numbers = subs_c_number(H_H)
+            H_c_numbers = subs_c_number(H_c_numbers,i)
+            H_H_c_numbers = subs_c_number(H_H_c_numbers,i)
 
+
+        ## classical equations of motion
         diff_ls = ([1j*sp.diff(H_c_numbers,var) for var in b_H] +
                    [-1j*sp.diff(H_H_c_numbers,var) for var in b])
         fs = [sp.lambdify( tuple( b+b_H ),expression) for expression in diff_ls ]
