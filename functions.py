@@ -180,7 +180,7 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
                         /func(root1-root2) )
     return s[0,0]
 
-def _norm_of_mode(root,mode,delay):
+def _norm_of_mode(root,mode,delays):
     '''
     Find the norm of the given mode
     '''
