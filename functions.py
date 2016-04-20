@@ -143,8 +143,8 @@ def spatial_modes(roots,M1,E,delays=None):
         return spatial_vecs
     if type(delays) != list:
         raise Exception('delays must be a list of delays.')
-    for root,mode in zip(roots,spatial_vecs):
-        mode /= _norm_of_mode(root,mode,delays)
+    for mode in spatial_vecs:
+        mode /= _norm_of_mode(mode,delays)
     return spatial_vecs
 
 def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
@@ -180,11 +180,19 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
                         /func(root1-root2) )
     return s[0,0]
 
-def _norm_of_mode(root,mode,delays):
+def _norm_of_mode(mode,delays):
     '''
     Find the norm of the given mode
+
+    Args:
+        mode (vector): column of complex numbers describing the amplitude of
+        each mode at the various nodes
+        delays (list of floats): time delays in the network
+
+    Returns:
+        the norm of the mode
     '''
-    return np.sqrt(inner_product_of_two_modes(root,root,mode,mode,delays))
+    return np.sqrt(inner_product_of_two_modes(0,0,mode,mode,delays))
 
 def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
                                 func=lambda z : z.imag):
