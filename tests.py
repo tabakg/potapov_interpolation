@@ -1,9 +1,17 @@
-import Potapov as P
-import Roots as R
+import Potapov
+import Roots
 import Examples
 import functions
 import numpy as np
 import numpy.testing as testing
+import Time_Sims_nonlin
+import Hamiltonian
+
+import numpy as np
+import numpy.linalg as la
+from scipy.integrate import ode
+
+import matplotlib.pyplot as plt
 
 def test_Potapov_1(eps=1e-7):
     '''
@@ -13,10 +21,10 @@ def test_Potapov_1(eps=1e-7):
     precision.
     '''
     vals = [1-1j,-1+1j, 2+2j]
-    vecs = [ P.normalize(np.matrix([-5.,4j])).T, P.normalize(np.matrix([1j,3.]).T),
-            P.normalize(np.matrix([2j,7.]).T)]
-    T = P.finite_transfer_function(np.eye(2),vecs,vals)
-    T_test = P.get_Potapov(T,vals)
+    vecs = [ Potapov.normalize(np.matrix([-5.,4j])).T, Potapov.normalize(np.matrix([1j,3.]).T),
+            Potapov.normalize(np.matrix([2j,7.]).T)]
+    T = Potapov.finite_transfer_function(np.eye(2),vecs,vals)
+    T_test = Potapov.get_Potapov(T,vals)
 
     points = [0.,10j,10.,-10j,10.+10j]
 
@@ -66,8 +74,8 @@ def test_Roots_1():
     width = 5.*np.pi-1e-5
     height = 5.*np.pi-1e-5
 
-    roots = np.asarray(R.get_roots_rect(f,fp,x_cent,y_cent,width,height,N))
-    roots_inside_boundary = R.inside_boundary(roots,x_cent,y_cent,width,height)
+    roots = np.asarray(Roots.get_roots_rect(f,fp,x_cent,y_cent,width,height,N))
+    roots_inside_boundary = Roots.inside_boundary(roots,x_cent,y_cent,width,height)
     two_sets_almost_equal(np.asarray(roots_inside_boundary)/np.pi,
         [-4.,-3.,-2.,-1.,-0.,1.,2.,3.,4.] )
 
@@ -83,8 +91,8 @@ def test_Roots_2():
     width = 5.*np.pi+1e-5
     height = 5.*np.pi+1e-5
 
-    roots = np.asarray(R.get_roots_rect(f,fp,x_cent,y_cent,width,height,N))
-    roots_inside_boundary = R.inside_boundary(roots,x_cent,y_cent,width,height)
+    roots = np.asarray(Roots.get_roots_rect(f,fp,x_cent,y_cent,width,height,N))
+    roots_inside_boundary = Roots.inside_boundary(roots,x_cent,y_cent,width,height)
     two_sets_almost_equal(np.asarray(roots_inside_boundary)/np.pi,
         [-5.,-4.,-3.,-2.,-1.,-0.,1.,2.,3.,4.,5.] )
 
@@ -127,3 +135,32 @@ def test_example_4():
     delays = Ex.delays
     modes = functions.spatial_modes(roots,M1,E)
     assert( len(roots) == 8)
+
+def test_Hamiltonian(eps=1e-5):
+    Ex = Examples.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=10.)
+    Ex.run_Potapov()
+    modes = functions.spatial_modes(Ex.roots,Ex.M1,Ex.E)
+    M = len(Ex.roots)
+
+    A,B,C,D = Potapov.get_Potapov_ABCD(Ex.roots,Ex.vecs,Ex.T,z=0.)
+    A_d,C_d,D_d = map(Time_Sims_nonlin.double_up,(A,C,D))
+    B_d = -Time_Sims_nonlin.double_up(C.H)
+
+    ## make Hamiltonian with zero nonlin_coeff
+    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,
+                              delay_indices = 0,start_nonlin = 0,duration_nonlin = 0.1,
+                              indices_of_refraction = 1.,
+                              chi_order = 3,photons_annihilated = 2,nonlin_coeff=0.)
+    H = ham.make_H(-1j*A)
+    eq_mot = ham.make_eq_motion()
+
+    a_in = lambda t: np.asmatrix([1.]*np.shape(D_d)[-1]).T  ## make a sample input function
+
+    ## find f for the linear and nonlinear systems
+    f = Time_Sims_nonlin.make_f(eq_mot,B_d,a_in)
+    f_lin = Time_Sims_nonlin.make_f_lin(A_d,B_d,a_in)
+
+    Y_lin = Time_Sims_nonlin.run_ODE(f_lin, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)  ## select f here.
+    Y_nonlin = Time_Sims_nonlin.run_ODE(f, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)  ## select f here.
+    for y_lin,y_nonlin in zip(Y_lin,Y_nonlin):
+        assert abs(sum(y_lin - y_nonlin)) < eps

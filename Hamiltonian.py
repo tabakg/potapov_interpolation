@@ -16,6 +16,10 @@ import numpy.linalg as la
 import sympy as sp
 import itertools
 
+from sympy.physics.quantum import *
+from sympy.physics.quantum.boson import *
+from sympy.physics.quantum.operatorordering import *
+
 class Hamiltonian():
     def __init__(self,roots,modes,delays,delay_indices,start_nonlin,
         duration_nonlin,
@@ -31,9 +35,9 @@ class Hamiltonian():
         self.chi_order=chi_order
         self.photons_annihilated=photons_annihilated
         self.m = len(roots)
-        self.a = [sp.symbols('a_'+str(i)) for i in range(self.m)]
-        self.a_H = [sp.symbols('a^H_'+str(i)) for i in range(self.m)]
-        self.H = None
+        self.a = [BosonOp('a_'+str(i)) for i in range(self.m)]
+#        self.a_H = [sp.symbols('a^H_'+str(i)) for i in range(self.m)]
+        self.H = 0.
         self.nonlin_coeff = nonlin_coeff
 
     def make_nonlin_term_sp(self,combination,pm_arr):
@@ -51,7 +55,7 @@ class Hamiltonian():
         r = 1.
         for index,sign in zip(combination,pm_arr):
             if sign == 1:
-                r*= self.a_H[index]
+                r*= Dagger(self.a[index])
             else:
                 r *= self.a[index]
         return r
@@ -140,7 +144,7 @@ class Hamiltonian():
         H_lin_sp = 0.
         for i in range(self.m):
             for j in range(self.m):
-                H_lin_sp += self.a_H[i]*self.a[j]*Omega[i,j]
+                H_lin_sp += Dagger(self.a[i])*self.a[j]*Omega[i,j]
         return H_lin_sp
 
     def make_H(self,Omega,eps=1e-5):
@@ -159,24 +163,28 @@ class Hamiltonian():
         self.H = H_lin + H_nonlin * self.nonlin_coeff
         return self.H
 
-    def make_sp_conj(self,A):
-        '''
-        Returns the symbolic conjugate of A.
-        Args:
-            A (symbolic expression in symbols a[i] and a_H[i])
-        Returns:
-            The complex conjugate of A
-        '''
-        A_H = sp.conjugate(A)
-        for i in range(len(self.a)):
-            A_H = A_H.subs(sp.conjugate(self.a[i]),self.a_H[i])
-            A_H = A_H.subs(sp.conjugate(self.a_H[i]),self.a[i])
-        return A_H
+    # def make_sp_conj(self,A):
+    #     '''
+    #     Returns the symbolic conjugate of A.
+    #     Args:
+    #         A (symbolic expression in symbols a[i] and a_H[i])
+    #     Returns:
+    #         The complex conjugate of A
+    #     '''
+    #     A_H = sp.conjugate(A)
+    #     for i in range(len(self.a)):
+    #         A_H = A_H.subs(sp.conjugate(self.a[i]),self.a_H[i])
+    #         A_H = A_H.subs(sp.conjugate(self.a_H[i]),self.a[i])
+    #     return A_H
 
     def make_eq_motion(self,):
         '''
         Input is a tuple or list, output is a matrix vector.
-        This generates Hamilton's equations of motion for a and a^H
+        This generates Hamilton's equations of motion for a and a^H.
+        These equations are CLASSICAL equations of motion. This means
+        we replace the operators with c-numbers. The order of the operators
+        will yield different results, so we assume the Hamiltonian is already
+        in the desired order (e.g. normally ordered).
 
         Returns:
             A function that yields the Hamiltonian equations of motion based on
@@ -184,8 +192,21 @@ class Hamiltonian():
             The equations of motion take an array as an input and return a column
             vector as an output.
         '''
-        A_H = self.make_sp_conj(self.H)
-        diff_ls = ([1j*sp.diff(self.H,var) for var in self.a_H] +
-                   [-1j*sp.diff(A_H,var) for var in self.a])
-        fs = [sp.lambdify( tuple(self.a+self.a_H),expression) for expression in diff_ls ]
+
+        b = [sp.symbols('b'+str(i)) for i in range(self.m)]
+        b_H = [sp.symbols('b_H'+str(i)) for i in range(self.m)]
+
+        ## Hamiltonian is not always Hermitian. We use its complex conjugate.
+        H_H = Dagger(self.H)
+
+        def subs_c_number(expression):
+            return expression.subs(self.a[i],b[i]).subs(Dagger(self.a[i]),b_H[i])
+
+        for i in range(self.m):
+            H_c_numbers = subs_c_number(self.H)
+            H_H_c_numbers = subs_c_number(H_H)
+
+        diff_ls = ([1j*sp.diff(H_c_numbers,var) for var in b_H] +
+                   [-1j*sp.diff(H_H_c_numbers,var) for var in b])
+        fs = [sp.lambdify( tuple( b+b_H ),expression) for expression in diff_ls ]
         return lambda arr: (np.asmatrix([ f(* arr ) for f in fs])).T
