@@ -103,7 +103,7 @@ def test_example_1():
     roots = Ex.roots
     M1 = Ex.M1
     delays = Ex.delays
-    modes = functions.spatial_modes(roots,M1,E)
+    modes = functions.spatial_modes(roots,M1,E,delays)
     assert( len(roots) == 3)
 
 def test_example_2():
@@ -113,7 +113,7 @@ def test_example_2():
     roots = Ex.roots
     M1 = Ex.M1
     delays = Ex.delays
-    modes = functions.spatial_modes(roots,M1,E)
+    modes = functions.spatial_modes(roots,M1,E,delays)
     assert( len(roots) == 7)
 
 def test_example_3():
@@ -123,7 +123,7 @@ def test_example_3():
     roots = Ex.roots
     M1 = Ex.M1
     delays = Ex.delays
-    modes = functions.spatial_modes(roots,M1,E)
+    modes = functions.spatial_modes(roots,M1,E,delays)
     assert( len(roots) == 11)
 
 def test_example_4():
@@ -133,7 +133,7 @@ def test_example_4():
     roots = Ex.roots
     M1 = Ex.M1
     delays = Ex.delays
-    modes = functions.spatial_modes(roots,M1,E)
+    modes = functions.spatial_modes(roots,M1,E,delays)
     assert( len(roots) == 8)
 
 def test_Hamiltonian(eps=1e-5):
@@ -149,7 +149,7 @@ def test_Hamiltonian(eps=1e-5):
     '''
     Ex = Examples.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=10.)
     Ex.run_Potapov()
-    modes = functions.spatial_modes(Ex.roots,Ex.M1,Ex.E)
+    modes = functions.spatial_modes(Ex.roots,Ex.M1,Ex.E,Ex.delays)
     M = len(Ex.roots)
 
     A,B,C,D = Potapov.get_Potapov_ABCD(Ex.roots,Ex.vecs,Ex.T,z=0.)

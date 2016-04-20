@@ -121,7 +121,7 @@ def Pade(n,z):
     '''
     return Q(z,n)/Q(-z,n)
 
-def spatial_modes(roots,M1,E):
+def spatial_modes(roots,M1,E,delays=None):
     '''
     Obtain the spetial mode profile at each node up to a constant.
 
@@ -129,14 +129,22 @@ def spatial_modes(roots,M1,E):
         roots: The eigenvalues of the system
         matrix M1: The connectivity matrix among internal nodes
         E (matrix-valued function): Time-delay matrix
+        delays (optional[list of floats]):
 
     Returns:
         A list of spatial eigenvectors.
     '''
+
     spatial_vecs = []
     for i in xrange(len(roots)):
         evals,evecs = la.eig(M1*E(roots[i]))
         spatial_vecs.append(evecs[:,np.argmin(abs(1.-evals))])
+    if delays == None:
+        return spatial_vecs
+    if type(delays) != list:
+        raise Exception('delays must be a list of delays.')
+    for root,mode in zip(roots,spatial_vecs):
+        mode /= _norm_of_mode(root,mode,delays)
     return spatial_vecs
 
 def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
@@ -171,6 +179,12 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
             s += (e1*e2.H*1j*(np.exp(-1j*delay*func(root1-root2)) - 1. )
                         /func(root1-root2) )
     return s[0,0]
+
+def _norm_of_mode(root,mode,delay):
+    '''
+    Find the norm of the given mode
+    '''
+    return np.sqrt(inner_product_of_two_modes(root,root,mode,mode,delays))
 
 def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
                                 func=lambda z : z.imag):
