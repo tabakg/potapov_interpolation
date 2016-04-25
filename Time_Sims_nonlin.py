@@ -21,47 +21,51 @@ import matplotlib.pyplot as plt
 from scipy.integrate import ode
 
 def make_f(eq_mot,B,a_in):
-    '''
-    Equations of motion, including possibly nonlinear internal dynamics.
+    '''Equations of motion, including possibly nonlinear internal dynamics.
+
     Args:
-        eq_mot: The equations of motion, which take an array and return a
-        matrix column.
-        B: The matrix multiplying the inputs to the system.
-        a_in: The inputs to the system
+        eq_mot (function): The equations of motion, which take an array and return a
+            matrix column.
+        B (matrix): The matrix multiplying the inputs to the system.
+        a_in (function): The inputs to the system
 
     Returns:
         A function that maps (t,a) -> f'(t,a), where t is a scalar (time), and
         a is an array representing the state of the system.
+
     '''
     return lambda t,a: np.asarray(eq_mot(a)+B*a_in(t)).T[0]
 
 def make_f_lin(A,B,a_in):
-    '''
-    Linear equations of motion
+    '''Linear equations of motion
+
     Args:
-        A: The matrix for the linear equations of motion:
+        A (matrix): The matrix for the linear equations of motion:
             d(a,a^H)/dt = A(a,a^H) + B * a_in (t)
-        B: The matrix multiplying the inputs to the system.
-        a_in: The inputs to the system
+        B (matrix): The matrix multiplying the inputs to the system.
+        a_in (function): The inputs to the system
+
     Returns:
         A function that maps (t,a) -> f'(t,a), where t is a scalar (time), and
         a is an array representing the state of the system.
+
     '''
     return lambda t,a: np.asarray(A*np.asmatrix(a).T+B*a_in(t)).T[0]
 
 def run_ODE(f, a_in, C, D, num_of_variables, T = 100, dt = 0.01):
-    '''
-    Run the ODE for the given set of equations and record the outputs.
+    '''Run the ODE for the given set of equations and record the outputs.
 
     Args:
         f (function): Evolution of the system
         a_in (function): inputs as a function of time
-        C,D: matrices to use to obtain output from system state and input
+        C,D (matrices): matrices to use to obtain output from system state and input
         num_of_variables (int): number of variables the system has
         T (optional[positive float]): length of simulation
         dt (optional[float]): time step used by the simulation
+
     Returns:
         An array Y of outputs
+
     '''
     r = ode(f).set_integrator('zvode', method='bdf')
     y0 = np.asmatrix([0.]*num_of_variables).T
@@ -74,6 +78,7 @@ def run_ODE(f, a_in, C, D, num_of_variables, T = 100, dt = 0.01):
 
 def double_up(M1,M2=None):
     '''
+
     Takes a given matrix M1 and an optional matrix M2 and generates a
     doubled-up matrix to use for simulations when the doubled-up notation
     is needed. i.e.
@@ -85,8 +90,10 @@ def double_up(M1,M2=None):
     Args:
         M1: matrix to double-up
         M2: optional second matrix to double-up
+
     Returns:
         The doubled-up matrix.
+
     '''
     if M2 == None:
         M2 = np.zeros_like(M1)
