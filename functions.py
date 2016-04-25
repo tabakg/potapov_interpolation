@@ -258,25 +258,25 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
     Args:
         roots (list of complex numbers): The roots of the various eigenmodes
         modes (list of column matrices): the amplitudes of the modes at
-        various nodes
+            various nodes
         delays (list of floats): The duration of each delay following
-        each node in the system
+            each node in the system
         delay_indices (int OR list/tuple of ints): the index representing the
-        delay line along which the nonlinearity lies. If given a list/tuple then
-        the nonlinearity interacts the N different modes.
+            delay line along which the nonlinearity lies. If given a list/tuple 
+            then the nonlinearity interacts the N different modes.
         start_nonlin (float OR list/tuple of floats): the beginning of the
-        nonlinearity. If a list/tuple then each nonlinearity begins at a
-        different time along its corresponding delay line.
+            nonlinearity. If a list/tuple then each nonlinearity begins at a
+            different time along its corresponding delay line.
         length_nonlin (float): duration of the nonlinearity in terms of length.
         plus_or_minus_arr (array of 1s and -1s): Creation/annihilation of
-        a photon in each of the given modes
+            a photon in each of the given modes
         indices_of_refraction (float/int or list/tuple of float/int): the
-        indices of refraction corresponding to the various modes. If float or
-        int then all are the same.
+            indices of refraction corresponding to the various modes. If float
+            or int then all are the same.
         eps(optional[float]): cutoff for two frequencies being equal
         func (optional[funciton]): used to transform the roots. Default
-        value is set to lambda z: z.imag, meaning we take the frequency
-        of each mode.
+            value is set to lambda z: z.imag, meaning we take the frequency
+            of each mode.
 
     Returns:
         A matrix of normalized inner products representing the geometric

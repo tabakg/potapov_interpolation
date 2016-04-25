@@ -70,6 +70,17 @@ def plot_all(L,dx,labels,colors,lw,name,*args):
     return None
 
 class Time_Delay_Network():
+    '''
+    A class to contain the information of a passive linear network with time
+    delays.
+
+    Attributes:
+        max_freq (optional [float]): maximum height in the complex plane
+        max_linewidth (optional [float]): maximum width in the complex plane.
+        N (optional [int]): number of points to use on the contour for finding
+        the roots/poles of the network.
+
+    '''
     def __init__(self,max_freq=30.,max_linewidth=1.,N=1000):
         self.max_freq = max_freq
         self.max_linewidth = max_linewidth

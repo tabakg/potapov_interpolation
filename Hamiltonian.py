@@ -25,7 +25,7 @@ class Chi_nonlin():
     '''
     Class to store the information in a particular nonlinear chi element.
 
-    Args:
+    Attributes:
         delay_indices (list of indices): indices of delays to use.
         start_nonlin (positive float or list of positive floats): location of
             nonlinear crystal with respect to each edge.
@@ -52,9 +52,21 @@ class Chi_nonlin():
             self.chi_function = chi_function
 
 class Hamiltonian():
+    '''
+    A class to create a sympy expression for the Hamiltonian of a network.
+
+    Attributes:
+        roots (list of complex numbers): the poles of the transfer function.
+        modes (list of complex-valued column matrices): modes of the network.
+        delays (list of floats): the delays in the network.
+        nonlin_coeff (optional [float]): overall scaling for the nonlinearities.
+        polarizations (optional [list]): the polarizations of the respective
+            modes. These should match the arguments in Chi_nonlin.chi_func.
+        cross_sectional_area (float): area of beams, used to determines the
+        scaling for the various modes.
+        chi_nonlinearities (lst): a list of Chi_nonlin instances.
+    '''
     def __init__(self,roots,modes,delays,
-        #delay_indices,start_nonlin, length_nonlin, indices_of_refraction = 1.,
-        #chi_order = 3, photons_annihilated = 2,
         nonlin_coeff = 1.,polarizations = None,
         cross_sectional_area = 1e-10,
         chi_nonlinearities = [],
@@ -63,33 +75,15 @@ class Hamiltonian():
         self.modes = modes
         self.m = len(roots)
         self.delays = delays
-
         self.normalize_modes()
-
         self.cross_sectional_area = cross_sectional_area
-
         if polarizations == None:
             self.polarizations = [1.]*self.m
         else:
             self.polarizations = polarizations
-
-
         self.volumes = self.mode_volumes()
         self.E_field_weights = self.make_E_field_weights()
-
         self.chi_nonlinearities = chi_nonlinearities
-        ###
-        # self.delay_indices = delay_indices
-        # self.start_nonlin = start_nonlin
-        # self.length_nonlin = length_nonlin
-        # self.indices_of_refraction = indices_of_refraction
-        # self.chi_order=chi_order
-        ##
-
-        ##
-        #self.photons_annihilated=photons_annihilated  ## <-- let's get rid of that
-        ###
-
         self.a = [BosonOp('a_'+str(i)) for i in range(self.m)]
         self.H = 0.
         self.nonlin_coeff = nonlin_coeff
@@ -98,12 +92,34 @@ class Hamiltonian():
                                length_nonlin,indices_of_refraction,
                                chi_order=3,chi_function=None,
                                ):
+    '''
+    Add an instance of Chi_nonlin to Hamiltonian.
+
+    Args:
+        delay_indices (int OR list/tuple of ints): the index representing the
+            delay line along which the nonlinearity lies. If given a list/tuple
+            then the nonlinearity interacts the N different modes.
+        start_nonlin (float OR list/tuple of floats): the beginning of the
+            nonlinearity. If a list/tuple then each nonlinearity begins at a
+            different time along its corresponding delay line.
+        length_nonlin (float): duration of the nonlinearity in terms of length.
+        indices_of_refraction (float/int or list/tuple of float/int): the
+            indices of refraction corresponding to the various modes. If float
+            or int then all are the same.
+        chi_order (optional [int]): order of the chi nonlinearity.
+        chi_function (function): a function of 2*(chi_order+1) parameters that
+            returns the strenght of the interaction for given frequency
+            combinations and polarizations.
+    '''
         chi_nonlinearity = Chi_nonlin(delay_indices,start_nonlin,
                                    length_nonlin,indices_of_refraction,
                                    chi_order=chi_order,chi_function=chi_function)
         self.chi_nonlinearities.append(chi_nonlinearity)
 
     def normalize_modes(self,):
+        '''
+        Normalize the modes of Hamiltonian.
+        '''
         for mode in self.modes:
             mode /= functions._norm_of_mode(mode,self.delays)
 
@@ -111,11 +127,6 @@ class Hamiltonian():
         '''
         Find the effective volume of each mode to normalize the field.
 
-        Args:
-            spatial_modes (list of column vectors): the amplitudes of the modes at
-            various nodes
-            delays (list of floats): The duration of each delay following
-            each node in the system
         Returns:
             A list of the effective lengths of the various modes.
         '''
@@ -127,41 +138,19 @@ class Hamiltonian():
                                 self.cross_sectional_area )
         return volumes
 
-
-################################################
-    # def make_nonlin_term_sp(self,combination,pm_arr):
-    #     '''
-    #     Make symbolic nonlinear term using sympy.
-    #
-    #     Example:
-    #     combination = [n,m,o]; pm_arr = [-1,1,1] ->> a(n) * a(m)^+ * a(o)^+
-    #
-    #     Args:
-    #         combination (tuple/list of integers): indices of which terms to include
-    #         pm_arr (tuple/list of +1 and -1): creation and annihilation
-    #             indicators for the respective terms in combination.
-    #     Returns:
-    #         symbolic expression for the combination of creation and annihilation
-    #         operators.
-    #     '''
-    #     r = 1.
-    #     for index,sign in zip(combination,pm_arr):
-    #         if sign == 1:
-    #             r*= Dagger(self.a[index])
-    #         else:
-    #             r *= self.a[index]
-    #     return r
     def make_nonlin_term_sympy(self,combination,pm_arr):
         '''
         Make symbolic nonlinear term using sympy.
 
         Example:
-        combination = [n,m,o]; pm_arr = [-1,1,1] ->> a(n) * a(m)^+ * a(o)^+
+        >>> combination = [1,2,3]; pm_arr = [-1,1,1]
+        >>> print Hamiltonian.make_nonlin_term_sympy(combination,pm_arr)
+        self.a(1) * Dagger(self.a(2)) * Dagger(self.a(3))
 
         Args:
-            combination (tuple/list of integers): indices of which terms to include
-            pm_arr (tuple/list of +1 and -1): creation and annihilation
-                indicators for the respective terms in combination.
+            combination (tuple/list of integers): indices of which terms to
+                include pm_arr (tuple/list of +1 and -1): creation and
+                annihilation indicators for the respective terms in combination.
         Returns:
             symbolic expression for the combination of creation and annihilation
             operators.
@@ -174,41 +163,6 @@ class Hamiltonian():
                 r *= self.a[index]
         return r
 
-    # def make_list_of_pm_arr(self,):
-    #     '''
-    #     Returns:
-    #         List of lists of +1 and -1. The length of each list is chi_order+1.
-    #         The number of -1's in each list is the number of photons annihilated.
-    #         Each unique combination exists once.
-    #     '''
-    #     plus_minus_combinations = list(itertools.combinations(
-    #         range(self.chi_order + 1), self.photons_annihilated))  ## pick which fields are annihilated
-    #     list_of_pm_arr = []
-    #     for tup in plus_minus_combinations:
-    #         ls = [1]*(self.chi_order+1)
-    #         for i in tup:
-    #             ls[i]=-1
-    #         list_of_pm_arr.append(ls)
-    #     return list_of_pm_arr
-
-    # def weight(self,combination,pm_arr):
-    #     '''
-    #     The weight to give to each nonlinear term characterized by the given
-    #     combination and pm_arr.
-    #
-    #     Args:
-    #         combination (list/tuple of integers): which modes/roots to pick
-    #         pm_arr (list of +1 and -1): creation and annihilation of modes
-    #     Returns:
-    #         The weight to add to the Hamiltonian
-    #     '''
-    #     roots_to_use = np.array([self.roots[i] for i in combination])
-    #     modes_to_use = [self.modes[i] for i in combination]
-    #     return functions.make_nonlinear_interaction(
-    #                 roots_to_use, modes_to_use, self.delays, self.delay_indices,
-    #                 self.start_nonlin, self.length_nonlin, pm_arr,
-    #                 self.indices_of_refraction)
-
     def phase_weight(self,combination,pm_arr,chi):
         '''
         The weight to give to each nonlinear term characterized by the given
@@ -217,6 +171,8 @@ class Hamiltonian():
         Args:
             combination (list/tuple of integers): which modes/roots to pick
             pm_arr (list of +1 and -1): creation and annihilation of modes
+            chi (Chi_nonlin): the chi nonlinearity for which to compute
+                the phase coefficient.
         Returns:
             The weight to add to the Hamiltonian
         '''
@@ -227,31 +183,14 @@ class Hamiltonian():
                     chi.start_nonlin, chi.length_nonlin, pm_arr,
                     chi.indices_of_refraction)
 
-    # def make_weights(self,):
-    #     '''
-    #     Make a dict to store the weights for the selected components and the
-    #     creation/annihilation information.
-    #
-    #     Returns:
-    #         A dictionary of weights. Each key is a tuple of a combination tuple
-    #         and a pm_arr tuple (a tuple of +1 and -1).
-    #     '''
-    #     ## TODO: add a priori check to restrict exponential growth on the number
-    #     ## of nonlienar coefficients
-    #     list_of_pm_arr = self.make_list_of_pm_arr()
-    #     weights = {}
-    #     for pm_arr in list_of_pm_arr:
-    #         field_combinations = itertools.combinations_with_replacement(
-    #             range(self.m), self.chi_order+1)
-    #         for combination in field_combinations:
-    #             weights[tuple(combination),tuple(pm_arr)] = self.weight(combination,pm_arr)
-    #     return weights
-
     def make_phase_matching_weights(self,chi):
         '''
         Make a dict to store the weights for the selected components and the
         creation/annihilation information.
 
+        Args:
+            chi (Chi_nonlin): the chi nonlinearity for which to compute
+                the phase coefficient.
         Returns:
             A dictionary of weights. Each key is a tuple consisting of two
             components: the first is a tuple of the indices of modes and the
@@ -269,26 +208,6 @@ class Hamiltonian():
                 weights[tuple(combination),tuple(pm_arr)] = self.phase_weight(
                     combination,pm_arr,chi)
         return weights
-
-    # def make_nonlin_H(self,eps=1e-5):
-    #     '''
-    #     Make a nonlinear Hamiltonian based on nonlinear interaction terms
-    #     Args:
-    #         eps (optional[float]): Cutoff for the significance of a particular term.
-    #     Returns:
-    #         A symbolic expression for the nonlinear Hamiltonian.
-    #     '''
-    #
-    #     weights = self.make_weights()
-    #     significant_weights =  {k:v for k,v in weights.iteritems() if abs(v) > eps}
-    #
-    #     H_nonlin_sp = 0.
-    #     for combination,pm_arr in significant_weights:
-    #         H_nonlin_sp += (self.make_nonlin_term_sp(combination,pm_arr) *
-    #                         significant_weights[combination,pm_arr])
-    #     return H_nonlin_sp
-
-########################################################
 
     def E_field_weight(self,mode_index):
         '''

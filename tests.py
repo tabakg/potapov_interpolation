@@ -156,17 +156,11 @@ def test_Hamiltonian(eps=1e-5):
     A_d,C_d,D_d = map(Time_Sims_nonlin.double_up,(A,C,D))
     B_d = -Time_Sims_nonlin.double_up(C.H)
 
-    ## make Hamiltonian with zero nonlin_coeff
-    # ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,
-    #                           delay_indices = 0,start_nonlin = 0,length_nonlin = 0.1,
-    #                           indices_of_refraction = 1.,
-    #                           chi_order = 3,photons_annihilated = 2,nonlin_coeff=0.)
     ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays)
 
     ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
                                length_nonlin=0.1,indices_of_refraction=1.,
-                               chi_order=3,chi_function=None,
-                               )
+                               chi_order=3,chi_function=None,)
 
     H = ham.make_H(-1j*A)
     eq_mot = ham.make_eq_motion()
