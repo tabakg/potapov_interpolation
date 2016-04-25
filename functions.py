@@ -233,7 +233,7 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
     return inner_prods
 
 def make_nonlinear_interaction(roots, modes, delays, delay_indices,
-                                start_nonlin,duration_nonlin,plus_or_minus_arr,
+                                start_nonlin,length_nonlin,plus_or_minus_arr,
                                 indices_of_refraction = None,
                                 eps=1e-12,func=lambda z : z.imag):
     '''
@@ -241,7 +241,7 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
     as well as the (N) delay lengths of the network, and determines the term
     we need to add to the Hamiltonian corresponding to the resulting
     nonlinearity. We assume there is a crystal going from start_nonlin to
-    and has length duration_nonlin. The plus_or_minus_arr is an array of
+    and has length length_nonlin. The plus_or_minus_arr is an array of
     length m of 1 or -1 used to determined whether a mode corresponds to a
     creation (1, a^\dag) or annihilation (-1,a) operator. The corresponding
     electric field integrated will be E^\dag for 1 and E for -1.
@@ -267,7 +267,7 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
         start_nonlin (float OR list/tuple of floats): the beginning of the
         nonlinearity. If a list/tuple then each nonlinearity begins at a
         different time along its corresponding delay line.
-        duration_nonlin (float): duration of the nonlinearity in terms of length.
+        length_nonlin (float): duration of the nonlinearity in terms of length.
         plus_or_minus_arr (array of 1s and -1s): Creation/annihilation of
         a photon in each of the given modes
         indices_of_refraction (float/int or list/tuple of float/int): the
@@ -297,14 +297,14 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
     elif type(start_nonlin) != list and type(start_nonlin) != tuple:
         raise Exception('start_nonlin must be an int/float or a list/tuple')
 
-    if duration_nonlin < 0:
-        raise Exception('duration_nonlin must be greater than 0.')
+    if length_nonlin < 0:
+        raise Exception('length_nonlin must be greater than 0.')
 
     for delay_index,start_loc in zip(delay_indices,start_nonlin):
         if start_loc < 0:
             raise Exception('each element of start_nonlin must be greater than 0.')
-        if duration_nonlin + start_loc > delays[delay_index]:
-            raise Exception('duration_nonlin + start_loc must be less than the '
+        if length_nonlin + start_loc > delays[delay_index]:
+            raise Exception('length_nonlin + start_loc must be less than the '
                            +'delay of index delay_index for start_loc in '
                            +'start_nonlin and delay_index in delay_indices.')
 
@@ -333,6 +333,6 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
             for m,sign,start_loc in zip(values_at_nodes,plus_or_minus_arr,start_nonlin)])
 
     if abs(delta_k) < eps: ## delta_k \approx 0
-        return const * duration_nonlin
+        return const * length_nonlin
     else:
-        return 1j*const*(np.exp(-1j*delta_k*duration_nonlin) - 1 ) / delta_k
+        return 1j*const*(np.exp(-1j*delta_k*length_nonlin) - 1 ) / delta_k

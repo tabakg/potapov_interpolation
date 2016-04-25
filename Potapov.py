@@ -167,7 +167,7 @@ def estimate_D(A,B,C,T,z):
     the transfer function T at a frequency z = i \omega.
 
     Try to satisfy
-    T(z) = D + C(zI-A)^{1}B
+    T(z) = D + C(zI-A)^{-1}B
 
     Args:
         A,B,C (matrices): The A,B, and C matrices of the

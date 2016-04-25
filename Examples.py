@@ -69,7 +69,7 @@ def plot_all(L,dx,labels,colors,lw,name,*args):
     bbox_inches="tight")
     return None
 
-class Example():
+class Time_Delay_Network():
     def __init__(self,max_freq=30.,max_linewidth=1.,N=1000):
         self.max_freq = max_freq
         self.max_linewidth = max_linewidth
@@ -100,13 +100,13 @@ class Example():
             print "Must run Potapov to get outputs!!!"
             return None
 
-class Example1(Example):
+class Example1(Time_Delay_Network):
     '''
     Single input, single output with a single delay.
     '''
     def __init__(self, max_freq=30.,max_linewidth=1.,N=1000,
             tau = 0.3,r = 0.8):
-        Example.__init__(self, max_freq,max_linewidth,N)
+        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N)
 
         self.tau = tau
         self.delays = [tau]
@@ -118,13 +118,13 @@ class Example1(Example):
         self.T_denom = lambda z: (1.-self.r* np.exp(-z*self.tau))
         self.Tp_denom = lambda z: der(self.T_denom,z)
 
-class Example2(Example):
+class Example2(Time_Delay_Network):
     '''
     Two inputs, two outputs with a delay (i.e. Fabry-Perot).
     '''
     def __init__(self, max_freq=10.,max_linewidth=10.,N=1000,
                     r=0.9,tau = 1.):
-        Example.__init__(self, max_freq,max_linewidth,N)
+        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N)
         self.r = r
         self.delays = [tau]
         e = lambda z: np.exp(-z*tau)
@@ -138,7 +138,7 @@ class Example2(Example):
             np.matrix([[r*e(z)**2,e(z)],[e(z),r*e(z)**2]])
         self.Tp_denom = lambda z: der(self.T_denom,z)
 
-class Example3(Example):
+class Example3(Time_Delay_Network):
     '''
     Two inputs and two outputs, with four delays and third mirror
     This corresponds to figures 7 and 8 in our paper.
@@ -147,7 +147,7 @@ class Example3(Example):
                 r1=0.9,r2=0.4,r3=0.8,
                 tau1 = 0.1, tau2 = 0.23,tau3 = 0.1,tau4 = 0.17,
                 ):
-        Example.__init__(self, max_freq,max_linewidth,N)
+        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N)
 
 
         self.r1 = r1
@@ -188,13 +188,13 @@ class Example3(Example):
         self.Tp_denom = lambda z: der(self.T_denom,z)
         self.T = lambda z: M3*E(z)*la.inv(np.eye(dim) - M1*E(z))*M2+M4
 
-class Example4(Example):
+class Example4(Time_Delay_Network):
     '''
     Two inputs and two outputs, with free delay (i.e. not in a loop).
     This corresponds to figures 9 and 10 in our paper.
     '''
     def __init__(self, max_freq=100.,max_linewidth=3.,N=5000):
-        Example.__init__(self, max_freq,max_linewidth,N)
+        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N)
 
         tau1 = 0.1
         tau2 = 0.039
@@ -233,12 +233,12 @@ class Example4(Example):
         self.Tp_denom = lambda z: der(self.T_denom,z)
         self.T = lambda z: M3*E(z)*la.inv(np.eye(dim) - M1*E(z))*M2+M4
 
-class Example5(Example):
+class Example5(Time_Delay_Network):
     '''
     Modified example 4, with analytic term.
     '''
     def __init__(self, max_freq=50.,max_linewidth=3.,N=1000):
-        Example.__init__(self, max_freq ,max_linewidth,N)
+        Time_Delay_Network.__init__(self, max_freq ,max_linewidth,N)
         tau1 = 0.1
         tau2 = 0.039
         tau3 = 0.11
