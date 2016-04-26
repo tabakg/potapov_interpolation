@@ -232,12 +232,12 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
                                 np.sqrt(norms[i]*norms[j]) )
     return inner_prods
 
-def make_nonlinear_interaction(roots, modes, delays, delay_indices,
+def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
                                 start_nonlin,length_nonlin,plus_or_minus_arr,
                                 indices_of_refraction = None,
-                                eps=1e-12,func=lambda z : z.imag):
+                                eps=1e-12):
     '''
-    This function takes several (say M) roots and their corresponding modes,
+    This function takes several (say M) natural_freqs and their corresponding modes,
     as well as the (N) delay lengths of the network, and determines the term
     we need to add to the Hamiltonian corresponding to the resulting
     nonlinearity. We assume there is a crystal going from start_nonlin to
@@ -256,13 +256,14 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
     the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.
 
     Args:
-        roots (list of complex numbers): The roots of the various eigenmodes
+        natural_freqs (list of complex numbers): The natural frequencies of the
+            various eigenmodes
         modes (list of column matrices): the amplitudes of the modes at
             various nodes
         delays (list of floats): The duration of each delay following
             each node in the system
         delay_indices (int OR list/tuple of ints): the index representing the
-            delay line along which the nonlinearity lies. If given a list/tuple 
+            delay line along which the nonlinearity lies. If given a list/tuple
             then the nonlinearity interacts the N different modes.
         start_nonlin (float OR list/tuple of floats): the beginning of the
             nonlinearity. If a list/tuple then each nonlinearity begins at a
@@ -274,18 +275,15 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
             indices of refraction corresponding to the various modes. If float
             or int then all are the same.
         eps(optional[float]): cutoff for two frequencies being equal
-        func (optional[funciton]): used to transform the roots. Default
-            value is set to lambda z: z.imag, meaning we take the frequency
-            of each mode.
 
     Returns:
         A matrix of normalized inner products representing the geometric
         overlap of the various given modes in the system.
     '''
 
-    M = len(roots)
+    M = len(natural_freqs)
     if len(modes) != M:
-        raise Exception('number of modes different than number of roots.')
+        raise Exception('number of modes different than number of natural_freqs.')
 
     if type(delay_indices) == int:
         delay_indices = [delay_indices] * M
@@ -326,11 +324,13 @@ def make_nonlinear_interaction(roots, modes, delays, delay_indices,
         else:
             raise Exception('bad input value -- must be 1 or -1.')
 
-    values_at_nodes = [m_vec[delay_index,0] for m_vec,delay_index in zip(modes,delay_indices)]
-    delta_k = sum([n*func(root)*sign for n,root,sign
-           in zip(indices_of_refraction,roots,plus_or_minus_arr)])
+    values_at_nodes = [m_vec[delay_index,0] for m_vec,delay_index
+        in zip(modes,delay_indices)]
+    delta_k = sum([n*omega*sign for n,omega,sign
+           in zip(indices_of_refraction,natural_freqs,plus_or_minus_arr)])
     const = np.prod([pick_conj(m*np.exp(-1j*delta_k*start_loc),sign)
-            for m,sign,start_loc in zip(values_at_nodes,plus_or_minus_arr,start_nonlin)])
+            for m,sign,start_loc
+            in zip(values_at_nodes,plus_or_minus_arr,start_nonlin)])
 
     if abs(delta_k) < eps: ## delta_k \approx 0
         return const * length_nonlin

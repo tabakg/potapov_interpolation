@@ -56,6 +56,7 @@ class Hamiltonian():
 
     Attributes:
         roots (list of complex numbers): the poles of the transfer function.
+        omegas (list of floats): the natural frequencies of the modes.
         modes (list of complex-valued column matrices): modes of the network.
         delays (list of floats): the delays in the network.
         nonlin_coeff (optional [float]): overall scaling for the nonlinearities.
@@ -72,6 +73,7 @@ class Hamiltonian():
         chi_nonlinearities = [],
         ):
         self.roots = roots
+        self.omegas = [root.imag / (2.*consts.pi) for root in roots]
         self.modes = modes
         self.m = len(roots)
         self.delays = delays
@@ -175,10 +177,10 @@ class Hamiltonian():
             The weight to add to the Hamiltonian
 
         '''
-        roots_to_use = np.array([self.roots[i] for i in combination])
+        omegas_to_use = np.array([self.omegas[i] for i in combination])
         modes_to_use = [self.modes[i] for i in combination]
         return functions.make_nonlinear_interaction(
-                    roots_to_use, modes_to_use, self.delays, chi.delay_indices,
+                    omegas_to_use, modes_to_use, self.delays, chi.delay_indices,
                     chi.start_nonlin, chi.length_nonlin, pm_arr,
                     chi.indices_of_refraction)
 
@@ -218,10 +220,7 @@ class Hamiltonian():
                 sqrt[\hbar * \omega(n) / 2 V_eff(n) \epsilon].
 
         '''
-        freq = self.roots[mode_index].imag
-        omega = freq / (2 * consts.pi)
-        if freq < 0:
-            print 'Frequency is negative, taking absolute value.'
+        omega = self.omegas[mode_index]
         eps0 = consts.epsilon_0
         hbar = consts.hbar
         return np.sqrt(hbar * abs(omega) / (2 * eps0 * self.volumes[mode_index]) )
@@ -251,10 +250,12 @@ class Hamiltonian():
         H_nonlin_sp = 0.
         for chi in self.chi_nonlinearities:
             phase_matching_weights = self.make_phase_matching_weights(chi)
-            significant_phase_matching_weights =  {k:v for k,v
+            significant_phase_matching_weights = {k:v for k,v
                 in phase_matching_weights.iteritems() if abs(v) > eps}
             for combination,pm_arr in significant_phase_matching_weights:
-                chi_args = list(combination) + map(lambda i: self.polarizations[i],combination)
+                freqs = map(lambda i: pm_arr[i] * self.omegas[i],combination)
+                pols = map(lambda i: self.polarizations[i],combination)
+                chi_args = freqs + pols
                 H_nonlin_sp += ( self.make_nonlin_term_sympy(combination,pm_arr) *
                     chi.chi_function(*chi_args) *
                     significant_phase_matching_weights[combination,pm_arr] *
