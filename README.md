@@ -1,17 +1,62 @@
-# Overview for Potapov Interpolation
-Given a meromorphic matrix-valued function $T(z)$ bounded on $mathbf{C}^+$ and unitary for $z \in i \mathbb{R}$, we wish to construct an approximate function $\tilde{T}(z)$ using a zero-pole interpolation procedure based on Blaschke-Potapov factors.
+# Overview
+The purpose of this package is to characterize network of optical components
+when time delays with feedback are present. The core of the package identifies
+'trapped' optical modes that result from feedback in the system. These modes are
+found by identifying the roots/poles of the transfer function containing only
+time delays and passive linear components. Further analysis of the network
+yields a linear Hamiltonian written in terms of the identified modes, linear
+operators coupling the system modes to the environment, and an overall
+scattering matrix. Nonlinear elements are added as additional Hamiltonian terms.
 
-The code in Potapov.py implements the procedure for finding Blaschke-Potapov products to approximate given functions near poles. Please see section 6.2 in our manuscript for details: http://arxiv.org/abs/1510.08942 or http://www.epjquantumtechnology.com/content/3/1/3.
+# Files
 
-We provide several examples in Examples.py, including those that appear in our paper.
+## Time_Delay_Network.py
+This module includes a class to contain the information of a passive linear
+network with time delays.
+Several examples are included in this module.
+Each example includes matrices that yield a transfer function.
+This module contains methods to re-construct finite-dimensional approximations
+of a transfer function of passive systems.
 
-## State-space representation
-Given a rational matrix-valued function, we also construct the matrices ABCD that give the state-space representation of the system.
+## Potapov.py
+We implement the procedure for finding Blaschke-Potapov
+products to approximate given functions near poles (see `get_Potapov`).
+Please see section 6.2 in
+our manuscript for details: http://arxiv.org/abs/1510.08942 or
+http://www.epjquantumtechnology.com/content/3/1/3.
+This procedure is used to generate the modes of the passive linear network.
 
-The file Time_Sims.py shows how the system can be integrated in time using the ABCD
+Given a rational matrix-valued function, we also construct the matrices ABCD
+that give the state-space representation of the system (see `get_Potapov_ABCD`).
 
-## Other files
+## Roots.py
+A module for identifying the zeros of a complex-valued function.
 
-The file functions.py contains functions that have been useful in the project.
+## functions.py
+Miscellaneous functions. Includes:
+--`Pade`: Generate a Pade approximation for delays that do NOT feed back.
+--`spatial_modes`: Finding the spatial location of modes. This is necessary to
+generate nonlinear terms.
+--`make_nonlinear_interaction`: Generate the weight of an interaction term due
+to phase-matching.
 
-The file Roots.py gives an implementation of the root-finding procedure in the complex plane.
+## Hamiltonian.py
+Includes a class `Hamiltonian` to contain the information needed to construct the
+Hamiltonian of the system, including nonlinear terms.
+This class also includes a function `make_eq_motion` to generate the classical
+equations of motion from the nonlinear Hamiltonian.
+
+Also includes a class `Chi_nonlin` which contains the information for a particular
+chi nonlinearity.
+
+## Time_Sims.py
+
+Integrate the dynamics of a passive in time using the ABCD matrices.
+
+## Time_Sims_nonlin.py
+
+--`make_f_lin` generates outputs from ABCD model.
+--`make_f` generates outputs from nonlinear Hamiltonian model.
+--`run_ODE` integrates the equations of motion in time.
+--`double_up` prepares a doubled-up system which can be used for non-classical
+simulations.
