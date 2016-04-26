@@ -16,13 +16,16 @@ def der(f,z,eps = 1e-5):
     '''
     Estimate the derivative of the function f at z
 
-    Given:
-        f (function): the function to use
-        z (complex number): point to evaluate
-        eps(optional[complex number]): number to perturb z to find derivative
+    Args:
+        f (function): the function to use.
+
+        z (complex number): point at which to evaluate derivative.
+
+        eps(optional[complex number]): number to perturb z to find derivative.
 
     Returns:
         Derivative of f
+
     '''
     return (f(z+eps)-f(z-eps))/(2*eps)
 
@@ -34,8 +37,11 @@ def limit(f,z0,N=10,eps=1e-3):
 
     Args:
         f (function): the function for which the limit will be found.
+
         z0 (complex number): The value at which the limit is evaluated.
+
         N (int): number of points used in the estimate.
+
         eps (optional[float]): distance from z0 at which estimating points are
         placed.
 
@@ -53,12 +59,14 @@ def limit(f,z0,N=10,eps=1e-3):
         return
 
 def factorial(n):
-    '''
-    Find the factorial of n.
+    '''Find the factorial of n.
+
     Args:
         n (integer)
+
     Returns:
         factorial of n
+
     '''
     end = 1
     for k in xrange(1,n+1):
@@ -66,11 +74,14 @@ def factorial(n):
     return end
 
 def pade_approx(n):
-    '''
+    '''Numerator coefficients of symmetric Pade approximation of math:`e^z` of order n.
+
     Args:
         n (integer)
+
     Returns:
-        Denominator of symmetric Pade approximation of e^{-s} of order n
+        Coefficients for Pade approximation numerator.
+
     '''
     output = [0]*(n+1)
     for k in xrange(0,n+1):
@@ -79,18 +90,19 @@ def pade_approx(n):
     return output
 
 def pade_roots(n):
-    '''
-    Extract roots of Pade polynomial.
+    '''Extract roots of Pade polynomial.
+
     Args:
-        n (integer)
+        n (integer).
+
     Returns:
         Roots of Pade polynomial.
+
     '''
     return np.roots(pade_approx(n))
 
 def Q(z,n):
-    '''
-    Numerator of Pade pproximation of e^z
+    r'''Numerator of Pade approximation of :math:`e^z`.
 
     args:
         n (integer): order of approximation
@@ -98,7 +110,6 @@ def Q(z,n):
 
     Returns:
         Value of Numerator of Pade approximation.
-
 
     '''
     coeffs = pade_approx(n)
@@ -108,8 +119,7 @@ def Q(z,n):
     return sum
 
 def Pade(n,z):
-    '''
-    Pade pproximation of e^z
+    r'''Pade pproximation of :math:`e^z`
 
     args:
         n (integer): order of approximation
@@ -126,9 +136,12 @@ def spatial_modes(roots,M1,E,delays=None):
     Obtain the spetial mode profile at each node up to a constant.
 
     Args:
-        roots: The eigenvalues of the system
-        matrix M1: The connectivity matrix among internal nodes
+        roots (list of complex numbers): The eigenvalues of the system
+
+        M1 (matrix): The connectivity matrix among internal nodes
+
         E (matrix-valued function): Time-delay matrix
+
         delays (optional[list of floats]):
 
     Returns:
@@ -158,11 +171,15 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
 
     Args:
         root1,root2 (complex number): the two roots
+
         v1,v2 (column matrices): the amplitude of each mode at the
         various nodes
+
         delays (list of floats): The duration of each delay following
         each node in the system
+
         eps(optional[float]): cutoff for two frequencies being equal
+
         func (optional[funciton]): used to transform the roots. Default
         value is set to lambda z: z.imag, meaning we take the frequency
         of each mode.
@@ -186,11 +203,12 @@ def _norm_of_mode(mode,delays):
 
     Args:
         mode (vector): column of complex numbers describing the amplitude of
-        each mode at the various nodes
-        delays (list of floats): time delays in the network
+        each mode at the various nodes.
+
+        delays (list of floats): time delays in the network.
 
     Returns:
-        the norm of the mode
+        the norm of the mode.
     '''
     return np.sqrt(inner_product_of_two_modes(0,0,mode,mode,delays))
 
@@ -206,11 +224,15 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
 
     Args:
         roots (list of complex numbers): The roots of the various eigenmodes
+
         modes (list of column matrices): the amplitudes of the modes at
         various nodes
+
         delays (list of floats): The duration of each delay following
         each node in the system
+
         eps(optional[float]): cutoff for two frequencies being equal
+
         func (optional[funciton]): used to transform the roots. Default
         value is set to lambda z: z.imag, meaning we take the frequency
         of each mode.

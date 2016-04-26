@@ -90,8 +90,8 @@ class Time_Delay_Network():
         self.Potapov_ran = False
 
     def make_roots(self):
-        self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,0,0,
-            self.max_linewidth,self.max_freq,N=self.N)
+        self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,-self.max_linewidth/2.,0,
+            self.max_linewidth/2.,self.max_freq,N=self.N)
 
     def make_T_Testing(self):
         self.T_testing = Potapov.get_Potapov(self.T,self.roots)

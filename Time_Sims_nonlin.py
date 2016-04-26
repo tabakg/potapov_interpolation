@@ -21,16 +21,18 @@ import matplotlib.pyplot as plt
 from scipy.integrate import ode
 
 def make_f(eq_mot,B,a_in):
-    '''Equations of motion, including possibly nonlinear internal dynamics.
+    r'''Equations of motion, including possibly nonlinear internal dynamics.
 
     Args:
         eq_mot (function): The equations of motion, which take an array and return a
         matrix column.
+
         B (matrix): The matrix multiplying the inputs to the system.
+
         a_in (function): The inputs to the system
 
     Returns:
-        A function that maps (t,a) -> f'(t,a), where t is a scalar (time), and
+        A function that maps :math:`(t,a) \to f'(t,a)`, where t is a scalar (time), and
         a is an array representing the state of the system.
 
     '''
@@ -42,11 +44,13 @@ def make_f_lin(A,B,a_in):
     Args:
         A (matrix): The matrix for the linear equations of motion:
         :math:`\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in} (t).`
+
         B (matrix): The matrix multiplying the inputs to the system.
+
         a_in (function): The inputs to the system :math:`\breve a`.
 
     Returns:
-        A function that maps (t,a) -> f'(t,a), where t is a scalar (time), and
+        A function that maps :math:`(t,a) \to f'(t,a)`, where t is a scalar (time), and
         a is an array representing the state of the system.
 
     '''
@@ -57,10 +61,15 @@ def run_ODE(f, a_in, C, D, num_of_variables, T = 100, dt = 0.01):
 
     Args:
         f (function): Evolution of the system
+
         a_in (function): inputs as a function of time
+
         C,D (matrices): matrices to use to obtain output from system state and input
+
         num_of_variables (int): number of variables the system has
+
         T (optional[positive float]): length of simulation
+
         dt (optional[float]): time step used by the simulation
 
     Returns:

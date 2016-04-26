@@ -12,11 +12,11 @@ We implement the method in the following paper:
  an analytic function." Mathematics of computation 21.100 (1967): 543-560.
 
 The main idea is to compute contour integrals of functions of the form
-$z^k fp/f$ around the contour, for integer values of k. Here fp denotes the
+:math:`z^k f'/f` around the contour, for integer values of k. Here :math:`f'` denotes the
 derivative of f. The resulting values of the contour integrals are proportional
-to $\sum_i z_i^k$, where i is the index of the roots.
+to :math:`\sum_i z_i^k`, where i is the index of the roots.
 
-Throughout we denote f_frac = fp/f.
+Throughout we denote :math:`f_{frac} = f'/f`.
 
 I have also tried several optimizations and strategies for numerical stability.
 
@@ -35,9 +35,13 @@ def Muller(x1,x2,x3,f,tol = 1e-12,N=400,verbose=False):
 
     Args:
         x1,x2,x3 (complex numbers): initial points for the algorithm
+
         f (function): complex valued function for which to find roots
+
         tol (optional[float]): tolerance
+
         N(optional[int]): maximum number of iterations
+
         verbose (optional[boolean]): print warnings
 
     Returns:
@@ -97,11 +101,12 @@ def Muller(x1,x2,x3,f,tol = 1e-12,N=400,verbose=False):
 
 def residues(f_frac,roots):
     '''
-    Finds the resides of f_frac = fp/f given the location of some roots of f.
+    Finds the resides of :math:`f_{frac} = f'/f` given the location of some roots of f.
     The roots of f are the poles of f_frac.
 
     Args:
         f_frac (function): a complex
+
         roots (a list of complex numbers): the roots of f; poles of f_frac
 
     Returns:
@@ -120,11 +125,15 @@ def new_f_frac(f_frac,z0,residues,roots,val=None):
 
     We assume here that the poles are of order 1.
 
-    Givens:
+    Args:
         f_frac (function): function for which roots will be subtracted
+
         z0 (complex number): point where new_f_frac is evaluated
+
         residues (list of complex numbers): The corresponding residues to subtract
+
         roots (list of complex numbers): The corresponding roots to subtract
+
         val (optional[complex number]): We can impose a value f_frac(z0) if we wish.
 
     Returns:
@@ -146,13 +155,19 @@ def new_f_frac_safe(f_frac,z0,residues,roots,max_ok,val=None,verbose=False):
 
     We assume here that the poles are of order 1.
 
-    Givens:
+    Args:
         f_frac (function): function for which roots will be subtracted
+
         z0 (complex number): point where new_f_frac is evaluated
+
         residues (list of complex numbers): The corresponding residues to subtract
+
         roots (list of complex numbers): The corresponding roots to subtract
+
         val (optional[complex number]): We can impose a value f_frac(z0) if we wish.
+
         max_ok (float) Maximum absolute value of f_frac(z0 to use)
+
         verbose (optional[boolean]): print warnings
 
     Returns:
@@ -175,7 +190,7 @@ def find_roots(y_smooth,c,num_roots_to_find):
     given the values y_smooth, locations c, and the number to go up to,
     find the roots using the polynomial trick.
 
-    Given:
+    Args:
         y_smooth (list of complex numbers)
     '''
     p=[0]  ##placeholder
@@ -197,7 +212,8 @@ def combine(eps=1e-5,*args):
 
     Args:
         eps (optional[float]): tolerance for purging elements
-        *args (lists): several lists
+
+        args (lists): several lists
 
     Returns:
         A list of combined elements.
@@ -229,8 +245,9 @@ def linspace(c1,c2,num=50):
     '''
     make a linespace method for complex numbers.
 
-    Given:
+    Args:
         c1,c2 (complex numbers): The two points along which to draw a line.
+
         num (optional [int]): number of points along the line
 
     Returns:
@@ -249,9 +266,11 @@ def get_boundary(x_cent,y_cent,width,height,N):
     Make a rectangle centered at x_cent,y_cent. Find points along this rectangle.
     I use the convention that width/height make up half the dimensions of the rectangle.
 
-    Givens:
+    Args:
         x_cent,y_cent (floats): the coordinates of the center of the rectangle
+
         width,height (float): The (half) width and height of the rectangle
+
         N (int): number of points to use along each edge.
 
     Returns:
@@ -272,9 +291,11 @@ def inside_boundary(roots_near_boundary,x_cent,y_cent,width,height):
     Takes roots and the specification of a rectangular region
     returns the roots in the interior (and ON the boundary) of the region.
 
-    Givens:
+    Args:
         roots_near_boundary (list of complex numbers): roots near the boundary
+
         x_cent,y_cent (floats): coordinates of the center of the region
+
         width,height (floats): The (half) width of height of the rectangle
 
     Returns:
@@ -286,7 +307,7 @@ def inside_boundary(roots_near_boundary,x_cent,y_cent,width,height):
 
 def get_max(y):
     '''
-    return the IQR + median to determine a maximum permissible value to use
+    return the :math:`IQR + median` to determine a maximum permissible value to use
     in the numerically safe function new_f_frac_safe.
 
     '''
@@ -298,7 +319,7 @@ def find_maxes(y):
     '''
     Given a list of numbers, find the indices where local maxima happen.
 
-    Givens:
+    Args:
         y(list of floats)
 
     Returns:
@@ -320,18 +341,26 @@ def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
     save values along edges if iterating to a smaller rectangle
     extend to other kinds of functions, e.g. function with non-simple zeros.
 
-    Givens:
+    Args:
         f (function): the function for which the roots (i.e. zeros) will be found
+
         fp (function): the derivative of f
+
         x_cent,y_cent (floats): The center of the rectangle in the complex plane
+
         width,height (floats): half the width and height of the rectangular region
+
         N (optional[int]): Number of points to sample per edge
+
         outlier_coeff (float): multiplier for coefficient used when subtracting
         poles to improve numerical stability. See new_f_frac_safe.
+
         max_step (optional[int]): Number of iterations allowed for algorithm to
         repeat on smaller rectangles
+
         known roots (optional[list of complex numbers]): Roots of f that are
         already known.
+
         verbose (optional[boolean]): print warnings
 
     Returns:

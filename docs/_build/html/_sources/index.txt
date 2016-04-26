@@ -9,6 +9,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   Potapov_Code.rst
+
 
 
 Indices and tables

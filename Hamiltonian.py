@@ -227,13 +227,14 @@ class Hamiltonian():
         return weights
 
     def E_field_weight(self,mode_index):
-        '''Make the weights for each field component E_i(n) = [weight] (a+a^+)
+        '''Make the weights for each field component :math:`E_i(n) = [\text{weight}] (a+a^\dagger)`.
 
         Args:
             mode_index (int): The index of the mode.
+
         Returns:
             The weight in the equation above. It has form:
-            sqrt[\hbar * \omega(n) / 2 V_eff(n) \epsilon].
+            :math:`sqrt[\hbar * \omega(n) / 2 V_eff(n) \epsilon]``.
 
         '''
         omega = self.omegas[mode_index]

@@ -24,15 +24,18 @@ import numpy.linalg as la
 
 
 def plot(L,dx,func,(i,j),*args):
-    '''
-    A nice function for plotting components of matrix-valued functions.
+    '''A nice function for plotting components of matrix-valued functions.
 
     Args:
         L (float): length along which to plot
+
         dx (float): step length to take
+
         func (function): complex matrix-valued function
-        (i,j) (tuple of ints): coordinate to plot
-        *args (functions): Desired transformations on the inputs
+
+        i,j (tuple of ints): coordinate to plot
+
+        args (functions): Desired transformations on the inputs
 
     '''
     x = np.linspace(-L,L,2.*L/dx)
@@ -41,21 +44,25 @@ def plot(L,dx,func,(i,j),*args):
     return
 
 def Potapov_prod(z,poles,vecs,N):
-    '''
+    r'''
+
     Takes a transfer function T(z) that outputs numpy matrices for imaginary
-    z = i \omega and the desired poles that characterize the modes.
+    :math:`z = i \omega` and the desired poles that characterize the modes.
     Returns the Potapov product as a function approximating the original
     transfer function.
 
     Args:
         z (complex number): value where product is evaluated
+
         poles(list of complex numbers): The poles of the Potapov product.
+
         vecs(list of complex-valued matrices): The eigenvectors corresponding to
         the orthogonal projectors of the Potapov product.
+
         N (int): Dimensionality of the the range.
 
     Returns:
-        Complex-valued matrix of size N-by-N.
+        Complex-valued matrix of size :math:`N \times N`.
 
     '''
     R = np.asmatrix(np.eye(N))
@@ -96,6 +103,7 @@ def get_Potapov(T,poles):
 
     Args:
         T (matrix-valued function): A given meromorphic function
+
         poles (a list of complex valued numbers): The given poles of T
 
     Returns:
@@ -114,8 +122,11 @@ def prod(z,U,eigenvectors,eigenvalues):
 
     Args:
         z (complex number): where product is evaluated
+
         U (complex-valued matrix): A unitary matrix
+
         eigenvectors(list of complex-valued matrices): eigenvectors to use
+
         eigenvalues(list of complex numebrs): eigenvalues to use
 
     Returns:
@@ -138,7 +149,9 @@ def finite_transfer_function(U,eigenvectors,eigenvalues):
 
     Args:
         U (complex-valued matrix): A unitary matrix.
+
         eigenvectors(list of complex-valued matrices): eigenvectors to use
+
         eigenvalues(list of complex numebrs): eigenvalues to use
 
     Returns:
@@ -162,23 +175,27 @@ def normalize(vec):
     return vec / la.norm(vec)
 
 def estimate_D(A,B,C,T,z):
-    '''
+    r'''
     Estimate the scattering matrix S=D using the ABC matrices
-    the transfer function T at a frequency z = i \omega.
+    the transfer function T at a frequency :math:`z = i \omega`.
 
     Try to satisfy
-    T(z) = D + C(zI-A)^{-1}B
+    :math:`T(z) = D + C(zI-A)^{-1}B`
 
     Args:
         A,B,C (matrices): The A,B, and C matrices of the
         state-space representation
+
         T (matrix-valued function): The input/output function
         to estimate
+
         z (complex number): the location at which the scattering
         matrix will be estimated
+
     Returns:
         The estimated S=D scaterring matrix based on the value of
         the function T and the ABC matrices.
+
     '''
     N = np.shape(A)[0]
     return T(z)+C*la.inv(A-z*np.eye(N))*B
@@ -192,8 +209,11 @@ def get_ABCD(val, vec):
 
     Args:
         val (complex number): an eigenvalue
+
         vec (complex-valued matrix): an eigenvector
-        sym (optiona[boolean]): Modify B and C so that B = C.H
+
+        sym (optiona[boolean]): Modify :math:`B` and :math:`C` so that :math:`B = C.H`.
+
     Returns:
         A list [A,B,C,D] of four matrices representing the ABCD model.
 
@@ -208,6 +228,7 @@ def get_Potapov_ABCD(poles,vecs,T=None,z=None):
 
     Args:
         val (a list of complex numbers): given eigenvalues
+
         vec (a list of complex-valued matrices): given eigenvectors
 
     Returns:
