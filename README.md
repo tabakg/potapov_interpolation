@@ -38,12 +38,12 @@ A module for identifying the zeros of a complex-valued function.
 ## functions.py
 Miscellaneous functions. Includes:
 
---`Pade`: Generate a Pade approximation for delays that do NOT feed back.
+--`Pade` Generate a Pade approximation for delays that do NOT feed back.
 
---`spatial_modes`: Finding the spatial location of modes. This is necessary to
+--`spatial_modes` Finding the spatial location of modes. This is necessary to
 generate nonlinear terms.
 
---`make_nonlinear_interaction`: Generate the weight of an interaction term due
+--`make_nonlinear_interaction` Generate the weight of an interaction term due
 to phase-matching.
 
 ## Hamiltonian.py
