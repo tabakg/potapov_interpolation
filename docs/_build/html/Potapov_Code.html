@@ -1155,12 +1155,16 @@ port_in and port_out are where the system is driven.</p>
 <dd><p>Takes a given matrix M1 and an optional matrix M2 and generates a
 doubled-up matrix to use for simulations when the doubled-up notation
 is needed. i.e.</p>
-<dl class="docutils">
-<dt>(M1,M2) -&gt; (M1          M2)</dt>
-<dd>(conj(M2)    conj(M1))</dd>
-<dt>(M1,None) -&gt; (M1          0)</dt>
-<dd>(0    conj(M1))</dd>
-</dl>
+<div class="math">
+\[\begin{split}\begin{pmatrix}
+    M_1 &amp;&amp; M_2
+\end{pmatrix}
+\to
+\begin{pmatrix}
+    M_1 &amp;&amp; M_2 \\
+    M_2^\# &amp;&amp; M_1^\#
+\end{pmatrix}\end{split}\]</div>
+<p>In the case M2 == None, it becomes replaced by the zero matrix.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1212,9 +1216,9 @@ a is an array representing the state of the system.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>A</strong> (<em>matrix</em>) &#8211; The matrix for the linear equations of motion:
-d(a,a^H)/dt = A(a,a^H) + B * a_in (t)</li>
+<span class="math">\(\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in} (t).\)</span></li>
 <li><strong>B</strong> (<em>matrix</em>) &#8211; The matrix multiplying the inputs to the system.</li>
-<li><strong>a_in</strong> (<em>function</em>) &#8211; The inputs to the system</li>
+<li><strong>a_in</strong> (<em>function</em>) &#8211; The inputs to the system <span class="math">\(\breve a\)</span>.</li>
 </ul>
 </td>
 </tr>

@@ -37,13 +37,13 @@ def make_f(eq_mot,B,a_in):
     return lambda t,a: np.asarray(eq_mot(a)+B*a_in(t)).T[0]
 
 def make_f_lin(A,B,a_in):
-    '''Linear equations of motion
+    r'''Linear equations of motion
 
     Args:
         A (matrix): The matrix for the linear equations of motion:
-            d(a,a^H)/dt = A(a,a^H) + B * a_in (t)
+            :math:`\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in} (t).`
         B (matrix): The matrix multiplying the inputs to the system.
-        a_in (function): The inputs to the system
+        a_in (function): The inputs to the system :math:`\breve a`.
 
     Returns:
         A function that maps (t,a) -> f'(t,a), where t is a scalar (time), and
@@ -77,16 +77,24 @@ def run_ODE(f, a_in, C, D, num_of_variables, T = 100, dt = 0.01):
     return Y
 
 def double_up(M1,M2=None):
-    '''
+    r'''
 
     Takes a given matrix M1 and an optional matrix M2 and generates a
     doubled-up matrix to use for simulations when the doubled-up notation
     is needed. i.e.
 
-    (M1,M2) -> (M1          M2)
-               (conj(M2)    conj(M1))
-    (M1,None) -> (M1          0)
-                 (0    conj(M1))
+    .. math::
+        \begin{pmatrix}
+            M_1 && M_2
+        \end{pmatrix}
+        \to
+        \begin{pmatrix}
+            M_1 && M_2 \\
+            M_2^\# && M_1^\#
+        \end{pmatrix}
+
+    In the case M2 == None, it becomes replaced by the zero matrix.
+
     Args:
         M1: matrix to double-up
         M2: optional second matrix to double-up
