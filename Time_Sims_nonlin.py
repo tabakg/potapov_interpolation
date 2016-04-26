@@ -25,7 +25,7 @@ def make_f(eq_mot,B,a_in):
 
     Args:
         eq_mot (function): The equations of motion, which take an array and return a
-            matrix column.
+        matrix column.
         B (matrix): The matrix multiplying the inputs to the system.
         a_in (function): The inputs to the system
 
@@ -41,7 +41,7 @@ def make_f_lin(A,B,a_in):
 
     Args:
         A (matrix): The matrix for the linear equations of motion:
-            :math:`\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in} (t).`
+        :math:`\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in} (t).`
         B (matrix): The matrix multiplying the inputs to the system.
         a_in (function): The inputs to the system :math:`\breve a`.
 

@@ -76,7 +76,9 @@ class Time_Delay_Network():
 
     Attributes:
         max_freq (optional [float]): maximum height in the complex plane
+
         max_linewidth (optional [float]): maximum width in the complex plane.
+
         N (optional [int]): number of points to use on the contour for finding
         the roots/poles of the network.
 

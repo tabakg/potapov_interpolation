@@ -26,14 +26,17 @@ class Chi_nonlin():
 
     Attributes:
         delay_indices (list of indices): indices of delays to use.
+
         start_nonlin (positive float or list of positive floats): location of
-            nonlinear crystal with respect to each edge.
+        nonlinear crystal with respect to each edge.
+
         length_nonlin (float): length of the nonlinear element.
+
         chi_order (optional [int]): order of nonlinearity
+
         chi_function (optional [function]): strength of nonlinearity.
-            first chi_order args are frequencies, next
-            first chi_order args are frequencies, next chi_order args are
-            indices of polarization.
+        first chi_order args are frequencies, next first chi_order args are
+        frequencies, next chi_order args are indices of polarization.
 
     '''
     def __init__(self,delay_indices,start_nonlin,length_nonlin,indices_of_refraction,
@@ -45,7 +48,7 @@ class Chi_nonlin():
         self.indices_of_refraction = indices_of_refraction
 
         if chi_function == None:
-            def chi_func(a,b,c,d,i,j,k,l):
+            def chi_func(a,b,c,d,i,j,k):
                 return 1.  #if abs(a+b+c+d) <= 2. else 0.
             self.chi_function = chi_func
         else:
@@ -56,14 +59,21 @@ class Hamiltonian():
 
     Attributes:
         roots (list of complex numbers): the poles of the transfer function.
+
         omegas (list of floats): the natural frequencies of the modes.
+
         modes (list of complex-valued column matrices): modes of the network.
+
         delays (list of floats): the delays in the network.
+
         nonlin_coeff (optional [float]): overall scaling for the nonlinearities.
+
         polarizations (optional [list]): the polarizations of the respective
-            modes. These should match the arguments in Chi_nonlin.chi_func.
+        modes. These should match the arguments in Chi_nonlin.chi_func.
+
         cross_sectional_area (float): area of beams, used to determines the
         scaling for the various modes.
+
         chi_nonlinearities (lst): a list of Chi_nonlin instances.
 
     '''
@@ -73,7 +83,7 @@ class Hamiltonian():
         chi_nonlinearities = [],
         ):
         self.roots = roots
-        self.omegas = [root.imag / (2.*consts.pi) for root in roots]
+        self.omegas = [root.imag / (2.*consts.pi) for root in self.roots]
         self.modes = modes
         self.m = len(roots)
         self.delays = delays
@@ -99,17 +109,23 @@ class Hamiltonian():
             delay_indices (int OR list/tuple of ints): the index representing the
             delay line along which the nonlinearity lies. If given a list/tuple
             then the nonlinearity interacts the N different modes.
+
             start_nonlin (float OR list/tuple of floats): the beginning of the
             nonlinearity. If a list/tuple then each nonlinearity begins at a
             different time along its corresponding delay line.
+
             length_nonlin (float): duration of the nonlinearity in terms of length.
             indices_of_refraction (float/int or list/tuple of float/int): the
             indices of refraction corresponding to the various modes. If float
             or int then all are the same.
+
             chi_order (optional [int]): order of the chi nonlinearity.
-            chi_function (function): a function of 2*(chi_order+1) parameters that
+
+            chi_function (function): a function of 2*chi_order+1 parameters that
             returns the strenght of the interaction for given frequency
-            combinations and polarizations.
+            combinations and polarizations. The first chi_order+1 parameters
+            correspond to frequencies combined the the next chi_order parameters
+            correspond to the various polarizations.
         '''
 
         chi_nonlinearity = Chi_nonlin(delay_indices,start_nonlin,
@@ -143,20 +159,20 @@ class Hamiltonian():
         '''Make symbolic nonlinear term using sympy.
 
         Example:
-        >>> combination = [1,2,3]; pm_arr = [-1,1,1]
-        >>> print Hamiltonian.make_nonlin_term_sympy(combination,pm_arr)
-        self.a(1) * Dagger(self.a(2)) * Dagger(self.a(3))
+            >>> combination = [1,2,3]; pm_arr = [-1,1,1]
+            >>> print Hamiltonian.make_nonlin_term_sympy(combination,pm_arr)
+                a_1*Dagger(a_2)*Dagger(a_3)
 
         Args:
             combination (tuple/list of integers): indices of which terms to
-                include pm_arr (tuple/list of +1 and -1): creation and
-                annihilation indicators for the respective terms in combination.
+            include pm_arr (tuple/list of +1 and -1): creation and
+            annihilation indicators for the respective terms in combination.
         Returns:
             symbolic expression for the combination of creation and annihilation
             operators.
 
         '''
-        r = 1.
+        r = 1
         for index,sign in zip(combination,pm_arr):
             if sign == 1:
                 r*= Dagger(self.a[index])
@@ -172,7 +188,7 @@ class Hamiltonian():
             combination (list/tuple of integers): which modes/roots to pick
             pm_arr (list of +1 and -1): creation and annihilation of modes
             chi (Chi_nonlin): the chi nonlinearity for which to compute
-                the phase coefficient.
+            the phase coefficient.
         Returns:
             The weight to add to the Hamiltonian
 
@@ -190,7 +206,7 @@ class Hamiltonian():
 
         Args:
             chi (Chi_nonlin): the chi nonlinearity for which to compute
-                the phase coefficient.
+            the phase coefficient.
         Returns:
             A dictionary of weights. Each key is a tuple consisting of two
             components: the first is a tuple of the indices of modes and the
@@ -217,7 +233,7 @@ class Hamiltonian():
             mode_index (int): The index of the mode.
         Returns:
             The weight in the equation above. It has form:
-                sqrt[\hbar * \omega(n) / 2 V_eff(n) \epsilon].
+            sqrt[\hbar * \omega(n) / 2 V_eff(n) \epsilon].
 
         '''
         omega = self.omegas[mode_index]
@@ -255,9 +271,11 @@ class Hamiltonian():
             significant_phase_matching_weights = {k:v for k,v
                 in phase_matching_weights.iteritems() if abs(v) > eps}
             for combination,pm_arr in significant_phase_matching_weights:
-                freqs = map(lambda i: pm_arr[i] * self.omegas[i],combination)
+                omegas_to_use = map(lambda i: self.omegas[i],combination)
+                omegas_with_sign = [omega * pm for omega,pm
+                                    in zip(omegas_to_use,pm_arr)]
                 pols = map(lambda i: self.polarizations[i],combination)
-                chi_args = freqs + pols
+                chi_args = omegas_with_sign + pols
                 H_nonlin_sp += ( self.make_nonlin_term_sympy(combination,pm_arr) *
                     chi.chi_function(*chi_args) *
                     significant_phase_matching_weights[combination,pm_arr] *
@@ -285,8 +303,8 @@ class Hamiltonian():
 
         Args:
             Omega (complex-valued matrix) describes the Hamiltonian of the system.
-            Omega = -1j*A        #### full dynamics (not necessarily Hermitian)
-            Omega = (A-A.H)/(2j) #### closed dynamics only (Hermitian part of above)
+            Omega = -1j*A        <--- full dynamics (not necessarily Hermitian)
+            Omega = (A-A.H)/(2j) <--- closed dynamics only (Hermitian part of above)
             eps (optional[float]): Cutoff for the significance of a particular term.
 
         Returns:
