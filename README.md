@@ -8,6 +8,10 @@ yields a linear Hamiltonian written in terms of the identified modes, linear
 operators coupling the system modes to the environment, and an overall
 scattering matrix. Nonlinear elements are added as additional Hamiltonian terms.
 
+Our manuscript describing this method can be found on
+http://arxiv.org/abs/1510.08942 or
+http://www.epjquantumtechnology.com/content/3/1/3.
+
 # Files
 
 ## Time_Delay_Network.py
@@ -22,8 +26,7 @@ of a transfer function of passive systems.
 We implement the procedure for finding Blaschke-Potapov
 products to approximate given functions near poles (see `get_Potapov`).
 Please see section 6.2 in
-our manuscript for details: http://arxiv.org/abs/1510.08942 or
-http://www.epjquantumtechnology.com/content/3/1/3.
+our manuscript for details.
 This procedure is used to generate the modes of the passive linear network.
 
 Given a rational matrix-valued function, we also construct the matrices ABCD
