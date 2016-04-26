@@ -34,9 +34,12 @@ A module for identifying the zeros of a complex-valued function.
 
 ## functions.py
 Miscellaneous functions. Includes:
+
 --`Pade`: Generate a Pade approximation for delays that do NOT feed back.
+
 --`spatial_modes`: Finding the spatial location of modes. This is necessary to
 generate nonlinear terms.
+
 --`make_nonlinear_interaction`: Generate the weight of an interaction term due
 to phase-matching.
 
@@ -56,7 +59,10 @@ Integrate the dynamics of a passive in time using the ABCD matrices.
 ## Time_Sims_nonlin.py
 
 --`make_f_lin` generates outputs from ABCD model.
+
 --`make_f` generates outputs from nonlinear Hamiltonian model.
+
 --`run_ODE` integrates the equations of motion in time.
+
 --`double_up` prepares a doubled-up system which can be used for non-classical
 simulations.
