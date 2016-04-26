@@ -4,10 +4,10 @@ Potapov_Code package
 Submodules
 ----------
 
-Potapov_Code.Examples module
-----------------------------
+Potapov_Code.Time_Delay_Network module
+--------------------------------------
 
-.. automodule:: Potapov_Code.Examples
+.. automodule:: Potapov_Code.Time_Delay_Network
     :members:
     :undoc-members:
     :show-inheritance:

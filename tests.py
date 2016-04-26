@@ -1,6 +1,6 @@
 import Potapov
 import Roots
-import Examples
+import Time_Delay_Network
 import functions
 import numpy as np
 import numpy.testing as testing
@@ -97,7 +97,7 @@ def test_Roots_2():
         [-5.,-4.,-3.,-2.,-1.,-0.,1.,2.,3.,4.,5.] )
 
 def test_example_1():
-    Ex = Examples.Example1()
+    Ex = Time_Delay_Network.Example1()
     Ex.run_Potapov()
     E = Ex.E
     roots = Ex.roots
@@ -107,7 +107,7 @@ def test_example_1():
     assert( len(roots) == 3)
 
 def test_example_2():
-    Ex = Examples.Example2()
+    Ex = Time_Delay_Network.Example2()
     Ex.run_Potapov()
     E = Ex.E
     roots = Ex.roots
@@ -117,7 +117,7 @@ def test_example_2():
     assert( len(roots) == 7)
 
 def test_example_3():
-    Ex = Examples.Example3()
+    Ex = Time_Delay_Network.Example3()
     Ex.run_Potapov()
     E = Ex.E
     roots = Ex.roots
@@ -127,7 +127,7 @@ def test_example_3():
     assert( len(roots) == 11)
 
 def test_example_4():
-    Ex = Examples.Example4()
+    Ex = Time_Delay_Network.Example4()
     Ex.run_Potapov()
     E = Ex.E
     roots = Ex.roots
@@ -147,7 +147,7 @@ def test_Hamiltonian(eps=1e-5):
         eps[optional(float)]: how closely each point in time along the two
         tested trajectories should match.
     '''
-    Ex = Examples.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=10.)
+    Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=10.)
     Ex.run_Potapov()
     modes = functions.spatial_modes(Ex.roots,Ex.M1,Ex.E,Ex.delays)
     M = len(Ex.roots)

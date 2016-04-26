@@ -8,7 +8,7 @@ Created on Mon Mar 31 2015
 
 import Roots
 import Potapov
-import Examples
+import Time_Delay_Network
 import functions
 import Hamiltonian
 
@@ -120,7 +120,7 @@ def double_up(M1,M2=None):
 
 if __name__ == "__main__":
 
-    Ex = Examples.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=25.)
+    Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=25.)
     Ex.run_Potapov()
     modes = functions.spatial_modes(Ex.roots,Ex.M1,Ex.E)
 

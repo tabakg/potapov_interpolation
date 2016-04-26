@@ -11,7 +11,7 @@ Created on Mon Mar  2 15:52:32 2015
 from scipy.integrate import ode
 import numpy as np
 import matplotlib.pyplot as plt
-import Examples
+import Time_Delay_Network
 import Potapov
 
 def time_sim(Example, omega = 0., t1=150, dt=0.05, freq=None,
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     Setting it to 1 only gets the pole at zero.
     '''
     ###########################################
-    eg = Examples.Example2
+    eg = Time_Delay_Network.Example2
     kind = 'FP'  ## Fabry-Perot
     time_sim(eg,port_out = [1],t1=50,dt=0.0005, freq = 1.)
     ###########################################
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     Run several simulations of FP
     '''
 
-    # eg = Examples.Example2
+    # eg = Time_Delay_Network.Example2
     # kind = 'FP'  ## Fabry-Perot
     #
     # for num in xrange(5,7):
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     '''
     Run a double - Fabry Perot (i.e. three mirrors)
     '''
-    #eg = Examples.Example3
+    #eg = Time_Delay_Network.Example3
     #kind = 'DFP' ##'double'-Fabry-Perot
     #for num in xrange(105,106):
     #    time_sim(eg,port_out = 1,t1=10,dt=0.0001,freq = 1+np.pi*num,\

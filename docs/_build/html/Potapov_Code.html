@@ -65,7 +65,7 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">Potapov_Code package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-Potapov_Code.Examples">Potapov_Code.Examples module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-Potapov_Code.Time_Delay_Network">Potapov_Code.Time_Delay_Network module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-Potapov_Code.Hamiltonian">Potapov_Code.Hamiltonian module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-Potapov_Code.Potapov">Potapov_Code.Potapov module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-Potapov_Code.Roots">Potapov_Code.Roots module</a></li>
@@ -116,51 +116,51 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-Potapov_Code.Examples">
-<span id="potapov-code-examples-module"></span><h2>Potapov_Code.Examples module<a class="headerlink" href="#module-Potapov_Code.Examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-Potapov_Code.Time_Delay_Network">
+<span id="potapov-code-time-delay-network-module"></span><h2>Potapov_Code.Time_Delay_Network module<a class="headerlink" href="#module-Potapov_Code.Time_Delay_Network" title="Permalink to this headline">¶</a></h2>
 <p>Created on Mon Mar  2 17:37:37 2015</p>
 <p>&#64;author: gil
 &#64;title: examples</p>
 <dl class="class">
-<dt id="Potapov_Code.Examples.Example1">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Examples.</code><code class="descname">Example1</code><span class="sig-paren">(</span><em>max_freq=30.0</em>, <em>max_linewidth=1.0</em>, <em>N=1000</em>, <em>tau=0.3</em>, <em>r=0.8</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Example1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Examples.Time_Delay_Network" title="Potapov_Code.Examples.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Examples.Time_Delay_Network</span></code></a></p>
+<dt id="Potapov_Code.Time_Delay_Network.Example1">
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example1</code><span class="sig-paren">(</span><em>max_freq=30.0</em>, <em>max_linewidth=1.0</em>, <em>N=1000</em>, <em>tau=0.3</em>, <em>r=0.8</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Single input, single output with a single delay.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="Potapov_Code.Examples.Example2">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Examples.</code><code class="descname">Example2</code><span class="sig-paren">(</span><em>max_freq=10.0</em>, <em>max_linewidth=10.0</em>, <em>N=1000</em>, <em>r=0.9</em>, <em>tau=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Example2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Examples.Time_Delay_Network" title="Potapov_Code.Examples.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Examples.Time_Delay_Network</span></code></a></p>
+<dt id="Potapov_Code.Time_Delay_Network.Example2">
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example2</code><span class="sig-paren">(</span><em>max_freq=10.0</em>, <em>max_linewidth=10.0</em>, <em>N=1000</em>, <em>r=0.9</em>, <em>tau=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Two inputs, two outputs with a delay (i.e. Fabry-Perot).</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="Potapov_Code.Examples.Example3">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Examples.</code><code class="descname">Example3</code><span class="sig-paren">(</span><em>max_freq=60.0</em>, <em>max_linewidth=1.0</em>, <em>N=5000</em>, <em>r1=0.9</em>, <em>r2=0.4</em>, <em>r3=0.8</em>, <em>tau1=0.1</em>, <em>tau2=0.23</em>, <em>tau3=0.1</em>, <em>tau4=0.17</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Example3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Examples.Time_Delay_Network" title="Potapov_Code.Examples.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Examples.Time_Delay_Network</span></code></a></p>
+<dt id="Potapov_Code.Time_Delay_Network.Example3">
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example3</code><span class="sig-paren">(</span><em>max_freq=60.0</em>, <em>max_linewidth=1.0</em>, <em>N=5000</em>, <em>r1=0.9</em>, <em>r2=0.4</em>, <em>r3=0.8</em>, <em>tau1=0.1</em>, <em>tau2=0.23</em>, <em>tau3=0.1</em>, <em>tau4=0.17</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Two inputs and two outputs, with four delays and third mirror
 This corresponds to figures 7 and 8 in our paper.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="Potapov_Code.Examples.Example4">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Examples.</code><code class="descname">Example4</code><span class="sig-paren">(</span><em>max_freq=100.0</em>, <em>max_linewidth=3.0</em>, <em>N=5000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Example4" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Examples.Time_Delay_Network" title="Potapov_Code.Examples.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Examples.Time_Delay_Network</span></code></a></p>
+<dt id="Potapov_Code.Time_Delay_Network.Example4">
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example4</code><span class="sig-paren">(</span><em>max_freq=100.0</em>, <em>max_linewidth=3.0</em>, <em>N=5000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Two inputs and two outputs, with free delay (i.e. not in a loop).
 This corresponds to figures 9 and 10 in our paper.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="Potapov_Code.Examples.Example5">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Examples.</code><code class="descname">Example5</code><span class="sig-paren">(</span><em>max_freq=50.0</em>, <em>max_linewidth=3.0</em>, <em>N=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Example5" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Examples.Time_Delay_Network" title="Potapov_Code.Examples.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Examples.Time_Delay_Network</span></code></a></p>
+<dt id="Potapov_Code.Time_Delay_Network.Example5">
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example5</code><span class="sig-paren">(</span><em>max_freq=50.0</em>, <em>max_linewidth=3.0</em>, <em>N=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Modified example 4, with analytic term.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="Potapov_Code.Examples.Time_Delay_Network">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Examples.</code><code class="descname">Time_Delay_Network</code><span class="sig-paren">(</span><em>max_freq=30.0</em>, <em>max_linewidth=1.0</em>, <em>N=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Time_Delay_Network" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network">
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Time_Delay_Network</code><span class="sig-paren">(</span><em>max_freq=30.0</em>, <em>max_linewidth=1.0</em>, <em>N=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to contain the information of a passive linear network with time
 delays.</p>
 <dl class="docutils">
@@ -172,35 +172,35 @@ the roots/poles of the network.</p>
 </dd>
 </dl>
 <dl class="method">
-<dt id="Potapov_Code.Examples.Time_Delay_Network.get_outputs">
-<code class="descname">get_outputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Time_Delay_Network.get_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_outputs">
+<code class="descname">get_outputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_outputs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="Potapov_Code.Examples.Time_Delay_Network.make_T_Testing">
-<code class="descname">make_T_Testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Time_Delay_Network.make_T_Testing" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_T_Testing">
+<code class="descname">make_T_Testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_T_Testing" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="Potapov_Code.Examples.Time_Delay_Network.make_roots">
-<code class="descname">make_roots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Time_Delay_Network.make_roots" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_roots">
+<code class="descname">make_roots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_roots" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="Potapov_Code.Examples.Time_Delay_Network.make_vecs">
-<code class="descname">make_vecs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Time_Delay_Network.make_vecs" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_vecs">
+<code class="descname">make_vecs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_vecs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="Potapov_Code.Examples.Time_Delay_Network.run_Potapov">
-<code class="descname">run_Potapov</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.Time_Delay_Network.run_Potapov" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.run_Potapov">
+<code class="descname">run_Potapov</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.run_Potapov" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="function">
-<dt id="Potapov_Code.Examples.example6_pade">
-<code class="descclassname">Potapov_Code.Examples.</code><code class="descname">example6_pade</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.example6_pade" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.Time_Delay_Network.example6_pade">
+<code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">example6_pade</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.example6_pade" title="Permalink to this definition">¶</a></dt>
 <dd><p>This example is the same as example 3, but we return a Pade approximation
 instead of a Potapov approximation. Instead of returnings roots, etc., we
 return a different kind of function (see below).</p>
@@ -213,8 +213,8 @@ and z is the location of the function to be evaluated.</dd>
 </dd></dl>
 
 <dl class="function">
-<dt id="Potapov_Code.Examples.plot3D">
-<code class="descclassname">Potapov_Code.Examples.</code><code class="descname">plot3D</code><span class="sig-paren">(</span><em>f</em>, <em>points=2000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.plot3D" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.Time_Delay_Network.plot3D">
+<code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">plot3D</code><span class="sig-paren">(</span><em>f</em>, <em>points=2000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.plot3D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a color and hue plot in the complex plane for a given function</p>
 <dl class="docutils">
 <dt>Givens:</dt>
@@ -224,8 +224,8 @@ points(optional[int]): number of points to use per dimension</dd>
 </dd></dl>
 
 <dl class="function">
-<dt id="Potapov_Code.Examples.plot_all">
-<code class="descclassname">Potapov_Code.Examples.</code><code class="descname">plot_all</code><span class="sig-paren">(</span><em>L</em>, <em>dx</em>, <em>labels</em>, <em>colors</em>, <em>lw</em>, <em>name</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Examples.plot_all" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.Time_Delay_Network.plot_all">
+<code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">plot_all</code><span class="sig-paren">(</span><em>L</em>, <em>dx</em>, <em>labels</em>, <em>colors</em>, <em>lw</em>, <em>name</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.plot_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>A method to plot the absolute value and phase of each component for a list
 of matrix-valued functions in the complex plane along an axis.</p>
 <dl class="docutils">
@@ -649,6 +649,9 @@ We implement the method in the following paper:</p>
 <blockquote>
 <div>Delves, L. M., and J. N. Lyness. &#8220;A numerical method for locating the zeros of
 an analytic function.&#8221; Mathematics of computation 21.100 (1967): 543-560.</div></blockquote>
+<p>Alternative code using a similar method can be found here:</p>
+<blockquote>
+<div><a class="reference external" href="http://cpc.cs.qub.ac.uk/summaries/ADKW_v1_0.html">http://cpc.cs.qub.ac.uk/summaries/ADKW_v1_0.html</a></div></blockquote>
 <p>The main idea is to compute contour integrals of functions of the form
 <span class="math">\(z^k f'/f\)</span> around the contour, for integer values of k. Here <span class="math">\(f'\)</span> denotes the
 derivative of f. The resulting values of the contour integrals are proportional

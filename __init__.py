@@ -1,6 +1,6 @@
 import Roots
 import Potapov
-import Examples
+import Time_Delay_Network
 import Time_Sims
 import functions
 import tests
@@ -17,7 +17,7 @@ def contour_plot(Mat):
 
 if __name__ == "__main__":
 
-    Ex = Examples.Example3(r1 = 0.999, r3 = 0.999)
+    Ex = Time_Delay_Network.Example3(r1 = 0.999, r3 = 0.999)
     Ex.run_Potapov()
 
     E = Ex.E

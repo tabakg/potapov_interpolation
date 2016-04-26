@@ -11,6 +11,10 @@ We implement the method in the following paper:
  Delves, L. M., and J. N. Lyness. "A numerical method for locating the zeros of
  an analytic function." Mathematics of computation 21.100 (1967): 543-560.
 
+Alternative code using a similar method can be found here:
+
+ http://cpc.cs.qub.ac.uk/summaries/ADKW_v1_0.html
+
 The main idea is to compute contour integrals of functions of the form
 :math:`z^k f'/f` around the contour, for integer values of k. Here :math:`f'` denotes the
 derivative of f. The resulting values of the contour integrals are proportional
