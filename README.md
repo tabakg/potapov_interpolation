@@ -12,6 +12,11 @@ Our manuscript describing this method can be found on
 http://arxiv.org/abs/1510.08942 or
 http://www.epjquantumtechnology.com/content/3/1/3.
 
+# Installation
+Simply clone the repository, open a terminal window, type:
+`cd /path/to/my/repo
+python setup.py install`
+
 # Files
 
 ## Time_Delay_Network.py
@@ -24,7 +29,7 @@ of a transfer function of passive systems.
 
 ## Potapov.py
 We implement the procedure for finding Blaschke-Potapov
-products to approximate given functions near poles (see `get_Potapov`).
+products to approximate given functions near poles (`get_Potapov`).
 Please see section 6.2 in
 our manuscript for details.
 This procedure is used to generate the modes of the passive linear network.
