@@ -60,13 +60,6 @@ Potapov_Code.functions module
     :undoc-members:
     :show-inheritance:
 
-Potapov_Code.setup module
--------------------------
-
-.. automodule:: Potapov_Code.setup
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 Potapov_Code.tests module
 -------------------------

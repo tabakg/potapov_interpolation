@@ -16,11 +16,11 @@ import sys
 import os
 import shlex
 
-from recommonmark.parser import CommonMarkParser
-
-source_parsers = {
-    '.md': CommonMarkParser,
-}
+# from recommonmark.parser import CommonMarkParser
+#
+# source_parsers = {
+#     '.md': CommonMarkParser,
+# }
 
 source_suffix = ['.rst', '.md']
 
@@ -44,7 +44,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
-    #'sphinxcontrib.napoleon',
+    'sphinxcontrib.napoleon',
 ]
 
 

@@ -246,6 +246,8 @@ class Hamiltonian():
         Returns:
             A symbolic expression for the nonlinear Hamiltonian.
 
+        TODO: Further restrict terms iterated over to make the RWA (i.e.
+            frequency-match terms).
         '''
         H_nonlin_sp = 0.
         for chi in self.chi_nonlinearities:

@@ -312,6 +312,12 @@ indices of polarization.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.omegas">
+<code class="descname">omegas</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.omegas" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list of floats</em> &#8211; the natural frequencies of the modes.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.modes">
 <code class="descname">modes</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.modes" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>list of complex-valued column matrices</em> &#8211; modes of the network.</p>
@@ -494,6 +500,10 @@ vector as an output.</td>
 </tr>
 </tbody>
 </table>
+<dl class="docutils">
+<dt>TODO: Further restrict terms iterated over to make the RWA (i.e.</dt>
+<dd>frequency-match terms).</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -1400,8 +1410,8 @@ points at a distance eps.</p>
 
 <dl class="function">
 <dt id="Potapov_Code.functions.make_nonlinear_interaction">
-<code class="descclassname">Potapov_Code.functions.</code><code class="descname">make_nonlinear_interaction</code><span class="sig-paren">(</span><em>roots</em>, <em>modes</em>, <em>delays</em>, <em>delay_indices</em>, <em>start_nonlin</em>, <em>length_nonlin</em>, <em>plus_or_minus_arr</em>, <em>indices_of_refraction=None</em>, <em>eps=1e-12</em>, <em>func=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.make_nonlinear_interaction" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function takes several (say M) roots and their corresponding modes,
+<code class="descclassname">Potapov_Code.functions.</code><code class="descname">make_nonlinear_interaction</code><span class="sig-paren">(</span><em>natural_freqs</em>, <em>modes</em>, <em>delays</em>, <em>delay_indices</em>, <em>start_nonlin</em>, <em>length_nonlin</em>, <em>plus_or_minus_arr</em>, <em>indices_of_refraction=None</em>, <em>eps=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.make_nonlinear_interaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes several (say M) natural_freqs and their corresponding modes,
 as well as the (N) delay lengths of the network, and determines the term
 we need to add to the Hamiltonian corresponding to the resulting
 nonlinearity. We assume there is a crystal going from start_nonlin to
@@ -1420,7 +1430,8 @@ the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>roots</strong> (<em>list of complex numbers</em>) &#8211; The roots of the various eigenmodes</li>
+<li><strong>natural_freqs</strong> (<em>list of complex numbers</em>) &#8211; The natural frequencies of the
+various eigenmodes</li>
 <li><strong>modes</strong> (<em>list of column matrices</em>) &#8211; the amplitudes of the modes at
 various nodes</li>
 <li><strong>delays</strong> (<em>list of floats</em>) &#8211; The duration of each delay following
@@ -1438,9 +1449,6 @@ a photon in each of the given modes</li>
 indices of refraction corresponding to the various modes. If float
 or int then all are the same.</li>
 <li><strong>eps</strong> (<em>optional[float]</em>) &#8211; cutoff for two frequencies being equal</li>
-<li><strong>func</strong> (<em>optional[funciton]</em>) &#8211; used to transform the roots. Default
-value is set to lambda z: z.imag, meaning we take the frequency
-of each mode.</li>
 </ul>
 </td>
 </tr>
@@ -1539,9 +1547,6 @@ overlap of the various given modes in the system.</p>
 </table>
 </dd></dl>
 
-</div>
-<div class="section" id="potapov-code-setup-module">
-<h2>Potapov_Code.setup module<a class="headerlink" href="#potapov-code-setup-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-Potapov_Code.tests">
 <span id="potapov-code-tests-module"></span><h2>Potapov_Code.tests module<a class="headerlink" href="#module-Potapov_Code.tests" title="Permalink to this headline">¶</a></h2>
