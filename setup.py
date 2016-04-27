@@ -7,5 +7,5 @@ setup(name='Potapov_interpolation',
       author='Gil Tabak',
       author_email='tabak.gil@gmail.com',
       license='GNU',
-      packages=['Potapov_interpolation'],
+      packages=['Potapov_Code'],
       zip_safe=False)

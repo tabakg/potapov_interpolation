@@ -172,6 +172,18 @@ the roots/poles of the network.</p>
 </dd>
 </dl>
 <dl class="method">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_Potapov_ABCD">
+<code class="descname">get_Potapov_ABCD</code><span class="sig-paren">(</span><em>z=0.0</em>, <em>doubled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_Potapov_ABCD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the ABCD matrices from the Time_Delay_Network.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>z (optional [complex number]): location where to estimate D.</dd>
+<dt>Return:</dt>
+<dd>A,B,C,D matrices.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_outputs">
 <code class="descname">get_outputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_outputs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -184,6 +196,11 @@ the roots/poles of the network.</p>
 <dl class="method">
 <dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_roots">
 <code class="descname">make_roots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_roots" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_spatial_modes">
+<code class="descname">make_spatial_modes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_spatial_modes" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -268,7 +285,7 @@ frequencies, next chi_order args are indices of polarization.</p>
 
 <dl class="class">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Hamiltonian.</code><code class="descname">Hamiltonian</code><span class="sig-paren">(</span><em>roots</em>, <em>modes</em>, <em>delays</em>, <em>nonlin_coeff=1.0</em>, <em>polarizations=None</em>, <em>cross_sectional_area=1e-10</em>, <em>chi_nonlinearities=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Potapov_Code.Hamiltonian.</code><code class="descname">Hamiltonian</code><span class="sig-paren">(</span><em>roots</em>, <em>modes</em>, <em>delays</em>, <em>Omega=None</em>, <em>nonlin_coeff=1.0</em>, <em>polarizations=None</em>, <em>cross_sectional_area=1e-10</em>, <em>chi_nonlinearities=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to create a sympy expression for the Hamiltonian of a network.</p>
 <dl class="docutils">
 <dt>Attributes:</dt>
@@ -276,6 +293,8 @@ frequencies, next chi_order args are indices of polarization.</p>
 <p>omegas (list of floats): the natural frequencies of the modes.</p>
 <p>modes (list of complex-valued column matrices): modes of the network.</p>
 <p>delays (list of floats): the delays in the network.</p>
+<p>Omega (optional [matrix]): Quadratic Hamiltonian term for linear
+dynamics.</p>
 <p>nonlin_coeff (optional [float]): overall scaling for the nonlinearities.</p>
 <p>polarizations (optional [list]): the polarizations of the respective
 modes. These should match the arguments in Chi_nonlin.chi_func.</p>
@@ -308,7 +327,7 @@ scaling for the various modes.</p>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_H">
-<code class="descname">make_H</code><span class="sig-paren">(</span><em>Omega</em>, <em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_H" title="Permalink to this definition">¶</a></dt>
+<code class="descname">make_H</code><span class="sig-paren">(</span><em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_H" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a Hamiltonian combining the linear and nonlinear parts.</p>
 <dl class="docutils">
 <dt>Args:</dt>
@@ -349,7 +368,7 @@ correspond to the various polarizations.</p>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_eq_motion">
-<code class="descname">make_eq_motion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_eq_motion" title="Permalink to this definition">¶</a></dt>
+<code class="descname">make_eq_motion</code><span class="sig-paren">(</span><em>type='doubled'</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_eq_motion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input is a tuple or list, output is a matrix vector.
 This generates Hamilton&#8217;s equations of motion for a and a^H.
 These equations are CLASSICAL equations of motion. This means
@@ -1186,7 +1205,9 @@ overlap of the various given modes in the system.</dd>
 <dl class="function">
 <dt id="Potapov_Code.functions.spatial_modes">
 <code class="descclassname">Potapov_Code.functions.</code><code class="descname">spatial_modes</code><span class="sig-paren">(</span><em>roots</em>, <em>M1</em>, <em>E</em>, <em>delays=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.spatial_modes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Obtain the spetial mode profile at each node up to a constant.</p>
+<dd><p>Obtain the spetial mode profile at each node up to a constant.
+If the delays are provided, the modes will be normalized using the delays.
+Otherwise, the modes will not be normalized.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><p class="first">roots (list of complex numbers): The eigenvalues of the system</p>
@@ -1203,8 +1224,8 @@ overlap of the various given modes in the system.</dd>
 <div class="section" id="module-Potapov_Code.tests">
 <span id="potapov-code-tests-module"></span><h2>Potapov_Code.tests module<a class="headerlink" href="#module-Potapov_Code.tests" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="Potapov_Code.tests.test_Hamiltonian">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_Hamiltonian</code><span class="sig-paren">(</span><em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_Hamiltonian" title="Permalink to this definition">¶</a></dt>
+<dt id="Potapov_Code.tests.test_Hamiltonian_with_doubled_equations">
+<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_Hamiltonian_with_doubled_equations</code><span class="sig-paren">(</span><em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_Hamiltonian_with_doubled_equations" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method tests various methods in Hamiltonian and Time_Sims_nonlin.
 In particular, we compare the output from the classical equations of motion
 that results directly from the ABCD model versus the classical Hamiltonian
