@@ -15,6 +15,7 @@ from Time_Sims_nonlin import double_up
 from functions import der
 from functions import Pade
 from functions import spatial_modes
+import matplotlib.patches as patches
 
 def plot_all(L,dx,labels,colors,lw,name,*args):
     '''
@@ -92,19 +93,36 @@ class Time_Delay_Network():
         self.Potapov_ran = False
 
     def make_roots(self):
+        '''Generate the roots given the denominator of the transfer function.
+
+        '''
         self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,-self.max_linewidth/2.,0,
             self.max_linewidth/2.,self.max_freq,N=self.N)
 
     def make_T_Testing(self):
+        '''Generate the approximating transfer function using the identified
+        poles of the transfer function.
+
+        '''
         self.T_testing = Potapov.get_Potapov(self.T,self.roots)
 
     def make_vecs(self):
+        '''Generate an ordered list of vectors representing the form of the
+        Potapov factors.
+
+        '''
         self.vecs = Potapov.get_Potapov_vecs(self.T,self.roots)
 
     def make_spatial_modes(self,):
+        '''Generate the spatial modes of the network.
+
+        '''
         self.spatial_modes = spatial_modes(self.roots,self.M1,self.E,delays=self.delays)
 
     def run_Potapov(self):
+        '''Run the entire Potapov procedure to find all important information.
+
+        '''
         self.Potapov_ran = True
         self.make_roots()
         self.roots =  [r for r in self.roots if r.real <= 0]
@@ -113,11 +131,18 @@ class Time_Delay_Network():
         self.make_spatial_modes()
 
     def get_outputs(self):
+        '''Get some of the relevant outputs from the Potapov procedure.
+
+        Returns:
+            The original transfer function, the approximating generated
+            transfer function, the identified poles of the transfer function,
+            and the vectors representing the form of the Potapov factors.
+
+        '''
         if self.Potapov_ran:
             return self.T,self.T_testing,self.roots,self.vecs
         else:
-            print "Must run Potapov to get outputs!!!"
-            return None
+            raise Exception("Must run Potapov to get outputs!!!")
 
     def get_Potapov_ABCD(self,z=0.,doubled=False):
         '''
@@ -388,7 +413,7 @@ def plot3D(f,points = 2000):
     fig.savefig("complex_plane_plot.pdf")
     return
 
-if __name__ == "__main__" and False:
+if __name__ == "__main__":
     print 'Running Examples.py'
 
     ################
@@ -529,8 +554,6 @@ if __name__ == "__main__" and False:
     ###########
     ## make scatter plot for the roots and poles of example 3
     ###########
-
-    import matplotlib.patches as patches
 
 
     E = Example3(max_freq = 400.)

@@ -118,7 +118,7 @@ def double_up(M1,M2=None):
     bottom = np.hstack([np.conj(M2),np.conj(M1)])
     return np.vstack([top,bottom])
 
-if __name__ == "__main__" and False:
+if __name__ == "__main__":
 
     Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=25.)
     Ex.run_Potapov()
