@@ -33,7 +33,7 @@ import mock
 
 MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot',
     'numpy.linalg','scipy.constants','scipy.integrate',
-    'numpy.testing',]
+    'numpy.testing','mpmath']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
     sys.modules.update((mod_name, mock.Mock()) for mod_name in MOCK_MODULES)
