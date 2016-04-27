@@ -34,11 +34,11 @@ try:
 except ImportError:
     import mock
 MOCK_MODULES = ['numpy', 'numpy.linalg', 'scipy.integrate', 'scipy',
-    'matplotlib', 'sympy', 'scipy.constants', 'itertools',
+    'sympy', 'scipy.constants',
     'sympy.physics.quantum', 'sympy.physics.quantum.boson',
     'sympy.physics.quantum.operatorordering',
     'matplotlib.pyplot','mpmath',
-    'pprint', 'cmath', 'numpy.testing']
+    'pprint', 'cmath', 'numpy.testing', ]
 
 sys.modules.update((mod_name, mock.Mock()) for mod_name in MOCK_MODULES)
 
