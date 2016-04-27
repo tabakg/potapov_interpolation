@@ -11,8 +11,10 @@ import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
 import mpmath as mp
+from Time_Sims_nonlin import double_up
 from functions import der
 from functions import Pade
+from functions import spatial_modes
 
 def plot_all(L,dx,labels,colors,lw,name,*args):
     '''
@@ -99,12 +101,16 @@ class Time_Delay_Network():
     def make_vecs(self):
         self.vecs = Potapov.get_Potapov_vecs(self.T,self.roots)
 
+    def make_spatial_modes(self,):
+        self.spatial_modes = spatial_modes(self.roots,self.M1,self.E,delays=self.delays)
+
     def run_Potapov(self):
         self.Potapov_ran = True
         self.make_roots()
         self.roots =  [r for r in self.roots if r.real <= 0]
         self.make_T_Testing()
         self.make_vecs()
+        self.make_spatial_modes()
 
     def get_outputs(self):
         if self.Potapov_ran:
@@ -112,6 +118,25 @@ class Time_Delay_Network():
         else:
             print "Must run Potapov to get outputs!!!"
             return None
+
+    def get_Potapov_ABCD(self,z=0.,doubled=False):
+        '''
+        Find the ABCD matrices from the Time_Delay_Network.
+
+        Args:
+            z (optional [complex number]): location where to estimate D.
+
+        Return:
+            A,B,C,D matrices.
+
+        '''
+        A,B,C,D = Potapov.get_Potapov_ABCD(self.roots,self.vecs,self.T,z=z)
+        if not doubled:
+            return A,B,C,D
+        else:
+            A_d,C_d,D_d = map(double_up,(A,C,D))
+            B_d = -double_up(C.H)
+            return A_d,B_d,C_d,D_d
 
 class Example1(Time_Delay_Network):
     '''

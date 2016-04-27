@@ -136,7 +136,7 @@ def test_example_4():
     modes = functions.spatial_modes(roots,M1,E,delays)
     assert( len(roots) == 8)
 
-def test_Hamiltonian(eps=1e-5):
+def test_Hamiltonian_with_doubled_equations(eps=1e-5):
     '''
     This method tests various methods in Hamiltonian and Time_Sims_nonlin.
     In particular, we compare the output from the classical equations of motion
@@ -149,22 +149,19 @@ def test_Hamiltonian(eps=1e-5):
     '''
     Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=10.)
     Ex.run_Potapov()
-    modes = functions.spatial_modes(Ex.roots,Ex.M1,Ex.E,Ex.delays)
+    modes = Ex.spatial_modes
     M = len(Ex.roots)
 
-    A,B,C,D = Potapov.get_Potapov_ABCD(Ex.roots,Ex.vecs,Ex.T,z=0.)
-    A_d,C_d,D_d = map(Time_Sims_nonlin.double_up,(A,C,D))
-    B_d = -Time_Sims_nonlin.double_up(C.H)
+    A_d,B_d,C_d,D_d = Ex.get_Potapov_ABCD(doubled=True)
 
-    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays)
+    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A_d)
 
     ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
                                length_nonlin=0.1,indices_of_refraction=1.,
                                chi_order=3,chi_function=None,)
 
-    H = ham.make_H(-1j*A)
+    ham.make_H()
     eq_mot = ham.make_eq_motion()
-
     a_in = lambda t: np.asmatrix([1.]*np.shape(D_d)[-1]).T  ## make a sample input function
 
     ## find f for the linear and nonlinear systems

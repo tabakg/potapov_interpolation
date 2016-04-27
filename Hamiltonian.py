@@ -66,6 +66,9 @@ class Hamiltonian():
 
         delays (list of floats): the delays in the network.
 
+        Omega (optional [matrix]): Quadratic Hamiltonian term for linear
+        dynamics.
+
         nonlin_coeff (optional [float]): overall scaling for the nonlinearities.
 
         polarizations (optional [list]): the polarizations of the respective
@@ -78,6 +81,7 @@ class Hamiltonian():
 
     '''
     def __init__(self,roots,modes,delays,
+        Omega = None,
         nonlin_coeff = 1.,polarizations = None,
         cross_sectional_area = 1e-10,
         chi_nonlinearities = [],
@@ -89,6 +93,10 @@ class Hamiltonian():
         self.delays = delays
         self.normalize_modes()
         self.cross_sectional_area = cross_sectional_area
+        if Omega == None:
+            self.Omega = np.asmatrix(np.zeros((m,m)))
+        else:
+            self.Omega = Omega
         if polarizations == None:
             self.polarizations = [1.]*self.m
         else:
@@ -299,7 +307,7 @@ class Hamiltonian():
                 H_lin_sp += Dagger(self.a[i])*self.a[j]*Omega[i,j]
         return H_lin_sp
 
-    def make_H(self,Omega,eps=1e-5):
+    def make_H(self,eps=1e-5):
         '''Make a Hamiltonian combining the linear and nonlinear parts.
 
         Args:
@@ -313,11 +321,11 @@ class Hamiltonian():
 
         '''
         H_nonlin = self.make_nonlin_H_from_chi(eps)
-        H_lin = self.make_lin_H(Omega)
+        H_lin = self.make_lin_H(self.Omega)
         self.H = H_lin + H_nonlin * self.nonlin_coeff
         return self.H
 
-    def make_eq_motion(self,):
+    def make_eq_motion(self,type='doubled'):
         '''Input is a tuple or list, output is a matrix vector.
         This generates Hamilton's equations of motion for a and a^H.
         These equations are CLASSICAL equations of motion. This means

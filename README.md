@@ -105,11 +105,35 @@ X = Time_Delay_Network.Example3(r1 = 0.7, r3 = 0.7, max_linewidth=35.)
 ## run the Potapov procedure.
 X.run_Potapov()
 
-## Extract the roots, modes, and delays
-roots = X.roots
+## Get the roots, modes, and delays from the Time_Delay_Network.
+roots = X.spatial_modes
+modes = X.roots
 delays = X.delays
-M1 = X.M1
-E = X.E
-modes = functions.spatial_modes(roots,M1,E)
+
+## make an instance of Hamiltonian.
+ham = Hamiltonian(roots,modes,delays,Omega = -1j*A_d))
+
+## Generated doubled-up ABCD matrices for the passive system.
+A_d,B_d,C_d,D_d = X.get_Potapov_ABCD(doubled=True)
+
+## Add a chi nonlinearity to ham.
+ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
+                             length_nonlin=0.1,indices_of_refraction=1.,
+                             chi_order=3,chi_function=None)
+
+## Make the Hamiltonian expression
+ham.make_H()
+
+## Make the classical equation of motion
+eq_mot = ham.make_eq_motion()
+a_in = lambda t: np.asmatrix([1.]*np.shape(D_d)[-1]).T  ## make a sample input function
+
+## find f for the linear and nonlinear systems
+f = Time_Sims_nonlin.make_f(eq_mot,B_d,a_in)
+f_lin = Time_Sims_nonlin.make_f_lin(A_d,B_d,a_in)
+
+## Simulate the system.
+Y_lin = Time_Sims_nonlin.run_ODE(f_lin, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)
+Y_nonlin = Time_Sims_nonlin.run_ODE(f, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01
 
 ```
