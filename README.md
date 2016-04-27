@@ -15,9 +15,9 @@ http://www.epjquantumtechnology.com/content/3/1/3.
 # Installation
 Simply clone the repository, open a terminal window, type:
 
-`cd /path/to/my/repo`
-
-`python setup.py install`
+::
+    cd /path/to/my/repo
+    python setup.py install
 
 # Files
 
@@ -76,3 +76,5 @@ Integrate the dynamics of a passive in time using the ABCD matrices.
 
 --`double_up` prepares a doubled-up system which can be used for non-classical
 simulations.
+
+# Sample Usage
