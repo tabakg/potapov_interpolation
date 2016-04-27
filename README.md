@@ -29,10 +29,17 @@ Several examples are included in this module.
 Each example includes matrices that yield a transfer function.
 This module contains methods to re-construct finite-dimensional approximations
 of a transfer function of passive systems.
+--`run_Potapov()`: This function will run the Potapov procedure. The instance
+of `Time_Delay_Network` will update its `roots`, `vecs`, and `T_testing`.
+These are respectively the poles of the transfer function, a list of vectors
+(complex-valued column matrices) that contain the information to reconstruct
+the matrix-valued projectors in the Potapov representation, and an approximating
+transfer function that has been generated using the Potapov interpolation
+procedure.
 
 ## Potapov.py
 We implement the procedure for finding Blaschke-Potapov
-products to approximate given functions near poles (`get_Potapov()`).
+products to approximate given functions near poles.
 Please see section 6.2 in
 our manuscript for details.
 This procedure is used to generate the modes of the passive linear network.
@@ -50,6 +57,10 @@ Miscellaneous functions. Includes:
 
 --`spatial_modes()` Finding the spatial location of modes. This is necessary to
 generate nonlinear terms.
+The required inputs to `spatial_modes()` are `roots`,`M1`,and `E`. These are
+respectively the poles of the transfer function, the directed connectivity
+matrix of the internal nodes of a network, and a diagonal matrix-valued function
+whose diagonal values correspond to the delays in the Fourier domain.
 
 --`make_nonlinear_interaction()` Generate the weight of an interaction term due
 to phase-matching.
@@ -79,3 +90,26 @@ Integrate the dynamics of a passive in time using the ABCD matrices.
 simulations.
 
 # Sample Usage
+
+```
+import Roots
+import Potapov
+import Time_Delay_Network
+import Time_Sims_nonlin
+import functions
+import Hamiltonian
+
+## Make a sample Time_Delay_Network, changing some parameters.
+X = Time_Delay_Network.Example3(r1 = 0.7, r3 = 0.7, max_linewidth=35.)
+
+## run the Potapov procedure.
+X.run_Potapov()
+
+## Extract the roots, modes, and delays
+roots = X.roots
+delays = X.delays
+M1 = X.M1
+E = X.E
+modes = functions.spatial_modes(roots,M1,E)
+
+```

@@ -134,6 +134,8 @@ def Pade(n,z):
 def spatial_modes(roots,M1,E,delays=None):
     '''
     Obtain the spetial mode profile at each node up to a constant.
+    If the delays are provided, the modes will be normalized using the delays.
+    Otherwise, the modes will not be normalized.
 
     Args:
         roots (list of complex numbers): The eigenvalues of the system
@@ -156,6 +158,7 @@ def spatial_modes(roots,M1,E,delays=None):
         return spatial_vecs
     if type(delays) != list:
         raise Exception('delays must be a list of delays.')
+
     for mode in spatial_vecs:
         mode /= _norm_of_mode(mode,delays)
     return spatial_vecs
