@@ -152,9 +152,10 @@ def test_Hamiltonian_with_doubled_equations(eps=1e-5):
     modes = Ex.spatial_modes
     M = len(Ex.roots)
 
+    A,B,C,D = Ex.get_Potapov_ABCD(doubled=False)
     A_d,B_d,C_d,D_d = Ex.get_Potapov_ABCD(doubled=True)
 
-    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A_d)
+    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A)
 
     ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
                                length_nonlin=0.1,indices_of_refraction=1.,
