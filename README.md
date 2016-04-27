@@ -15,10 +15,10 @@ http://www.epjquantumtechnology.com/content/3/1/3.
 # Installation
 Simply clone the repository, open a terminal window, type:
 
-'''
+```
 cd /path/to/my/repo
 python setup.py install
-'''
+```
 
 # Files
 
