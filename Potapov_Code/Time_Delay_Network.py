@@ -388,7 +388,7 @@ def plot3D(f,points = 2000):
     fig.savefig("complex_plane_plot.pdf")
     return
 
-if __name__ == "__main__":
+if __name__ == "__main__" and False:
     print 'Running Examples.py'
 
     ################

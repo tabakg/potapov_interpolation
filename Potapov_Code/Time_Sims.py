@@ -82,7 +82,7 @@ def plot_time(time,y,port_out,port_in,num=0,kind='FP',format = 'pdf'):
     return
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and False:
     '''
     Run a single simulation of a Fabry-Perot cavity.
 

@@ -15,7 +15,7 @@ def contour_plot(Mat):
     cax = ax.matshow(abs(Mat), interpolation='nearest')
     fig.colorbar(cax)
 
-if __name__ == "__main__":
+if __name__ == "__main__" and False:
 
     Ex = Time_Delay_Network.Example3(r1 = 0.999, r3 = 0.999)
     Ex.run_Potapov()

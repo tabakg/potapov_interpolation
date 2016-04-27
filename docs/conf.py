@@ -29,18 +29,14 @@ source_suffix = ['.rst', '.md']
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('../..'))
 
-try:
-    from unittest import mock
-except ImportError:
-    import mock
-MOCK_MODULES = ['numpy', 'numpy.linalg', 'scipy.integrate', 'scipy',
-    'sympy', 'scipy.constants',
-    'sympy.physics.quantum', 'sympy.physics.quantum.boson',
-    'sympy.physics.quantum.operatorordering',
-    'matplotlib.pyplot','mpmath',
-    'pprint', 'cmath', 'numpy.testing', ]
+import mock
 
-sys.modules.update((mod_name, mock.Mock()) for mod_name in MOCK_MODULES)
+MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot',
+    'numpy.linalg','scipy.constants','scipy.integrate',
+    'numpy.testing',]
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()
+    sys.modules.update((mod_name, mock.Mock()) for mod_name in MOCK_MODULES)
 
 # -- General configuration ------------------------------------------------
 
