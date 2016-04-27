@@ -29,6 +29,19 @@ source_suffix = ['.rst', '.md']
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('../..'))
 
+try:
+    from unittest import mock
+except ImportError:
+    import mock
+MOCK_MODULES = ['numpy', 'numpy.linalg', 'scipy.integrate', 'scipy',
+    'matplotlib', 'sympy', 'scipy.constants', 'itertools',
+    'sympy.physics.quantum', 'sympy.physics.quantum.boson',
+    'sympy.physics.quantum.operatorordering',
+    'matplotlib.pyplot','mpmath',
+    'pprint', 'cmath', 'numpy.testing']
+
+sys.modules.update((mod_name, mock.Mock()) for mod_name in MOCK_MODULES)
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
