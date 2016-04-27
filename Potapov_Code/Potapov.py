@@ -14,7 +14,6 @@ Please see section 6.2 in our manuscript for details: http://arxiv.org/abs/1510.
 """
 
 import numpy as np
-import sympy as sp
 import functions as f
 import matplotlib.pyplot as plt
 import numpy.linalg as la
