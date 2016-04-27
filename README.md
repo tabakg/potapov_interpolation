@@ -15,9 +15,10 @@ http://www.epjquantumtechnology.com/content/3/1/3.
 # Installation
 Simply clone the repository, open a terminal window, type:
 
-::
-    cd /path/to/my/repo
-    python setup.py install
+'''
+cd /path/to/my/repo
+python setup.py install
+'''
 
 # Files
 
@@ -31,13 +32,13 @@ of a transfer function of passive systems.
 
 ## Potapov.py
 We implement the procedure for finding Blaschke-Potapov
-products to approximate given functions near poles (`get_Potapov`).
+products to approximate given functions near poles (`get_Potapov()`).
 Please see section 6.2 in
 our manuscript for details.
 This procedure is used to generate the modes of the passive linear network.
 
 Given a rational matrix-valued function, we also construct the matrices ABCD
-that give the state-space representation of the system (see `get_Potapov_ABCD`).
+that give the state-space representation of the system (see `get_Potapov_ABCD()`).
 
 ## Roots.py
 A module for identifying the zeros of a complex-valued function.
@@ -45,21 +46,21 @@ A module for identifying the zeros of a complex-valued function.
 ## functions.py
 Miscellaneous functions. Includes:
 
---`Pade` Generate a Pade approximation for delays that do NOT feed back.
+--`Pade()` Generate a Pade approximation for delays that do NOT feed back.
 
---`spatial_modes` Finding the spatial location of modes. This is necessary to
+--`spatial_modes()` Finding the spatial location of modes. This is necessary to
 generate nonlinear terms.
 
---`make_nonlinear_interaction` Generate the weight of an interaction term due
+--`make_nonlinear_interaction()` Generate the weight of an interaction term due
 to phase-matching.
 
 ## Hamiltonian.py
-Includes a class `Hamiltonian` to contain the information needed to construct the
+Includes a class `Hamiltonian()` to contain the information needed to construct the
 Hamiltonian of the system, including nonlinear terms.
-This class also includes a function `make_eq_motion` to generate the classical
+This class also includes a function `make_eq_motion()` to generate the classical
 equations of motion from the nonlinear Hamiltonian.
 
-Also includes a class `Chi_nonlin` which contains the information for a particular
+Also includes a class `Chi_nonlin()` which contains the information for a particular
 chi nonlinearity.
 
 ## Time_Sims.py
@@ -68,13 +69,13 @@ Integrate the dynamics of a passive in time using the ABCD matrices.
 
 ## Time_Sims_nonlin.py
 
---`make_f_lin` generates outputs from ABCD model.
+--`make_f_lin()` generates outputs from ABCD model.
 
---`make_f` generates outputs from nonlinear Hamiltonian model.
+--`make_f()` generates outputs from nonlinear Hamiltonian model.
 
---`run_ODE` integrates the equations of motion in time.
+--`run_ODE()` integrates the equations of motion in time.
 
---`double_up` prepares a doubled-up system which can be used for non-classical
+--`double_up()` prepares a doubled-up system which can be used for non-classical
 simulations.
 
 # Sample Usage
