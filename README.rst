@@ -1,5 +1,5 @@
 Overview
-========
+--------
 
 The purpose of this package is to characterize network of optical
 components when time delays with feedback are present. The core of the
@@ -16,7 +16,7 @@ http://arxiv.org/abs/1510.08942 or
 http://www.epjquantumtechnology.com/content/3/1/3.
 
 Installation
-============
+------------
 
 Simply clone the repository, open a terminal window, type:
 
@@ -26,10 +26,10 @@ Simply clone the repository, open a terminal window, type:
     python setup.py install
 
 Files
-=====
+-----
 
 Time\_Delay\_Network.py
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 This module includes a class to contain the information of a passive
 linear network with time delays. Several examples are included in this
@@ -45,7 +45,7 @@ the Potapov representation, and an approximating transfer function that
 has been generated using the Potapov interpolation procedure.
 
 Potapov.py
-----------
+~~~~~~~~~~
 
 We implement the procedure for finding Blaschke-Potapov products to
 approximate given functions near poles. Please see section 6.2 in our
@@ -57,12 +57,12 @@ ABCD that give the state-space representation of the system (see
 ``get_Potapov_ABCD()``).
 
 Roots.py
---------
+~~~~~~~~
 
 A module for identifying the zeros of a complex-valued function.
 
 functions.py
-------------
+~~~~~~~~~~~~
 
 Miscellaneous functions. Includes:
 
@@ -81,7 +81,7 @@ the Fourier domain.
 term due to phase-matching.
 
 Hamiltonian.py
---------------
+~~~~~~~~~~~~~~
 
 Includes a class ``Hamiltonian()`` to contain the information needed to
 construct the Hamiltonian of the system, including nonlinear terms. This
@@ -92,12 +92,12 @@ Also includes a class ``Chi_nonlin()`` which contains the information
 for a particular chi nonlinearity.
 
 Time\_Sims.py
--------------
+~~~~~~~~~~~~~
 
 Integrate the dynamics of a passive in time using the ABCD matrices.
 
 Time\_Sims\_nonlin.py
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 --``make_f_lin()`` generates outputs from ABCD model.
 
@@ -109,7 +109,7 @@ Time\_Sims\_nonlin.py
 non-classical simulations.
 
 Sample Usage
-============
+------------
 
 ::
 
@@ -156,4 +156,3 @@ Sample Usage
     ## Simulate the system.
     Y_lin = Time_Sims_nonlin.run_ODE(f_lin, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)
     Y_nonlin = Time_Sims_nonlin.run_ODE(f, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01
-
