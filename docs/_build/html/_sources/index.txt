@@ -9,6 +9,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   includeme.rst
    Potapov_Code.rst
 
 
