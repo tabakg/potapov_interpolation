@@ -16,6 +16,7 @@ import numpy.linalg as la
 import sympy as sp
 import scipy.constants as consts
 import itertools
+import copy
 
 from sympy.physics.quantum import *
 from sympy.physics.quantum.boson import *
@@ -351,8 +352,8 @@ class Hamiltonian():
         def subs_c_number(expression,i):
             return expression.subs(self.a[i],b[i]).subs(Dagger(self.a[i]),b_H[i])
 
-        H_c_numbers = self.H
-        H_H_c_numbers = H_H
+        H_c_numbers = copy.copy(self.H)
+        H_H_c_numbers = copy.copy(H_H)
         for i in range(self.m):
             H_c_numbers = subs_c_number(H_c_numbers,i)
             H_H_c_numbers = subs_c_number(H_H_c_numbers,i)
