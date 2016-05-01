@@ -126,20 +126,25 @@ if __name__ == "__main__":
 
     M = len(Ex.roots)
 
-    A,B,C,D = Potapov.get_Potapov_ABCD(Ex.roots,Ex.vecs,Ex.T,z=0.)
-    A_d,C_d,D_d = map(double_up,(A,C,D))
-    B_d = -double_up(C.H)
+    A,B,C,D = Ex.get_Potapov_ABCD(doubled=False)
+    A_d,B_d,C_d,D_d = Ex.get_Potapov_ABCD(doubled=True)
 
-    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,0,0,0.1,1000.,3,2)
-    H = ham.make_H(-1j*A_d)
+    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A)
+
+    ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
+                               length_nonlin=0.1,indices_of_refraction=1.,
+                               chi_order=3,chi_function=None,)
+
+    ham.make_H()
     eq_mot = ham.make_eq_motion()
+    a_in = lambda t: np.asmatrix([1.]*np.shape(D_d)[-1]).T  ## make a sample input function
 
-    a_in = lambda t: np.asmatrix([1e-6]*np.shape(D_d)[-1]).T  ## make a sample input function
+    ## find f for the linear and nonlinear systems
+    f = Time_Sims_nonlin.make_f(eq_mot,B_d,a_in)
+    f_lin = Time_Sims_nonlin.make_f_lin(A_d,B_d,a_in)
 
-    f = make_f(eq_mot,B_d,a_in)
-    f_lin = make_f_lin(A_d,B_d,a_in)
-
-    Y = run_ODE(f, a_in, C_d, D_d, 2*M, T = 100, dt = 0.01)  ## select f here.
+    Y_lin = Time_Sims_nonlin.run_ODE(f_lin, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)  ## select f here.
+    Y_nonlin = Time_Sims_nonlin.run_ODE(f, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)  ## select f here.
 
     for i in range(2):
         plt.plot([abs(y)[i][0,0] for y in Y ])

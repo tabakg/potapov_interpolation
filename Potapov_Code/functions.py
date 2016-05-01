@@ -12,6 +12,8 @@ Functions used by other files.
 import numpy as np
 import numpy.linalg as la
 
+import scipy.constants as consts
+
 def der(f,z,eps = 1e-5):
     '''
     Estimate the derivative of the function f at z
@@ -274,9 +276,6 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
     The k-vectors are computed from the following formula:
     k = omega / v_p = omega n(omega) / c.
 
-    Below we assume c == 1. We can modify the frequencies or n's to make the
-    units work.
-
     If the indices of refraction n(omega_i) are given, we use them to compute
     the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.
 
@@ -361,6 +360,7 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
         in zip(modes,delay_indices)]
     delta_k = sum([n*omega*sign for n,omega,sign
            in zip(indices_of_refraction,natural_freqs,plus_or_minus_arr)])
+    delta_k /= consts.speed_of_light
     const = np.prod([pick_conj(m*np.exp(-1j*delta_k*start_loc),sign)
             for m,sign,start_loc
             in zip(values_at_nodes,plus_or_minus_arr,start_nonlin)])

@@ -326,7 +326,7 @@ class Hamiltonian():
         self.H = H_lin + H_nonlin * self.nonlin_coeff
         return self.H
 
-    def make_eq_motion(self,type='doubled'):
+    def make_eq_motion(self):
         '''Input is a tuple or list, output is a matrix vector.
         This generates Hamilton's equations of motion for a and a^H.
         These equations are CLASSICAL equations of motion. This means
@@ -361,6 +361,6 @@ class Hamiltonian():
 
         ## classical equations of motion
         diff_ls = ([1j*sp.diff(H_c_numbers,var) for var in b_H] +
-                   [-1j*sp.diff(H_H_c_numbers,var) for var in b])
+               [-1j*sp.diff(H_H_c_numbers,var) for var in b])
         fs = [sp.lambdify( tuple( b+b_H ),expression) for expression in diff_ls ]
         return lambda arr: (np.asmatrix([ f(* arr ) for f in fs])).T
