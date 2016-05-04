@@ -85,18 +85,23 @@ class Time_Delay_Network():
         N (optional [int]): number of points to use on the contour for finding
         the roots/poles of the network.
 
+        center_freq (optional [float] ): how much to move the frame up or down
+        the complex plane. 
+
     '''
-    def __init__(self,max_freq=30.,max_linewidth=1.,N=1000):
+    def __init__(self,max_freq=30.,max_linewidth=1.,N=1000,center_freq = 0.):
         self.max_freq = max_freq
         self.max_linewidth = max_linewidth
         self.N = N
         self.Potapov_ran = False
+        self.center_freq = center_freq
 
     def make_roots(self):
         '''Generate the roots given the denominator of the transfer function.
 
         '''
-        self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,-self.max_linewidth/2.,0,
+        self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,
+            -self.max_linewidth/2.,self.center_freq,
             self.max_linewidth/2.,self.max_freq,N=self.N)
 
     def make_T_Testing(self):
@@ -167,9 +172,9 @@ class Example1(Time_Delay_Network):
     '''
     Single input, single output with a single delay.
     '''
-    def __init__(self, max_freq=30.,max_linewidth=1.,N=1000,
+    def __init__(self, max_freq=30.,max_linewidth=1.,N=1000, center_freq = 0.,
             tau = 0.3,r = 0.8):
-        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N)
+        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N,center_freq)
 
         self.tau = tau
         self.delays = [tau]
@@ -185,9 +190,9 @@ class Example2(Time_Delay_Network):
     '''
     Two inputs, two outputs with a delay (i.e. Fabry-Perot).
     '''
-    def __init__(self, max_freq=10.,max_linewidth=10.,N=1000,
+    def __init__(self, max_freq=10.,max_linewidth=10.,N=1000, center_freq = 0.,
                     r=0.9,tau = 1.):
-        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N)
+        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N,center_freq)
         self.r = r
         self.delays = [tau]
         e = lambda z: np.exp(-z*tau)
@@ -206,11 +211,11 @@ class Example3(Time_Delay_Network):
     Two inputs and two outputs, with four delays and third mirror
     This corresponds to figures 7 and 8 in our paper.
     '''
-    def __init__(self, max_freq=60.,max_linewidth=1.,N=5000,
+    def __init__(self, max_freq=60.,max_linewidth=1.,N=5000, center_freq = 0.,
                 r1=0.9,r2=0.4,r3=0.8,
                 tau1 = 0.1, tau2 = 0.23,tau3 = 0.1,tau4 = 0.17,
                 ):
-        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N)
+        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N,center_freq)
 
 
         self.r1 = r1
@@ -256,8 +261,8 @@ class Example4(Time_Delay_Network):
     Two inputs and two outputs, with free delay (i.e. not in a loop).
     This corresponds to figures 9 and 10 in our paper.
     '''
-    def __init__(self, max_freq=100.,max_linewidth=3.,N=5000):
-        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N)
+    def __init__(self, max_freq=100.,max_linewidth=3.,N=5000,center_freq = 0.):
+        Time_Delay_Network.__init__(self, max_freq,max_linewidth,N,center_freq)
 
         tau1 = 0.1
         tau2 = 0.039
@@ -300,8 +305,8 @@ class Example5(Time_Delay_Network):
     '''
     Modified example 4, with analytic term.
     '''
-    def __init__(self, max_freq=50.,max_linewidth=3.,N=1000):
-        Time_Delay_Network.__init__(self, max_freq ,max_linewidth,N)
+    def __init__(self, max_freq=50.,max_linewidth=3.,N=1000,center_freq = 0.,):
+        Time_Delay_Network.__init__(self, max_freq ,max_linewidth,N,center_freq)
         tau1 = 0.1
         tau2 = 0.039
         tau3 = 0.11
