@@ -274,10 +274,10 @@ class Hamiltonian():
         TODO: Further restrict terms iterated over to make the RWA (i.e.
             frequency-match terms).
         '''
-        H_nonlin_sp = 0.
+        H_nonlin_sp = sp.Float(0.)
         for chi in self.chi_nonlinearities:
             phase_matching_weights = self.make_phase_matching_weights(chi)
-                        
+
             if filtering:
                 phase_matching_weights = {k:v for k,v
                     in phase_matching_weights.iteritems() if abs(v) > eps}
