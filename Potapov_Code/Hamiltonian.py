@@ -304,7 +304,7 @@ class Hamiltonian():
             A symbolic expression for the nonlinear Hamiltonian.
 
         '''
-        H_lin_sp = 0.
+        H_lin_sp = sp.Float(0.)
         for i in range(self.m):
             for j in range(self.m):
                 H_lin_sp += Dagger(self.a[i])*self.a[j]*Omega[i,j]
