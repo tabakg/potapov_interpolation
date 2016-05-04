@@ -10,7 +10,7 @@ import Potapov
 import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
-import mpmath as mp
+#import mpmath as mp ## for complex-valued plots
 from Time_Sims_nonlin import double_up
 from functions import der
 from functions import Pade
