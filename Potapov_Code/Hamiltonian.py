@@ -277,7 +277,7 @@ class Hamiltonian():
         H_nonlin_sp = 0.
         for chi in self.chi_nonlinearities:
             phase_matching_weights = self.make_phase_matching_weights(chi)
-            print phase_matching_weights
+                        
             if filtering:
                 phase_matching_weights = {k:v for k,v
                     in phase_matching_weights.iteritems() if abs(v) > eps}
