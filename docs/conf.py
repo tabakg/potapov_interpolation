@@ -37,7 +37,7 @@ MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot',
     'matplotlib.patches',
     'mpmath.libmp.libmpc','mpmath.libmp.libmpf',
     'mpmath.libmp.gammazeta',
-    
+    'sympy'
     ]
 
 for mod_name in MOCK_MODULES:
