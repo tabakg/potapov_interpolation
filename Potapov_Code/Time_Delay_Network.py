@@ -86,7 +86,7 @@ class Time_Delay_Network():
         the roots/poles of the network.
 
         center_freq (optional [float] ): how much to move the frame up or down
-        the complex plane. 
+        the complex plane.
 
     '''
     def __init__(self,max_freq=30.,max_linewidth=1.,N=1000,center_freq = 0.):
@@ -418,7 +418,7 @@ def plot3D(f,points = 2000):
     fig.savefig("complex_plane_plot.pdf")
     return
 
-if __name__ == "__main__":
+if __name__ == "__main__" and False:
     print 'Running Examples.py'
 
     ################
