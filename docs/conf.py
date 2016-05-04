@@ -33,10 +33,11 @@ import mock
 
 MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot',
     'numpy.linalg','scipy.constants','scipy.integrate',
-    'numpy.testing','mpmath','mpmath.libmp','mpmath.libmp.backend',
+    'numpy.testing',
     'matplotlib.patches',
-    'mpmath.libmp.libmpc','mpmath.libmp.libmpf',
-    'mpmath.libmp.gammazeta',
+    #'mpmath','mpmath.libmp','mpmath.libmp.backend',
+    #'mpmath.libmp.libmpc','mpmath.libmp.libmpf',
+    #'mpmath.libmp.gammazeta',
     ]
 
 for mod_name in MOCK_MODULES:
