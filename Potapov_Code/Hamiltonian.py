@@ -33,6 +33,9 @@ class Chi_nonlin():
 
         length_nonlin (float): length of the nonlinear element.
 
+        refraction_index_func (function): the indices of refraction as a
+        function of the netural frequency :math:`/omega`.
+
         chi_order (optional [int]): order of nonlinearity
 
         chi_function (optional [function]): strength of nonlinearity.
@@ -40,20 +43,15 @@ class Chi_nonlin():
         frequencies, next chi_order args are indices of polarization.
 
     '''
-    def __init__(self,delay_indices,start_nonlin,length_nonlin,indices_of_refraction,
-                 chi_order=3,chi_function=None):
+    def __init__(self,delay_indices,start_nonlin,length_nonlin,
+            refraction_index_func = lambda z: 1.,
+            chi_order=3,chi_function = lambda a,b,c,d,i,j,k: 1.):
         self.delay_indices = delay_indices
         self.start_nonlin = start_nonlin
         self.length_nonlin = length_nonlin
         self.chi_order = chi_order
-        self.indices_of_refraction = indices_of_refraction
-
-        if chi_function == None:
-            def chi_func(a,b,c,d,i,j,k):
-                return 1.  #if abs(a+b+c+d) <= 2. else 0.
-            self.chi_function = chi_func
-        else:
-            self.chi_function = chi_function
+        self.refraction_index_func = refraction_index_func
+        self.chi_function = chi_function
 
 class Hamiltonian():
     '''A class to create a sympy expression for the Hamiltonian of a network.
@@ -94,11 +92,11 @@ class Hamiltonian():
         self.delays = delays
         self.normalize_modes()
         self.cross_sectional_area = cross_sectional_area
-        if Omega == None:
+        if Omega is None:
             self.Omega = np.asmatrix(np.zeros((m,m)))
         else:
             self.Omega = Omega
-        if polarizations == None:
+        if polarizations is None:
             self.polarizations = [1.]*self.m
         else:
             self.polarizations = polarizations
@@ -110,9 +108,9 @@ class Hamiltonian():
         self.nonlin_coeff = nonlin_coeff
 
     def make_chi_nonlinearity(self,delay_indices,start_nonlin,
-                               length_nonlin,indices_of_refraction,
-                               chi_order=3,chi_function=None):
-        '''Add an instance of Chi_nonlin to Hamiltonian.
+                               length_nonlin,refraction_index_func = lambda *args: 1.,
+                               chi_order=3,chi_function = lambda *args: 1):
+        r'''Add an instance of Chi_nonlin to Hamiltonian.
 
         Args:
             delay_indices (int OR list/tuple of ints): the index representing the
@@ -124,21 +122,21 @@ class Hamiltonian():
             different time along its corresponding delay line.
 
             length_nonlin (float): duration of the nonlinearity in terms of length.
-            indices_of_refraction (float/int or list/tuple of float/int): the
-            indices of refraction corresponding to the various modes. If float
-            or int then all are the same.
+
+            refraction_index_func (function): the indices of refraction as a
+            function of the netural frequency :math:`/omega`.
 
             chi_order (optional [int]): order of the chi nonlinearity.
 
-            chi_function (function): a function of 2*chi_order+1 parameters that
+            chi_function (function): a function of 2*chi_order+2 parameters that
             returns the strenght of the interaction for given frequency
             combinations and polarizations. The first chi_order+1 parameters
-            correspond to frequencies combined the the next chi_order parameters
+            correspond to frequencies combined the the next chi_order+1 parameters
             correspond to the various polarizations.
         '''
 
         chi_nonlinearity = Chi_nonlin(delay_indices,start_nonlin,
-                                   length_nonlin,indices_of_refraction,
+                                   length_nonlin,refraction_index_func=refraction_index_func,
                                    chi_order=chi_order,chi_function=chi_function)
         self.chi_nonlinearities.append(chi_nonlinearity)
 
@@ -204,10 +202,11 @@ class Hamiltonian():
         '''
         omegas_to_use = np.array([self.omegas[i] for i in combination])
         modes_to_use = [self.modes[i] for i in combination]
+        indices_of_refraction = map(chi.refraction_index_func, omegas_to_use)
         return functions.make_nonlinear_interaction(
                     omegas_to_use, modes_to_use, self.delays, chi.delay_indices,
                     chi.start_nonlin, chi.length_nonlin, pm_arr,
-                    chi.indices_of_refraction)
+                    indices_of_refraction)
 
     def make_phase_matching_weights(self,chi):
         '''Make a dict to store the weights for the selected components and the
@@ -224,7 +223,7 @@ class Hamiltonian():
         '''
         ## TODO: add a priori check to restrict exponential growth on the number
         ## of nonlienar coefficients
-        list_of_pm_arr = list(itertools.product([-1, 1], repeat=3))
+        list_of_pm_arr = list(itertools.product([-1, 1], repeat=chi.chi_order+1))
 
         weights = {}
         for pm_arr in list_of_pm_arr:
@@ -263,7 +262,7 @@ class Hamiltonian():
         return weights
 
 
-    def make_nonlin_H_from_chi(self,chi,eps=1e-5):
+    def make_nonlin_H_from_chi(self,chi,filtering=False,eps=1e-5):
         '''Make a nonlinear Hamiltonian based on nonlinear interaction terms
 
         Args:
@@ -278,9 +277,12 @@ class Hamiltonian():
         H_nonlin_sp = 0.
         for chi in self.chi_nonlinearities:
             phase_matching_weights = self.make_phase_matching_weights(chi)
-            significant_phase_matching_weights = {k:v for k,v
-                in phase_matching_weights.iteritems() if abs(v) > eps}
-            for combination,pm_arr in significant_phase_matching_weights:
+            print phase_matching_weights
+            if filtering:
+                phase_matching_weights = {k:v for k,v
+                    in phase_matching_weights.iteritems() if abs(v) > eps}
+
+            for combination,pm_arr in phase_matching_weights:
                 omegas_to_use = map(lambda i: self.omegas[i],combination)
                 omegas_with_sign = [omega * pm for omega,pm
                                     in zip(omegas_to_use,pm_arr)]
@@ -288,7 +290,7 @@ class Hamiltonian():
                 chi_args = omegas_with_sign + pols
                 H_nonlin_sp += ( self.make_nonlin_term_sympy(combination,pm_arr) *
                     chi.chi_function(*chi_args) *
-                    significant_phase_matching_weights[combination,pm_arr] *
+                    phase_matching_weights[combination,pm_arr] *
                     np.prod([self.E_field_weights[i] for i in combination]) )
             return H_nonlin_sp
 

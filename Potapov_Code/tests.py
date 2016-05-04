@@ -147,7 +147,7 @@ def test_Hamiltonian_with_doubled_equations(eps=1e-5):
         eps[optional(float)]: how closely each point in time along the two
         tested trajectories should match.
     '''
-    Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=10.)
+    Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=20.)
     Ex.run_Potapov()
     modes = Ex.spatial_modes
     M = len(Ex.roots)
@@ -158,8 +158,7 @@ def test_Hamiltonian_with_doubled_equations(eps=1e-5):
     ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A)
 
     ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
-                               length_nonlin=0.1,indices_of_refraction=1.,
-                               chi_order=3,chi_function=None,)
+                               length_nonlin=0.1,)
 
     ham.make_H()
     eq_mot = ham.make_eq_motion()
