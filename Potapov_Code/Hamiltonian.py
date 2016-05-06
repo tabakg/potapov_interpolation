@@ -44,8 +44,8 @@ class Chi_nonlin():
 
     '''
     def __init__(self,delay_indices,start_nonlin,length_nonlin,
-            refraction_index_func = lambda z: 1.,
-            chi_order=3,chi_function = lambda a,b,c,d,i,j,k: 1.):
+            refraction_index_func = lambda *args: 1.,
+            chi_order=3,chi_function = lambda *args: 1.):
         self.delay_indices = delay_indices
         self.start_nonlin = start_nonlin
         self.length_nonlin = length_nonlin
