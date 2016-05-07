@@ -27,8 +27,11 @@ def make_f(eq_mot,B,a_in):
     r'''Equations of motion, including possibly nonlinear internal dynamics.
 
     Args:
-        eq_mot (function): The equations of motion, which take an array and return a
-        matrix column.
+        eq_mot (function): The equations of motion, which map
+        :math:`(t,a) \to v`. Here \math:`t` is a scalar corresponding to time,
+        :math:`a` is an array of inputs correpsonding to the internal degrees
+        of freedom, and :math:`v` is a complex-valued column matrix describing
+        the gradient.
 
         B (matrix): The matrix multiplying the inputs to the system.
 

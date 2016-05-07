@@ -380,7 +380,7 @@ class Hamiltonian():
 
 
     def make_eq_motion(self,):
-        '''Input is a tuple or list, output is a matrix vector.
+        r'''Input is a tuple or list, output is a matrix vector.
         This generates Hamilton's equations of motion for a and a^H.
         These equations are CLASSICAL equations of motion. This means
         we replace the operators with c-numbers. The order of the operators
@@ -392,9 +392,11 @@ class Hamiltonian():
 
         Returns:
             A function that yields the Hamiltonian equations of motion based on
-            the Hamiltonian given.
-            The equations of motion take an array as an input and return a column
-            vector as an output.
+            the Hamiltonian given. The equations of motion map
+            :math:`(t,a) \to v`. where \math:`t` is a scalar corresponding to
+            time, :math:`a` is an array of inputs correpsonding to the internal
+            degrees of freedom, and :math:`v` is a complex-valued column matrix
+            describing the gradient.
 
         '''
 
