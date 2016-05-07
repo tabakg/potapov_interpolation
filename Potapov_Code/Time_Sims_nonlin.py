@@ -20,6 +20,9 @@ import itertools
 import matplotlib.pyplot as plt
 from scipy.integrate import ode
 
+from scipy.integrate import quad
+
+
 def make_f(eq_mot,B,a_in):
     r'''Equations of motion, including possibly nonlinear internal dynamics.
 
@@ -36,7 +39,7 @@ def make_f(eq_mot,B,a_in):
         a is an array representing the state of the system.
 
     '''
-    return lambda t,a: np.asarray(eq_mot(a)+B*a_in(t)).T[0]
+    return lambda t,a: np.asarray(eq_mot(t,a)+B*a_in(t)).T[0]
 
 def make_f_lin(A,B,a_in):
     r'''Linear equations of motion
@@ -56,7 +59,7 @@ def make_f_lin(A,B,a_in):
     '''
     return lambda t,a: np.asarray(A*np.asmatrix(a).T+B*a_in(t)).T[0]
 
-def run_ODE(f, a_in, C, D, num_of_variables, T = 100, dt = 0.01):
+def run_ODE(f, a_in, C, D, num_of_variables, T = 10, dt = 0.01, y0 = None):
     '''Run the ODE for the given set of equations and record the outputs.
 
     Args:
@@ -76,8 +79,10 @@ def run_ODE(f, a_in, C, D, num_of_variables, T = 100, dt = 0.01):
         An array Y of outputs
 
     '''
+    if y0 is None:
+        y0 = np.asmatrix([0.]*num_of_variables).T
+
     r = ode(f).set_integrator('zvode', method='bdf')
-    y0 = np.asmatrix([0.]*num_of_variables).T
     r.set_initial_value(y0, 0.)
     Y = []
     while r.successful() and r.t < T:

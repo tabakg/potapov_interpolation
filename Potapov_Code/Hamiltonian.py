@@ -18,6 +18,8 @@ import scipy.constants as consts
 import itertools
 import copy
 
+from sympy.printing.theanocode import theano_function
+
 from sympy.physics.quantum import *
 from sympy.physics.quantum.boson import *
 from sympy.physics.quantum.operatorordering import *
@@ -104,6 +106,7 @@ class Hamiltonian():
         self.E_field_weights = self.make_E_field_weights()
         self.chi_nonlinearities = chi_nonlinearities
         self.a = [BosonOp('a_'+str(i)) for i in range(self.m)]
+        self.t = sp.symbols('t')
         self.H = 0.
         self.nonlin_coeff = nonlin_coeff
 
@@ -271,8 +274,11 @@ class Hamiltonian():
         Returns:
             A symbolic expression for the nonlinear Hamiltonian.
 
-        TODO: Further restrict terms iterated over to make the RWA (i.e.
-            frequency-match terms).
+        TODO:  Make separate dictionaries for values of chi_function,
+        for phase_matching_weights, and for producs of E_field_weights. filter
+        the keys before generating terms.
+
+        TODO:  Expand and simplify the Hamiltonian term.
         '''
         H_nonlin_sp = sp.Float(0.)
         for chi in self.chi_nonlinearities:
@@ -311,7 +317,22 @@ class Hamiltonian():
         return H_lin_sp
 
     def make_H(self,eps=1e-5):
-        '''Make a Hamiltonian combining the linear and nonlinear parts.
+        r'''Make a Hamiltonian combining the linear and nonlinear parts.
+
+        The term -1j*A carries the effective linear Hamiltonian, including the
+        decay term :math:`-\frac{i}{2} L^\dagger L`. However, this term does
+        not include material effects including dielectric and nonlinear terms.
+        It also does not include a term with contribution from the inputs.
+
+        If one wishes to include terms due to coherent input, one can impose a
+        linear Hamiltonian term consistent with the classical equations of
+        motion. This yields the usual term :math:`i(a \alpha^* - a^\dagger \alpha)`.
+
+        To obtain the form :math:`A = i \Omega - \frac{1}{2} C^\dagger C` with
+        :math:`Omega` Hermitian, we notice :math:`A` can be split into Hermitian
+        and anti-Hermitian parts. The anti-Hermitian part of A describes the
+        closed dynamics only and the Hermitian part corresponds to the decay
+        terms due to the coupling to the environment at the input/output ports.
 
         Args:
             Omega (complex-valued matrix) describes the Hamiltonian of the system.
@@ -326,15 +347,48 @@ class Hamiltonian():
         H_nonlin = self.make_nonlin_H_from_chi(eps)
         H_lin = self.make_lin_H(self.Omega)
         self.H = H_lin + H_nonlin * self.nonlin_coeff
+        self.H = normal_order((self.H).expand())
         return self.H
 
-    def make_eq_motion(self):
+    def move_to_rotating_frame(self, freqs = 0.):
+        if type(freqs) in [float,long,int]:
+            if freqs == 0.:
+                return
+            else:
+                self.move_to_rotating_frame([freqs]*self.m)
+        elif type(freqs) in [list,tuple]:
+            for op,freq in zip(self.a,freqs):
+                self.H -= freq * Dagger(op)* op
+            self.H = (self.H).expand()
+            for op,freq in zip(self.a,freqs):
+                ### Sympy has issues with the complex exponential...
+                # self.H = (self.H).subs({
+                #     Dagger(op) : Dagger(op)*sp.exp(sp.I * freq * self.t),
+                #     op : op*sp.exp(-sp.I * freq * self.t),
+                # })
+                ###
+                self.H = (self.H).subs({
+                    Dagger(op) : Dagger(op)*( sp.cos(freq * self.t)
+                        + sp.I * sp.sin(freq * self.t) ),
+                    op : op * ( sp.cos(freq * self.t)
+                        - sp.I * sp.sin(freq * self.t) ),
+                    })
+            self.H = (self.H).expand()
+        else:
+            print "freqs should be a real number or list of real numbers."
+            return
+
+
+    def make_eq_motion(self,):
         '''Input is a tuple or list, output is a matrix vector.
         This generates Hamilton's equations of motion for a and a^H.
         These equations are CLASSICAL equations of motion. This means
         we replace the operators with c-numbers. The order of the operators
         will yield different results, so we assume the Hamiltonian is already
         in the desired order (e.g. normally ordered).
+
+        These equations of motion will not show effects of squeezing. To do
+        this, we will need a full quantum picture.
 
         Returns:
             A function that yields the Hamiltonian equations of motion based on
@@ -364,5 +418,11 @@ class Hamiltonian():
         ## classical equations of motion
         diff_ls = ([1j*sp.diff(H_c_numbers,var) for var in b_H] +
                [-1j*sp.diff(H_H_c_numbers,var) for var in b])
-        fs = [sp.lambdify( tuple( b+b_H ),expression) for expression in diff_ls ]
-        return lambda arr: (np.asmatrix([ f(* arr ) for f in fs])).T
+        fs = [sp.lambdify( (self.t,b+b_H), expression) for expression in diff_ls ]
+        return lambda t,arr: (np.asmatrix([ sp.N ( f(t,arr) ) for f in fs], dtype = 'complex128' )).T
+
+        #### In future implementations, we can use theano to make calculations faster
+        #### right now however theano does not have good support for complex numbers.
+        ###f = theano_function([self.t]+b+b_H, diff_ls)   ## f(t,b[0],b[1],...)
+        ###F = lambda t,args: np.asarray(f(t,*args))                  ## F(t,(b[0],b[1],...))
+        #return F
