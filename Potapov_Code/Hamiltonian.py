@@ -350,7 +350,24 @@ class Hamiltonian():
         self.H = normal_order((self.H).expand())
         return self.H
 
-    def move_to_rotating_frame(self, freqs = 0.):
+    def move_to_rotating_frame(self, freqs = 0.,include_time_terms = True):
+        r'''Moves the Hamiltonian to a rotating frame
+
+        We apply a change of basis :math:`a_j \to a e^{- i \omega_j}` for
+        each mode :math:`a_j`. This method modifies the symbolic Hamiltonian,
+        so to use it the Hamiltonian sould already be constructed and stored.
+
+        Args:
+            freqs (optional [real number or list/tuple]): Frequency or list
+            of frequencies to use to displace the Hamiltonian.
+
+            include_time_terms (optional [boolean]): If this is set to true,
+            we include the terms :math:`e^{- i \omega_j}` in the Hamiltonian
+            resulting from a change of basis. This can be set to False if all
+            such terms have already been eliminated (i.e. if the rotating wave
+            approximation has been applied).
+
+        '''
         if type(freqs) in [float,long,int]:
             if freqs == 0.:
                 return
@@ -360,20 +377,21 @@ class Hamiltonian():
             for op,freq in zip(self.a,freqs):
                 self.H -= freq * Dagger(op)* op
             self.H = (self.H).expand()
-            for op,freq in zip(self.a,freqs):
-                ### Sympy has issues with the complex exponential...
-                # self.H = (self.H).subs({
-                #     Dagger(op) : Dagger(op)*sp.exp(sp.I * freq * self.t),
-                #     op : op*sp.exp(-sp.I * freq * self.t),
-                # })
-                ###
-                self.H = (self.H).subs({
-                    Dagger(op) : Dagger(op)*( sp.cos(freq * self.t)
-                        + sp.I * sp.sin(freq * self.t) ),
-                    op : op * ( sp.cos(freq * self.t)
-                        - sp.I * sp.sin(freq * self.t) ),
-                    })
-            self.H = (self.H).expand()
+            if include_time_terms:
+                for op,freq in zip(self.a,freqs):
+                    self.H = (self.H).subs({
+                        Dagger(op) : Dagger(op)*( sp.cos(freq * self.t)
+                            + sp.I * sp.sin(freq * self.t) ),
+                        op : op * ( sp.cos(freq * self.t)
+                            - sp.I * sp.sin(freq * self.t) ),
+                        })
+                        ### Sympy has issues with the complex exponential...
+                        # self.H = (self.H).subs({
+                        #     Dagger(op) : Dagger(op)*sp.exp(sp.I * freq * self.t),
+                        #     op : op*sp.exp(-sp.I * freq * self.t),
+                        # })
+                        ###
+                self.H = (self.H).expand()
         else:
             print "freqs should be a real number or list of real numbers."
             return
@@ -420,8 +438,10 @@ class Hamiltonian():
         ## classical equations of motion
         diff_ls = ([1j*sp.diff(H_c_numbers,var) for var in b_H] +
                [-1j*sp.diff(H_H_c_numbers,var) for var in b])
-        fs = [sp.lambdify( (self.t,b+b_H), expression) for expression in diff_ls ]
-        return lambda t,arr: (np.asmatrix([ sp.N ( f(t,arr) ) for f in fs], dtype = 'complex128' )).T
+        fs = ([sp.lambdify( (self.t,b+b_H), expression)
+            for expression in diff_ls ])
+        return lambda t,arr: (np.asmatrix([ sp.N ( f(t,arr) )
+            for f in fs], dtype = 'complex128' )).T
 
         #### In future implementations, we can use theano to make calculations faster
         #### right now however theano does not have good support for complex numbers.
