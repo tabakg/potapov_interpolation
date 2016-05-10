@@ -9,13 +9,17 @@ import Roots
 import Potapov
 import numpy as np
 import numpy.linalg as la
+import sympy as sp
 import matplotlib.pyplot as plt
 #import mpmath as mp ## for complex-valued plots
 from Time_Sims_nonlin import double_up
 from functions import der
 from functions import Pade
 from functions import spatial_modes
+from functions import gcd_lst
 import matplotlib.patches as patches
+
+from decimal import Decimal
 
 def plot_all(L,dx,labels,colors,lw,name,*args):
     '''
@@ -103,6 +107,93 @@ class Time_Delay_Network():
         self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,
             -self.max_linewidth/2.,self.center_freq,
             self.max_linewidth/2.,self.max_freq,N=self.N)
+
+    def make_commensurate_roots(self,list_of_ranges = []):
+        '''
+        Assuming the delays are commensurate, obtain all the roots within the
+        frequency ranges of interest. Sets self.roots a list of complex roots
+        in the desired frequency ranges.
+
+        Args:
+            list_of_ranges (optional [list of 2-tuples]): list of frequency
+            ranges of interest in the form:
+            (minimum frequency, maximum frequency).
+        '''
+        def _find_commensurate(delays):
+            '''
+            Find the 'gcd' but for Decimal numbers.
+
+            Args:
+                delays(list of Demicals): numbers whose gcd will be found.
+
+            Returns:
+                Decimal gcd.
+            '''
+            mult = min([d.as_tuple().exponent for d in delays])
+            power = 10**-mult
+            delays = map(lambda x: x*power,delays)
+            int_gcd = gcd_lst(delays)
+            return int_gcd/power
+
+        def _find_instances_in_range(z,freq_range):
+            '''
+            Find numbers of the form :math:`z + Tni` where :math:`T` is the
+            period and :math:`n` is an integer inside the given frequency range.
+
+            Args:
+                z (complex number)
+                freq_range (2-tuple): (minimum frequency, maximum frequency)
+
+            Returns:
+                list of numbers of the desired form. Empty list if none exist.
+            '''
+            T = 2.*np.pi / float(Decimal_gcd)
+            if z.imag >= freq_range[0] and z.imag <= freq_range[1]:
+                lst_in_range = [z]
+                num_below = int((z.imag - freq_range[0])/T )
+                num_above = int((freq_range[1] - z.imag)/T )
+                lst_in_range += [z + 1j * disp for disp in
+                    (np.asarray(range(num_above))+1) * T]
+                lst_in_range += [z - 1j * disp for disp in
+                    (np.asarray(range(num_below))+1) * T]
+                return lst_in_range
+            elif z.imag > freq_range[1]:
+                min_dist = (int((z.imag - freq_range[1])/T)+1) * T
+                max_dist = int((z.imag - freq_range[0]) / T) * T
+                if min_dist > max_dist:
+                    return []
+                else:
+                    return _find_instances_in_range(z - 1j*min_dist,freq_range)
+            else:
+                min_dist = (int((freq_range[0] - z.imag)/T)+1) * T
+                max_dist = int((freq_range[1] - z.imag)/T)  * T
+                if min_dist > max_dist:
+                    return []
+                else:
+                    return _find_instances_in_range(z + 1j*min_dist,freq_range)
+
+        Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
+        Decimal_gcd = _find_commensurate(Decimal_delays)
+
+        x = sp.symbols('x')
+        for i,delay in enumerate(Decimal_delays):
+            E_sym = sp.Matrix(np.zeros_like(self.M1))
+            for i,delay in enumerate(Decimal_delays):
+                E_sym[i,i] = 1.*x**int(delay / Decimal_gcd)
+            M1_sym = sp.Matrix(self.M1)
+            expr = sp.apart((E_sym - M1_sym).det())
+            poly = sp.Poly(expr, x)
+            poly_coeffs = poly.all_coeffs()
+            roots = np.roots(poly_coeffs)
+            zs = np.asarray(map(lambda r: np.log(r) / - float(Decimal_gcd),
+                            roots))
+
+        lst_to_return = []
+        for freq_range in list_of_ranges:
+            for r in roots:
+                lst_to_return += _find_instances_in_range(r,freq_range)
+        self.roots = lst_to_return
+
 
     def make_T_Testing(self):
         '''Generate the approximating transfer function using the identified

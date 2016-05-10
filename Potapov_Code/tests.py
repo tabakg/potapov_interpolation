@@ -136,6 +136,17 @@ def test_example_4():
     modes = functions.spatial_modes(roots,M1,E,delays)
     assert( len(roots) == 8)
 
+def test_commensurate_roots_example_3():
+    X = Time_Delay_Network.Example3()
+    X.make_commensurate_roots()
+    assert(len(X.roots) == 0)
+    X.make_commensurate_roots([(0,1000)])
+    assert(len(X.roots) == 91)
+    X.make_commensurate_roots([(0,10000)])
+    assert(len(X.roots) == 931)
+    X.make_commensurate_roots([(0,10000),(1e15,1e15 +10000)])
+    assert(len(X.roots) == 1891)
+
 def test_Hamiltonian_with_doubled_equations(eps=1e-5):
     '''
     This method tests various methods in Hamiltonian and Time_Sims_nonlin.
@@ -172,3 +183,6 @@ def test_Hamiltonian_with_doubled_equations(eps=1e-5):
     Y_nonlin = Time_Sims_nonlin.run_ODE(f, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)  ## select f here.
     for y_lin,y_nonlin in zip(Y_lin,Y_nonlin):
         assert abs(sum(y_lin - y_nonlin)) < eps
+
+if __name__ == "__main__":
+    test_commensurate_roots_example_3()

@@ -13,6 +13,18 @@ import numpy as np
 import numpy.linalg as la
 
 import scipy.constants as consts
+from fractions import gcd
+
+def gcd_lst(lst):
+    l = len(lst)
+    if l == 0:
+        return None
+    elif l == 1:
+        return lst[0]
+    elif l == 2:
+        return gcd(lst[0],lst[1])
+    else:
+        return gcd(lst[0],gcd_lst(lst[1:]))
 
 def der(f,z,eps = 1e-5):
     '''
