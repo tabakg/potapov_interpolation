@@ -36,16 +36,19 @@ linear network with time delays. Several examples are included in this
 module. Each example includes matrices that yield a transfer function.
 This module contains methods to re-construct finite-dimensional
 approximations of a transfer function of passive systems.
+
 --``make_commensurate_roots()``: A method to determine the roots utilizing
 the commensurate structure of the roots. The algorithm determines a polynomial
 based on the gcd of the time delays to describe where poles of the transfer
 function occur. The roots of the polynomial are found. The periodicity of the
 exponential :math:`e^{-zT}` for the gcd delay is then used to find the roots
 within desired frequency ranges.
+
 --``make_roots()``: A method that find the poles of the transfer function within
 a contour. This is a very general method in that the function needs only to be
 meromorphic with poles of order 1. In particular this yields the poles even
 when the delays are not commensurate.
+
 --``run_Potapov()``: This function will run the Potapov procedure. The
 instance of ``Time_Delay_Network`` will update its ``roots``, ``vecs``,
 and ``T_testing``. These are respectively the poles of the transfer
