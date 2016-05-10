@@ -215,12 +215,18 @@ class Time_Delay_Network():
         '''
         self.spatial_modes = spatial_modes(self.roots,self.M1,self.E,delays=self.delays)
 
-    def run_Potapov(self):
+    def run_Potapov(self, commensurate_roots = False):
         '''Run the entire Potapov procedure to find all important information.
 
+        Args:
+            commensurate_roots (optional[boolean]): which root-finding method
+            to use.
         '''
         self.Potapov_ran = True
-        self.make_roots()
+        if commensurate_roots:
+            self.make_commensurate_roots([(-max_freq,max_freq)])
+        else:
+            self.make_roots()
         self.roots =  [r for r in self.roots if r.real <= 0]
         self.make_T_Testing()
         self.make_vecs()
