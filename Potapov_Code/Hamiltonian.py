@@ -41,8 +41,8 @@ class Chi_nonlin():
         chi_order (optional [int]): order of nonlinearity
 
         chi_function (optional [function]): strength of nonlinearity.
-        first chi_order args are frequencies, next first chi_order args are
-        frequencies, next chi_order args are indices of polarization.
+        first (chi_order+1) args are frequencies,
+        next (chi_order+1) args are indices of polarization.
 
     '''
     def __init__(self,delay_indices,start_nonlin,length_nonlin,

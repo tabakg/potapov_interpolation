@@ -123,8 +123,8 @@ Time\_Sims\_nonlin.py
 --``double_up()`` prepares a doubled-up system which can be used for
 non-classical simulations.
 
-Sample Usage
-------------
+Sample Usage -- Time Domain Simulation
+--------------------------------------
 
 ::
 
@@ -139,7 +139,9 @@ Sample Usage
     X = Time_Delay_Network.Example3(r1 = 0.7, r3 = 0.7, max_linewidth=35.)
 
     ## run the Potapov procedure.
-    X.run_Potapov()
+    ## Setting commensurate_roots to True will tell the program to identify
+    ## the roots utilizing the periodic structure of the roots.
+    X.run_Potapov(commensurate_roots = True)
 
     ## Get the roots, modes, and delays from the Time_Delay_Network.
     roots = X.spatial_modes
@@ -147,7 +149,7 @@ Sample Usage
     delays = X.delays
 
     ## make an instance of Hamiltonian.
-    ham = Hamiltonian(roots,modes,delays,Omega = -1j*A_d))
+    ham = Hamiltonian(roots,modes,delays,Omega=-1j*A)
 
     ## Generated doubled-up ABCD matrices for the passive system.
     A_d,B_d,C_d,D_d = X.get_Potapov_ABCD(doubled=True)
@@ -168,6 +170,6 @@ Sample Usage
     f = Time_Sims_nonlin.make_f(eq_mot,B_d,a_in)
     f_lin = Time_Sims_nonlin.make_f_lin(A_d,B_d,a_in)
 
-    ## Simulate the system.
+    ## Simulate the systems (both linear and nonlinear).
     Y_lin = Time_Sims_nonlin.run_ODE(f_lin, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)
     Y_nonlin = Time_Sims_nonlin.run_ODE(f, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01
