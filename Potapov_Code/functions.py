@@ -331,12 +331,12 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
 
     if type(delay_indices) == int:
         delay_indices = [delay_indices] * M
-    elif type(delay_indices) != list and type(delay_indices) != tuple:
+    elif not type(delay_indices) in [list,tuple]:
         raise Exception('delay_indices must be an int or a list/tuple')
 
-    if type(start_nonlin) == int or type(start_nonlin) == float:
+    if type(start_nonlin) in [int,float]:
         start_nonlin = [start_nonlin] * M
-    elif type(start_nonlin) != list and type(start_nonlin) != tuple:
+    elif not type(start_nonlin) in [list,tuple]:
         raise Exception('start_nonlin must be an int/float or a list/tuple')
 
     if length_nonlin < 0:
@@ -350,13 +350,11 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
                            +'delay of index delay_index for start_loc in '
                            +'start_nonlin and delay_index in delay_indices.')
 
-    if indices_of_refraction == None:
+    if indices_of_refraction is None:
         indices_of_refraction = [1.] * M
-    elif (type(indices_of_refraction) == float or
-          type(indices_of_refraction) == int):
+    elif type(indices_of_refraction) in [float,int]:
         indices_of_refraction = [float(indices_of_refraction)] * M
-    elif (type(indices_of_refraction) != list and
-          type(indices_of_refraction) != tuple):
+    elif not type(indices_of_refraction) in [list,tuple]:
         raise Exception('indices_of_refraction is not a float, integer, list, '
                        +'tuple, or None.')
 

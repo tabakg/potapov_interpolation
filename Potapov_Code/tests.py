@@ -13,6 +13,45 @@ from scipy.integrate import ode
 
 import matplotlib.pyplot as plt
 
+def test_Hamiltonian_with_doubled_equations(eps=1e-5):
+    '''
+    This method tests various methods in Hamiltonian and Time_Sims_nonlin.
+    In particular, we compare the output from the classical equations of motion
+    that results directly from the ABCD model versus the classical Hamiltonian
+    equations of motion when we set the coefficient of the nonlinearity to zero.
+
+    This method will NOT test the details of the nonlinear Hamiltonian.
+
+    Args:
+        eps[optional(float)]: how closely each point in time along the two
+        tested trajectories should match.
+    '''
+    Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=20.)
+    Ex.run_Potapov()
+    modes = Ex.spatial_modes
+    M = len(Ex.roots)
+
+    A,B,C,D = Ex.get_Potapov_ABCD(doubled=False)
+    A_d,B_d,C_d,D_d = Ex.get_Potapov_ABCD(doubled=True)
+
+    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A)
+
+    ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
+                               length_nonlin=0.1,)
+
+    ham.make_H()
+    eq_mot = ham.make_eq_motion()
+    a_in = lambda t: np.asmatrix([1.]*np.shape(D_d)[-1]).T  ## make a sample input function
+
+    ## find f for the linear and nonlinear systems
+    f = Time_Sims_nonlin.make_f(eq_mot,B_d,a_in)
+    f_lin = Time_Sims_nonlin.make_f_lin(A_d,B_d,a_in)
+
+    Y_lin = Time_Sims_nonlin.run_ODE(f_lin, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)  ## select f here.
+    Y_nonlin = Time_Sims_nonlin.run_ODE(f, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)  ## select f here.
+    for y_lin,y_nonlin in zip(Y_lin,Y_nonlin):
+        assert abs(sum(y_lin - y_nonlin)) < eps
+
 def test_Potapov_1(eps=1e-7):
     '''
     Generate a finite_transfer_function from eigenvectors and eigenvalues.
@@ -147,42 +186,7 @@ def test_commensurate_roots_example_3():
     X.make_commensurate_roots([(0,10000),(1e15,1e15 +10000)])
     assert(len(X.roots) == 1891)
 
-def test_Hamiltonian_with_doubled_equations(eps=1e-5):
-    '''
-    This method tests various methods in Hamiltonian and Time_Sims_nonlin.
-    In particular, we compare the output from the classical equations of motion
-    that results directly from the ABCD model versus the classical Hamiltonian
-    equations of motion when we set the coefficient of the nonlinearity to zero.
 
-    Args:
-        eps[optional(float)]: how closely each point in time along the two
-        tested trajectories should match.
-    '''
-    Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=20.)
-    Ex.run_Potapov()
-    modes = Ex.spatial_modes
-    M = len(Ex.roots)
-
-    A,B,C,D = Ex.get_Potapov_ABCD(doubled=False)
-    A_d,B_d,C_d,D_d = Ex.get_Potapov_ABCD(doubled=True)
-
-    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A)
-
-    ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
-                               length_nonlin=0.1,)
-
-    ham.make_H()
-    eq_mot = ham.make_eq_motion()
-    a_in = lambda t: np.asmatrix([1.]*np.shape(D_d)[-1]).T  ## make a sample input function
-
-    ## find f for the linear and nonlinear systems
-    f = Time_Sims_nonlin.make_f(eq_mot,B_d,a_in)
-    f_lin = Time_Sims_nonlin.make_f_lin(A_d,B_d,a_in)
-
-    Y_lin = Time_Sims_nonlin.run_ODE(f_lin, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)  ## select f here.
-    Y_nonlin = Time_Sims_nonlin.run_ODE(f, a_in, C_d, D_d, 2*M, T = 15, dt = 0.01)  ## select f here.
-    for y_lin,y_nonlin in zip(Y_lin,Y_nonlin):
-        assert abs(sum(y_lin - y_nonlin)) < eps
 
 if __name__ == "__main__":
     test_commensurate_roots_example_3()

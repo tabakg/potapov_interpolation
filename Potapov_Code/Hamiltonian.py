@@ -25,7 +25,7 @@ from sympy.physics.quantum.boson import *
 from sympy.physics.quantum.operatorordering import *
 
 class Chi_nonlin():
-    '''Class to store the information in a particular nonlinear chi element.
+    r'''Class to store the information in a particular nonlinear chi element.
 
     Attributes:
         delay_indices (list of indices): indices of delays to use.
@@ -211,34 +211,37 @@ class Hamiltonian():
                     chi.start_nonlin, chi.length_nonlin, pm_arr,
                     indices_of_refraction)
 
-    def make_phase_matching_weights(self,chi):
+    def make_phase_matching_weights(self,weight_keys,chi,
+        filtering_phase_weights = False ,eps = 1e-5):
         '''Make a dict to store the weights for the selected components and the
         creation/annihilation information.
 
         Args:
-            chi (Chi_nonlin): the chi nonlinearity for which to compute
-            the phase coefficient.
-        Returns:
-            A dictionary of weights. Each key is a tuple consisting of two
+            weight_keys (list of tuples): keys for weights to consider.
+            Each key is a tuple consisting of two
             components: the first is a tuple of the indices of modes and the
             second is a tuple of +1 and -1.
 
-        '''
-        ## TODO: add a priori check to restrict exponential growth on the number
-        ## of nonlienar coefficients
-        list_of_pm_arr = list(itertools.product([-1, 1], repeat=chi.chi_order+1))
+            filtering_phase_weights (optional[Boolean]): Whether or not to
+            filter the phase_matching_weights by the size of their values. The
+            cutoff for their absolute value is given by eps
 
+            eps (optional [float]): Cutoff for filtering of weights.
+
+        Returns:
+            A dictionary of weights with values corresponding to the
+            phase matching coefficients.
+
+        '''
         weights = {}
-        for pm_arr in list_of_pm_arr:
-            field_combinations = itertools.combinations_with_replacement(
-                range(self.m), chi.chi_order+1)
-            for combination in field_combinations:
-                weights[tuple(combination),tuple(pm_arr)] = self.phase_weight(
-                    combination,pm_arr,chi)
+        for comb,pm_arr in weight_keys:
+            weights[comb,pm_arr] = self.phase_weight(comb,pm_arr,chi)
+        if filtering_phase_weights:
+            weights = {k:v for k,v in weights.iteritems() if abs(v) > eps}
         return weights
 
     def E_field_weight(self,mode_index):
-        '''Make the weights for each field component :math:`E_i(n) = [\text{weight}] (a+a^\dagger)`.
+        r'''Make the weights for each field component :math:`E_i(n) = [\text{weight}] (a+a^\dagger)`.
 
         Args:
             mode_index (int): The index of the mode.
@@ -264,8 +267,31 @@ class Hamiltonian():
             weights[mode_index] = self.E_field_weight(mode_index)
         return weights
 
+    def make_weight_keys(self,chi):
+        r'''
+        Make a list of keys for which various weights will be determined.
+        Each key is a tuple consisting of two
+        components: the first is a tuple of the indices of modes and the
+        second is a tuple of +1 and -1.
 
-    def make_nonlin_H_from_chi(self,chi,filtering=False,eps=1e-5):
+        Args:
+            chi (Chi_nonlin): the nonlinearity for which the weight will be
+            found.
+        Returns:
+            A list of keys of the type described.
+
+        '''
+        weight_keys=[]
+        list_of_pm_arr = list(itertools.product([-1, 1],
+            repeat=chi.chi_order+1))
+        field_combinations = itertools.combinations_with_replacement(
+            range(self.m), chi.chi_order+1)  ##generator
+        for combination in field_combinations:
+            for pm_arr in list_of_pm_arr:
+                weight_keys.append( (tuple(combination),tuple(pm_arr)) )
+        return weight_keys
+
+    def make_nonlin_H_from_chi(self,chi,filtering_phase_weights=False,eps=1e-5):
         '''Make a nonlinear Hamiltonian based on nonlinear interaction terms
 
         Args:
@@ -282,11 +308,9 @@ class Hamiltonian():
         '''
         H_nonlin_sp = sp.Float(0.)
         for chi in self.chi_nonlinearities:
-            phase_matching_weights = self.make_phase_matching_weights(chi)
-
-            if filtering:
-                phase_matching_weights = {k:v for k,v
-                    in phase_matching_weights.iteritems() if abs(v) > eps}
+            weight_keys = self.make_weight_keys(chi)
+            phase_matching_weights = self.make_phase_matching_weights(
+                weight_keys,chi,filtering_phase_weights,eps)
 
             for combination,pm_arr in phase_matching_weights:
                 omegas_to_use = map(lambda i: self.omegas[i],combination)
@@ -298,7 +322,7 @@ class Hamiltonian():
                     chi.chi_function(*chi_args) *
                     phase_matching_weights[combination,pm_arr] *
                     np.prod([self.E_field_weights[i] for i in combination]) )
-            return H_nonlin_sp
+        return H_nonlin_sp
 
     def make_lin_H(self,Omega):
         '''Make a linear Hamiltonian based on Omega.
