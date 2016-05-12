@@ -176,21 +176,20 @@ class Time_Delay_Network():
         Decimal_gcd = _find_commensurate(Decimal_delays)
 
         x = sp.symbols('x')
+        E_sym = sp.Matrix(np.zeros_like(self.M1))
         for i,delay in enumerate(Decimal_delays):
-            E_sym = sp.Matrix(np.zeros_like(self.M1))
-            for i,delay in enumerate(Decimal_delays):
-                E_sym[i,i] = 1.*x**int(delay / Decimal_gcd)
-            M1_sym = sp.Matrix(self.M1)
-            expr = sp.apart((E_sym - M1_sym).det())
-            poly = sp.Poly(expr, x)
-            poly_coeffs = poly.all_coeffs()
-            roots = np.roots(poly_coeffs)
-            zs = np.asarray(map(lambda r: np.log(r) / - float(Decimal_gcd),
-                            roots))
+            E_sym[i,i] = x**int(delay / Decimal_gcd)
+        M1_sym = sp.Matrix(self.M1)
+        expr = sp.apart((E_sym - M1_sym).det())
+        poly = sp.Poly(expr, x)
+        poly_coeffs = poly.all_coeffs()
+        roots = np.roots(poly_coeffs)
+        zs = np.asarray(map(lambda r: np.log(r) / float(Decimal_gcd),
+                        roots))
 
         lst_to_return = []
         for freq_range in list_of_ranges:
-            for r in roots:
+            for r in zs:
                 lst_to_return += _find_instances_in_range(r,freq_range)
         self.roots = lst_to_return
 
@@ -224,7 +223,7 @@ class Time_Delay_Network():
         '''
         self.Potapov_ran = True
         if commensurate_roots:
-            self.make_commensurate_roots([(-max_freq,max_freq)])
+            self.make_commensurate_roots([(-self.max_freq,self.max_freq)])
         else:
             self.make_roots()
         self.roots =  [r for r in self.roots if r.real <= 0]
