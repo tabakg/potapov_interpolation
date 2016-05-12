@@ -135,7 +135,29 @@ class Time_Delay_Network():
             int_gcd = gcd_lst(delays)
             return int_gcd/power
 
-        def _find_instances_in_range(z,freq_range):
+        def _find_instances_in_range_good_initial_point(z,freq_range,T):
+            '''
+            Find numbers of the form :math:`z + Tni` where :math:`T` is the
+            period and :math:`n` is an integer inside the given frequency range.
+            Assumes the given z is in the desired frequency range.
+
+            Args:
+                z (complex number)
+                freq_range (2-tuple): (minimum frequency, maximum frequency)
+
+            Returns:
+                list of numbers of the desired form.
+            '''
+            lst_in_range = [z]
+            num_below = int((z.imag - freq_range[0])/T )
+            num_above = int((freq_range[1] - z.imag)/T )
+            above_range = (np.asarray(range(num_above))+1) * T
+            below_range = (np.asarray(range(num_below))+1) * T
+            lst_in_range += [z + 1j * disp for disp in above_range]
+            lst_in_range += [z - 1j * disp for disp in below_range]
+            return lst_in_range
+
+        def _find_instances_in_range(z,freq_range,T):
             '''
             Find numbers of the form :math:`z + Tni` where :math:`T` is the
             period and :math:`n` is an integer inside the given frequency range.
@@ -147,30 +169,24 @@ class Time_Delay_Network():
             Returns:
                 list of numbers of the desired form. Empty list if none exist.
             '''
-            T = 2.*np.pi / float(Decimal_gcd)
             if z.imag >= freq_range[0] and z.imag <= freq_range[1]:
-                lst_in_range = [z]
-                num_below = int((z.imag - freq_range[0])/T )
-                num_above = int((freq_range[1] - z.imag)/T )
-                lst_in_range += [z + 1j * disp for disp in
-                    (np.asarray(range(num_above))+1) * T]
-                lst_in_range += [z - 1j * disp for disp in
-                    (np.asarray(range(num_below))+1) * T]
-                return lst_in_range
+                return _find_instances_in_range_good_initial_point(z,freq_range,T)
             elif z.imag > freq_range[1]:
                 min_dist = (int((z.imag - freq_range[1])/T)+1) * T
                 max_dist = int((z.imag - freq_range[0]) / T) * T
                 if min_dist > max_dist:
                     return []
                 else:
-                    return _find_instances_in_range(z - 1j*min_dist,freq_range)
+                    return _find_instances_in_range_good_initial_point(
+                        z - 1j*min_dist,freq_range,T)
             else:
                 min_dist = (int((freq_range[0] - z.imag)/T)+1) * T
                 max_dist = int((freq_range[1] - z.imag)/T)  * T
                 if min_dist > max_dist:
                     return []
                 else:
-                    return _find_instances_in_range(z + 1j*min_dist,freq_range)
+                    return _find_instances_in_range_good_initial_point(
+                        z + 1j*min_dist,freq_range,T)
 
         Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
         Decimal_gcd = _find_commensurate(Decimal_delays)
@@ -187,12 +203,13 @@ class Time_Delay_Network():
         zs = np.asarray(map(lambda r: np.log(r) / float(Decimal_gcd),
                         roots))
 
+        T = 2.*np.pi / float(Decimal_gcd)
+
         lst_to_return = []
         for freq_range in list_of_ranges:
             for r in zs:
-                lst_to_return += _find_instances_in_range(r,freq_range)
+                lst_to_return += _find_instances_in_range(r,freq_range,T)
         self.roots = lst_to_return
-
 
     def make_T_Testing(self):
         '''Generate the approximating transfer function using the identified
