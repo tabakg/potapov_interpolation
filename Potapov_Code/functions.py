@@ -145,6 +145,39 @@ def Pade(n,z):
     '''
     return Q(z,n)/Q(-z,n)
 
+def double_up(M1,M2=None):
+    r'''
+
+    Takes a given matrix M1 and an optional matrix M2 and generates a
+    doubled-up matrix to use for simulations when the doubled-up notation
+    is needed. i.e.
+
+    .. math::
+        \begin{pmatrix}
+            M_1 && M_2
+        \end{pmatrix}
+        \to
+        \begin{pmatrix}
+            M_1 && M_2 \\
+            M_2^\# && M_1^\#
+        \end{pmatrix}
+
+    In the case M2 == None, it becomes replaced by the zero matrix.
+
+    Args:
+        M1: matrix to double-up
+        M2: optional second matrix to double-up
+
+    Returns:
+        The doubled-up matrix.
+
+    '''
+    if M2 == None:
+        M2 = np.zeros_like(M1)
+    top = np.hstack([M1,M2])
+    bottom = np.hstack([np.conj(M2),np.conj(M1)])
+    return np.vstack([top,bottom])
+
 def spatial_modes(roots,M1,E,delays=None):
     '''
     Obtain the spetial mode profile at each node up to a constant.

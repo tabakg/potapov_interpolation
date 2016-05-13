@@ -12,7 +12,7 @@ import numpy.linalg as la
 import sympy as sp
 import matplotlib.pyplot as plt
 #import mpmath as mp ## for complex-valued plots
-from Time_Sims_nonlin import double_up
+from functions import double_up
 from functions import der
 from functions import Pade
 from functions import spatial_modes
@@ -74,7 +74,7 @@ def plot_all(L,dx,labels,colors,lw,name,*args):
     art.append(lgd)
     plt.savefig(name,additional_artists=art,
     bbox_inches="tight")
-    return None
+    return
 
 class Time_Delay_Network():
     '''
@@ -99,6 +99,7 @@ class Time_Delay_Network():
         self.N = N
         self.Potapov_ran = False
         self.center_freq = center_freq
+        return
 
     def make_roots(self):
         '''Generate the roots given the denominator of the transfer function.
@@ -107,6 +108,7 @@ class Time_Delay_Network():
         self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,
             -self.max_linewidth/2.,self.center_freq,
             self.max_linewidth/2.,self.max_freq,N=self.N)
+        return
 
     def make_commensurate_roots(self,list_of_ranges = []):
         '''
@@ -203,20 +205,36 @@ class Time_Delay_Network():
         zs = np.asarray(map(lambda r: np.log(r) / float(Decimal_gcd),
                         roots))
 
-        T = 2.*np.pi / float(Decimal_gcd)
+        T_gcd = 2.*np.pi / float(Decimal_gcd)
 
+        self.map_root_to_commensurate_index = {}
         lst_to_return = []
         for freq_range in list_of_ranges:
-            for r in zs:
-                lst_to_return += _find_instances_in_range(r,freq_range,T)
+            for i,r in enumerate(zs):
+                prev_len = len(lst_to_return)
+                new_roots = _find_instances_in_range(r,freq_range,T_gcd)
+                len_new_roots = len(new_roots)
+                lst_to_return += new_roots
+                for j in range(prev_len,prev_len + len_new_roots):
+                    self.map_root_to_commensurate_index[j] = i
         self.roots = lst_to_return
+        self.commensurate_roots = zs
+
+    def make_commensurate_vecs(self,):
+        self.commensurate_vecs = Potapov.get_Potapov_vecs(
+            self.T,self.commensurate_roots)
+        self.vecs = map(
+            lambda i: self.commensurate_vecs[self.map_root_to_commensurate_index[i]],
+            range(len(self.roots)) )
+        return
 
     def make_T_Testing(self):
         '''Generate the approximating transfer function using the identified
         poles of the transfer function.
 
         '''
-        self.T_testing = Potapov.get_Potapov(self.T,self.roots)
+        self.T_testing = Potapov.get_Potapov(self.T,self.roots,self.vecs)
+        return
 
     def make_vecs(self):
         '''Generate an ordered list of vectors representing the form of the
@@ -224,29 +242,42 @@ class Time_Delay_Network():
 
         '''
         self.vecs = Potapov.get_Potapov_vecs(self.T,self.roots)
+        return
 
     def make_spatial_modes(self,):
         '''Generate the spatial modes of the network.
 
         '''
         self.spatial_modes = spatial_modes(self.roots,self.M1,self.E,delays=self.delays)
+        return
 
-    def run_Potapov(self, commensurate_roots = False):
+    def run_Potapov(self, commensurate_roots = False, filtering_roots = True):
         '''Run the entire Potapov procedure to find all important information.
+        The generated roots, vecs, approximated transfer function T_Testing,
+        and the spatial_modes are all stored in the class.
 
         Args:
             commensurate_roots (optional[boolean]): which root-finding method
             to use.
+
+            filtering_roots (optional[boolean]): makes sure the poles of the
+            transfer function all have negative real part. Drops ones that
+            might not.
         '''
         self.Potapov_ran = True
         if commensurate_roots:
             self.make_commensurate_roots([(-self.max_freq,self.max_freq)])
+            if filtering_roots:
+                self.roots =  [r for r in self.roots if r.real <= 0]
+            self.make_commensurate_vecs()
         else:
             self.make_roots()
-        self.roots =  [r for r in self.roots if r.real <= 0]
+            if filtering_roots:
+                self.roots =  [r for r in self.roots if r.real <= 0]
+            self.make_vecs()
         self.make_T_Testing()
-        self.make_vecs()
         self.make_spatial_modes()
+        return
 
     def get_outputs(self):
         '''Get some of the relevant outputs from the Potapov procedure.
@@ -261,6 +292,7 @@ class Time_Delay_Network():
             return self.T,self.T_testing,self.roots,self.vecs
         else:
             raise Exception("Must run Potapov to get outputs!!!")
+        return
 
     def get_Potapov_ABCD(self,z=0.,doubled=False):
         '''
@@ -531,7 +563,7 @@ def plot3D(f,points = 2000):
     fig.savefig("complex_plane_plot.pdf")
     return
 
-if __name__ == "__main__" and False:
+if __name__ == "__main__":
     print 'Running Examples.py'
 
     ################
@@ -594,6 +626,31 @@ if __name__ == "__main__" and False:
     # colors = ['b','r--','y--','m--','c--']
     #
     # plot_all(L,dx,labels,colors,0.5,'figure_8_v3.pdf',T,*T_ls)
+
+
+    ###########
+    ## Testing example 3 as above, but now using commensurate roots.
+    ###########
+
+    L = 1000.
+    dx = 0.5
+    freqs = [300.,500.,800.,1000.]
+    T_ls = []; roots_ls = []; vecs_ls = []
+
+    for freq in freqs:
+        E = Example3(max_freq = freq)
+        E.run_Potapov(commensurate_roots=True)
+        T,T_,roots,vecs = E.get_outputs()
+        T_ls.append(T_)
+        roots_ls.append(roots)
+        vecs_ls.append(vecs)
+
+    labels = ['Original T'] + ['Potapov T of Order '+str(len(r))
+                                for r in roots_ls]
+    colors = ['b','r--','y--','m--','c--']
+
+    plot_all(L,dx,labels,colors,0.5,'figure_8_commensurate.pdf',T,*T_ls)
+
 
     ################
     ## Input/output plot for example 4
@@ -673,46 +730,44 @@ if __name__ == "__main__" and False:
     ## make scatter plot for the roots and poles of example 3
     ###########
 
-
-    E = Example3(max_freq = 400.)
-    E.run_Potapov()
-    T,T_3,roots3,vecs3 = E.get_outputs()
-    fig = plt.figure(figsize=(3,10))
-
-    ax2 = fig.add_subplot(111)
-    ax2.add_patch(
-       patches.Rectangle(
-           (0.3,-0),
-           0.5,
-           100,
-           fill=False      # remove background
-       )
-    )
-
-    ax2 = fig.add_subplot(111)
-    ax2.add_patch(
-       patches.Rectangle(
-           (0.3,-0),
-           0.5,
-           200,
-           fill=False      # remove background
-       )
-    )
-    fig.suptitle('Zero-polt scatter plot', fontsize=20)
-
-
-    plt.xlim(-1.,1.)
-    plt.ylim(-400,400)
-
-    plt.xlabel('linewidth', fontsize=18)
-    plt.ylabel('frequency', fontsize=16)
-    plt.scatter(map(lambda z: z.real, roots3),map(lambda z: z.imag, roots3))
-    poles = map(lambda z: -z, roots3)
-
-    plt.scatter(map(lambda z: z.real, poles),map(lambda z: z.imag, poles),c="red")
-
-    plt.show()
-
+    # E = Example3(max_freq = 400.)
+    # E.run_Potapov()
+    # T,T_3,roots3,vecs3 = E.get_outputs()
+    # fig = plt.figure(figsize=(3,10))
+    #
+    # ax2 = fig.add_subplot(111)
+    # ax2.add_patch(
+    #    patches.Rectangle(
+    #        (0.3,-0),
+    #        0.5,
+    #        100,
+    #        fill=False      # remove background
+    #    )
+    # )
+    #
+    # ax2 = fig.add_subplot(111)
+    # ax2.add_patch(
+    #    patches.Rectangle(
+    #        (0.3,-0),
+    #        0.5,
+    #        200,
+    #        fill=False      # remove background
+    #    )
+    # )
+    # fig.suptitle('Zero-polt scatter plot', fontsize=20)
+    #
+    #
+    # plt.xlim(-1.,1.)
+    # plt.ylim(-400,400)
+    #
+    # plt.xlabel('linewidth', fontsize=18)
+    # plt.ylabel('frequency', fontsize=16)
+    # plt.scatter(map(lambda z: z.real, roots3),map(lambda z: z.imag, roots3))
+    # poles = map(lambda z: -z, roots3)
+    #
+    # plt.scatter(map(lambda z: z.real, poles),map(lambda z: z.imag, poles),c="red")
+    #
+    # plt.show()
 
     ##########
     ## make scatter plot for the roots and poles of example 4
