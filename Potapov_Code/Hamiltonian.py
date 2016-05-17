@@ -23,6 +23,7 @@ from sympy.printing.theanocode import theano_function
 from sympy.physics.quantum import *
 from sympy.physics.quantum.boson import *
 from sympy.physics.quantum.operatorordering import *
+from qnet.algebra.circuit_algebra import *
 
 class Chi_nonlin():
     r'''Class to store the information in a particular nonlinear chi element.
@@ -43,6 +44,8 @@ class Chi_nonlin():
         chi_function (optional [function]): strength of nonlinearity.
         first (chi_order+1) args are frequencies,
         next (chi_order+1) args are indices of polarization.
+
+    TODO: make refraction_index_func a function of also the polarization.
 
     '''
     def __init__(self,delay_indices,start_nonlin,length_nonlin,
@@ -79,6 +82,9 @@ class Hamiltonian():
         scaling for the various modes.
 
         chi_nonlinearities (lst): a list of Chi_nonlin instances.
+
+        TODO: split self.a into two kinds, specified by the user. The first
+        will be a usual sympy symbol. The second will be QNET operator.
 
     '''
     def __init__(self,roots,modes,delays,
@@ -201,7 +207,6 @@ class Hamiltonian():
             the phase coefficient.
         Returns:
             The weight to add to the Hamiltonian
-
         '''
         omegas_to_use = np.array([self.omegas[i] for i in combination])
         modes_to_use = [self.modes[i] for i in combination]
@@ -304,11 +309,11 @@ class Hamiltonian():
         for phase_matching_weights, and for producs of E_field_weights. filter
         the keys before generating terms.
 
-        TODO:  Expand and simplify the Hamiltonian term.
         '''
         H_nonlin_sp = sp.Float(0.)
         for chi in self.chi_nonlinearities:
             weight_keys = self.make_weight_keys(chi)
+
             phase_matching_weights = self.make_phase_matching_weights(
                 weight_keys,chi,filtering_phase_weights,eps)
 
@@ -425,7 +430,7 @@ class Hamiltonian():
         r'''Input is a tuple or list, output is a matrix vector.
         This generates Hamilton's equations of motion for a and a^H.
         These equations are CLASSICAL equations of motion. This means
-        we replace the operators with c-numbers. The order of the operators
+        we replace the operators with c-numbers. The orde   r of the operators
         will yield different results, so we assume the Hamiltonian is already
         in the desired order (e.g. normally ordered).
 
@@ -450,6 +455,7 @@ class Hamiltonian():
         H_H = Dagger(self.H)
 
         def subs_c_number(expression,i):
+            ## TODO: change to dictionary, call once (might not need to do depending on organization.)
             return expression.subs(self.a[i],b[i]).subs(Dagger(self.a[i]),b_H[i])
 
         H_c_numbers = copy.copy(self.H)
@@ -472,3 +478,21 @@ class Hamiltonian():
         ###f = theano_function([self.t]+b+b_H, diff_ls)   ## f(t,b[0],b[1],...)
         ###F = lambda t,args: np.asarray(f(t,*args))                  ## F(t,(b[0],b[1],...))
         #return F
+
+    def H_qnet(self,):
+        '''
+        Converts the Hamiltonian to a QNET expression and returns that expression.
+
+        Returns:
+            QNET expression of the Hamiltonian.
+
+        TODO: Fix error that results from this function!
+        '''
+        a = [Destroy(i) for i in range(self.m)]
+        H_qnet = copy.copy(self.H)
+
+        def subs_c_number(expression,i):
+            return expression.subs(self.a[i],a[i]).subs(Dagger(self.a[i]),a[i].dag())
+        for i in range(self.m):
+            H_qnet = subs_c_number(H_qnet, i)
+        return H_qnet
