@@ -69,10 +69,11 @@ def test_Hamiltonian_with_doubled_equations(eps=1e-5):
     A,B,C,D = Ex.get_Potapov_ABCD(doubled=False)
     A_d,B_d,C_d,D_d = Ex.get_Potapov_ABCD(doubled=True)
 
-    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A)
+    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A,
+                nonlin_coeff = 0.)
 
     ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
-                               length_nonlin=0.1,)
+                               length_nonlin=0.1)
 
     ham.make_H()
     eq_mot = ham.make_eq_motion()
@@ -225,5 +226,5 @@ def test_Hamiltonian_with_doubled_equations(eps=1e-5):
 
 
 if __name__ == "__main__":
-    test_commensurate_vecs_example_3()
+    test_Hamiltonian_with_doubled_equations()
     #test_example_3()

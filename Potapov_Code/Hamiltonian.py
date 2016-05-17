@@ -92,6 +92,7 @@ class Hamiltonian():
         nonlin_coeff = 1.,polarizations = None,
         cross_sectional_area = 1e-10,
         chi_nonlinearities = [],
+        using_qnet_symbols = False,
         ):
         self.roots = roots
         self.omegas = [root.imag / (2.*consts.pi) for root in self.roots]
@@ -111,10 +112,21 @@ class Hamiltonian():
         self.volumes = self.mode_volumes()
         self.E_field_weights = self.make_E_field_weights()
         self.chi_nonlinearities = chi_nonlinearities
-        self.a = [BosonOp('a_'+str(i)) for i in range(self.m)]
+        self.using_qnet_symbols = using_qnet_symbols
+        if self.using_qnet_symbols:
+            self.a = [Destroy(i) for i in range(self.m)]
+        else:
+            #self.a = [sp.symbols('a_'+str(i)) for i in range(self.m)]
+            self.a = [BosonOp('a_'+str(i)) for i in range(self.m)]
         self.t = sp.symbols('t')
         self.H = 0.
         self.nonlin_coeff = nonlin_coeff
+
+    def Dagger(self, symbol):
+        if self.using_qnet_symbols:
+            return symbol.dag()
+        else:
+            return Dagger(symbol)
 
     def make_chi_nonlinearity(self,delay_indices,start_nonlin,
                                length_nonlin,refraction_index_func = lambda *args: 1.,
@@ -191,7 +203,7 @@ class Hamiltonian():
         r = 1
         for index,sign in zip(combination,pm_arr):
             if sign == 1:
-                r*= Dagger(self.a[index])
+                r*= self.Dagger(self.a[index])
             else:
                 r *= self.a[index]
         return r
@@ -342,7 +354,7 @@ class Hamiltonian():
         H_lin_sp = sp.Float(0.)
         for i in range(self.m):
             for j in range(self.m):
-                H_lin_sp += Dagger(self.a[i])*self.a[j]*Omega[i,j]
+                H_lin_sp += self.Dagger(self.a[i])*self.a[j]*Omega[i,j]
         return H_lin_sp
 
     def make_H(self,eps=1e-5):
@@ -404,19 +416,19 @@ class Hamiltonian():
                 self.move_to_rotating_frame([freqs]*self.m)
         elif type(freqs) in [list,tuple]:
             for op,freq in zip(self.a,freqs):
-                self.H -= freq * Dagger(op)* op
+                self.H -= freq * self.Dagger(op)* op
             self.H = (self.H).expand()
             if include_time_terms:
                 for op,freq in zip(self.a,freqs):
                     self.H = (self.H).subs({
-                        Dagger(op) : Dagger(op)*( sp.cos(freq * self.t)
+                        self.Dagger(op) : self.Dagger(op)*( sp.cos(freq * self.t)
                             + sp.I * sp.sin(freq * self.t) ),
                         op : op * ( sp.cos(freq * self.t)
                             - sp.I * sp.sin(freq * self.t) ),
                         })
                         ### Sympy has issues with the complex exponential...
                         # self.H = (self.H).subs({
-                        #     Dagger(op) : Dagger(op)*sp.exp(sp.I * freq * self.t),
+                        #     self.Dagger(op) : self.Dagger(op)*sp.exp(sp.I * freq * self.t),
                         #     op : op*sp.exp(-sp.I * freq * self.t),
                         # })
                         ###
@@ -446,29 +458,29 @@ class Hamiltonian():
             describing the gradient.
 
         '''
+        if self.using_qnet_symbols:
+            print "Warning: The Hamiltonian should be regular c-numbers!"
+            print "Returning None"
+            return None
 
         ## c-numbers
         b = [sp.symbols('b'+str(i)) for i in range(self.m)]
-        b_H = [sp.symbols('b_H'+str(i)) for i in range(self.m)]
+        b_conj = [sp.symbols('b_H'+str(i)) for i in range(self.m)]
 
-        ## Hamiltonian is not always Hermitian. We use its complex conjugate.
-        H_H = Dagger(self.H)
+        D_to_c_numbers = {self.a[i] : b[i] for i in range(self.m)}
+        D_to_c_numbers.update({self.Dagger(self.a[i]) : b_conj[i] for
+            i in range(self.m)})
 
-        def subs_c_number(expression,i):
-            ## TODO: change to dictionary, call once (might not need to do depending on organization.)
-            return expression.subs(self.a[i],b[i]).subs(Dagger(self.a[i]),b_H[i])
+        H_conj = self.Dagger(self.H)
 
-        H_c_numbers = copy.copy(self.H)
-        H_H_c_numbers = copy.copy(H_H)
-        for i in range(self.m):
-            H_c_numbers = subs_c_number(H_c_numbers,i)
-            H_H_c_numbers = subs_c_number(H_H_c_numbers,i)
+        H_c_numbers = self.H.subs(D_to_c_numbers)
+        H_conj_c_numbers = H_conj.subs(D_to_c_numbers)  ## don't have to copy
 
 
         ## classical equations of motion
-        diff_ls = ([1j*sp.diff(H_c_numbers,var) for var in b_H] +
-               [-1j*sp.diff(H_H_c_numbers,var) for var in b])
-        fs = ([sp.lambdify( (self.t,b+b_H), expression)
+        diff_ls = ([1j*sp.diff(H_c_numbers,var) for var in b_conj ] +
+               [-1j*sp.diff(H_conj_c_numbers,var) for var in b])
+        fs = ([sp.lambdify( (self.t, b + b_conj), expression)
             for expression in diff_ls ])
         return lambda t,arr: (np.asmatrix([ sp.N ( f(t,arr) )
             for f in fs], dtype = 'complex128' )).T
@@ -478,21 +490,3 @@ class Hamiltonian():
         ###f = theano_function([self.t]+b+b_H, diff_ls)   ## f(t,b[0],b[1],...)
         ###F = lambda t,args: np.asarray(f(t,*args))                  ## F(t,(b[0],b[1],...))
         #return F
-
-    def H_qnet(self,):
-        '''
-        Converts the Hamiltonian to a QNET expression and returns that expression.
-
-        Returns:
-            QNET expression of the Hamiltonian.
-
-        TODO: Fix error that results from this function!
-        '''
-        a = [Destroy(i) for i in range(self.m)]
-        H_qnet = copy.copy(self.H)
-
-        def subs_c_number(expression,i):
-            return expression.subs(self.a[i],a[i]).subs(Dagger(self.a[i]),a[i].dag())
-        for i in range(self.m):
-            H_qnet = subs_c_number(H_qnet, i)
-        return H_qnet
