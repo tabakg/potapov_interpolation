@@ -8,4 +8,15 @@ setup(name='Potapov_interpolation',
       author_email='tabak.gil@gmail.com',
       license='GNU',
       packages=['Potapov_Code'],
+      install_requires=[
+        'matplotlib',
+        'sympy',
+        'numpy',
+    ],
+    extras_require=[
+        'QNET==1.4.1'
+    ]
+      dependency_links = [
+            'https://github.com/mabuchilab/QNET.git#egg=QNET-1.4.1',
+      ]
       zip_safe=False)
