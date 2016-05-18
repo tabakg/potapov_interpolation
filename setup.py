@@ -14,9 +14,6 @@ setup(name='Potapov_interpolation',
         'numpy',
         'QNET==1.4.1'
     ],
-    '''extras_require={
-        'QNET': ['QNET==1.4.1'],
-    }, '''
     dependency_links = [
         'https://github.com/mabuchilab/QNET.git#egg=QNET-1.4.1',
     ],
