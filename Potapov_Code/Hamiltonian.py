@@ -86,6 +86,8 @@ class Hamiltonian():
         TODO: split self.a into two kinds, specified by the user. The first
         will be a usual sympy symbol. The second will be QNET operator.
 
+        TODO: Return L operator for QNET
+
     '''
     def __init__(self,roots,modes,delays,
         Omega = None,
