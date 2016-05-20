@@ -145,10 +145,11 @@ class Time_Delay_Network():
         self.T_denom_sym = sp.apart((E_sym - M1_sym).det())
         ## I use apart above because sympy yields a function that is not
         ## completely reduced. Alternatively, can use *.as_numer_denom()
-        ## and take the first component for the numerator.
+        ## and take the first component for the numerator. However, this could
+        ## results in spurious roots if the denominator is nontrivial.
         return
 
-    def _make_symbolic_frequency_perturbation(self,simplify = True):
+    def make_symbolic_frequency_perturbation(self,simplify = True):
         r'''
         A method to prepare the symbolic expression T_denom_sym for further
         computations. This expression represents the denominator in terms of

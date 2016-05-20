@@ -378,6 +378,11 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
     for delay_index,start_loc in zip(delay_indices,start_nonlin):
         if start_loc < 0:
             raise Exception('each element of start_nonlin must be greater than 0.')
+        # Below is the condition we would need to check when
+        # the index of refraction is 1. In the case the index of refraction
+        # is different, length_nonlin is multiplied by the refractiive index.
+        # However, the duration of the delay lengthens by the same amount so the
+        # condition remains unchanged.
         if length_nonlin + start_loc > delays[delay_index]:
             raise Exception('length_nonlin + start_loc must be less than the '
                            +'delay of index delay_index for start_loc in '

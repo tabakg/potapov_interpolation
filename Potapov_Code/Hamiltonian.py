@@ -127,6 +127,10 @@ class Hamiltonian():
         else:
             return Dagger(symbol)
 
+    def perturb_roots(self,):
+
+        return
+
     def make_chi_nonlinearity(self,delay_indices,start_nonlin,
                                length_nonlin,refraction_index_func = lambda *args: 1.,
                                chi_order=3,chi_function = lambda *args: 1):
