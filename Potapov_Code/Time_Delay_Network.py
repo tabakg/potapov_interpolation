@@ -146,6 +146,9 @@ class Time_Delay_Network():
                 E_sym[i,i] = self.x**int(delay / self.Decimal_gcd)
             M1_sym = sp.Matrix(self.M1)
             self.T_denom_sym = sp.apart((E_sym - M1_sym).det())
+            ## I use apart above because sympy yields a function that is not
+            ## completely reduced. Alternatively, can use *.as_numer_denom()
+            ## and take the first component for the numerator.
         return
 
     def _find_instances_in_range_good_initial_point(self,z,freq_range,T):
