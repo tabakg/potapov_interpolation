@@ -14,6 +14,10 @@ from scipy.integrate import ode
 import matplotlib.pyplot as plt
 import time
 
+def test_make_T_denom_sym_separate_delays():
+    X = Time_Delay_Network.Example3(tau1 = 0.1, tau2 = 0.2,tau3 = 0.1,tau4 = 0.2,)
+    print X._make_symbolic_frequency_perturbation(simplify = False)
+
 def test_commensurate_vecs_example_3():
     times = [time.clock()]
     X = Time_Delay_Network.Example3(tau1 = 0.1, tau2 = 0.2,tau3 = 0.1,tau4 = 0.2,)
@@ -226,5 +230,6 @@ def test_commensurate_vecs_example_3():
 
 
 if __name__ == "__main__":
-    test_Hamiltonian_with_doubled_equations()
+    test_make_T_denom_sym_separate_delays()
+    #test_Hamiltonian_with_doubled_equations()
     #test_example_3()

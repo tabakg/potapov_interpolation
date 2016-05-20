@@ -101,6 +101,10 @@ class Time_Delay_Network():
         self.center_freq = center_freq
         return
 
+    def _make_decimal_delays(self,):
+        self.Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
+        self.Decimal_gcd = self._find_commensurate(self.Decimal_delays)
+
     def make_roots(self):
         '''Generate the roots given the denominator of the transfer function.
 
@@ -132,9 +136,7 @@ class Time_Delay_Network():
         computations. This expression represents the denominator in terms of
         a symbol x, which represents the shortest time delay in the network.
         '''
-
-        self.Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
-        self.Decimal_gcd = self._find_commensurate(self.Decimal_delays)
+        self._make_decimal_delays()
         self.x = sp.symbols('x')
         E_sym = sp.Matrix(np.zeros_like(self.M1))
         for i,delay in enumerate(self.Decimal_delays):
@@ -145,6 +147,51 @@ class Time_Delay_Network():
         ## completely reduced. Alternatively, can use *.as_numer_denom()
         ## and take the first component for the numerator.
         return
+
+    def _make_symbolic_frequency_perturbation(self,simplify = True):
+        r'''
+        A method to prepare the symbolic expression T_denom_sym for further
+        computations. This expression represents the denominator in terms of
+        the various delays :math:`T_1,...,T_k` and the complex variable
+        :math:`z`.
+
+        This method treats the various delays as separate variables.
+
+        Args:
+            simplify (optiona[boolean]): simplify the output sympy expression.
+        '''
+        M = len(self.delays)
+        self._make_decimal_delays()
+        z, z_Delta = sp.symbols('z dz')
+        Ts = [sp.symbols('T_'+str(i)) for i in range(M)]
+        Ts_Delta = [sp.symbols('dT_'+str(i)) for i in range(M)]
+
+        xs = [sp.symbols('x_'+str(i)) for i in range(4) ]
+        E_sym = sp.Matrix(np.zeros_like(self.M1))
+        for i,delay in enumerate(self.Decimal_delays):
+            E_sym[i,i] = xs[i]
+        M1_sym = sp.Matrix(self.M1)
+        num, den = (E_sym - M1_sym).det().as_numer_denom()
+        D = {x: sp.exp(-z*T) for x,T in zip(xs,Ts)}
+        exp_periodic = num.subs(D)
+        T_expression = sum([exp_periodic.diff(T)*T_d
+            for T,T_d in zip(Ts,Ts_Delta)])
+
+        ## Next solve for the first-order perturbation.
+        ## The commented-out line might be slow -- the code below does the same.
+        #sol = sp.solve(T_expression + exp_periodic.diff(z)*z_Delta, z_Delta)[0]
+
+        diff_z = exp_periodic.diff(z)
+        T_temps = [sp.symbols('T_temp_'+str(i)) for i in range(M)]
+        D_tmp = {z*T:T_t for T,T_t in zip(Ts,T_temps)}
+        D_inv = {T_t:z*T for T,T_t in zip(Ts,T_temps)}
+        D = {T:dT for T,dT in zip(Ts,Ts_Delta)}
+        diff_z2 = diff_z.subs(D_tmp)
+        diff_z3 = diff_z2.subs(D)
+        diff_z4 = diff_z3.subs(D_inv)
+        sol = -z*diff_z4 / diff_z
+
+        return sp.simplify(sol) if simplify else sol
 
     def _find_instances_in_range_good_initial_point(self,z,freq_range,T):
         '''
