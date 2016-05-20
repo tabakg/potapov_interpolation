@@ -132,14 +132,20 @@ class Time_Delay_Network():
         computations. This expression represents the denominator in terms of
         a symbol x, which represents the shortest time delay in the network.
         '''
-        self.Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
-        self.Decimal_gcd = self._find_commensurate(self.Decimal_delays)
-        self.x = sp.symbols('x')
-        E_sym = sp.Matrix(np.zeros_like(self.M1))
-        for i,delay in enumerate(self.Decimal_delays):
-            E_sym[i,i] = self.x**int(delay / self.Decimal_gcd)
-        M1_sym = sp.Matrix(self.M1)
-        self.T_denom_sym = sp.apart((E_sym - M1_sym).det())
+        try:
+            self.T_denom_sym
+            self.Decimal_delays
+            self.Decimal_gcd
+            self.x
+        except AttributeError: ## self.T_denom_sym not defined, make expression
+            self.Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
+            self.Decimal_gcd = self._find_commensurate(self.Decimal_delays)
+            self.x = sp.symbols('x')
+            E_sym = sp.Matrix(np.zeros_like(self.M1))
+            for i,delay in enumerate(self.Decimal_delays):
+                E_sym[i,i] = self.x**int(delay / self.Decimal_gcd)
+            M1_sym = sp.Matrix(self.M1)
+            self.T_denom_sym = sp.apart((E_sym - M1_sym).det())
         return
 
     def _find_instances_in_range_good_initial_point(self,z,freq_range,T):
@@ -207,13 +213,7 @@ class Time_Delay_Network():
             (minimum frequency, maximum frequency).
         '''
 
-        try:
-            self.T_denom_sym
-            self.Decimal_delays
-            self.Decimal_gcd
-            self.x
-        except AttributeError: ## self.T_denom_sym not defined, make expression
-            self._make_T_denom_sym()
+        self._make_T_denom_sym()
 
         poly = sp.Poly(self.T_denom_sym, self.x)
         poly_coeffs = poly.all_coeffs()
