@@ -83,9 +83,6 @@ class Hamiltonian():
 
         chi_nonlinearities (lst): a list of Chi_nonlin instances.
 
-        TODO: split self.a into two kinds, specified by the user. The first
-        will be a usual sympy symbol. The second will be QNET operator.
-
         TODO: Return L operator for QNET
 
     '''
@@ -322,6 +319,8 @@ class Hamiltonian():
         TODO:  Make separate dictionaries for values of chi_function,
         for phase_matching_weights, and for producs of E_field_weights. filter
         the keys before generating terms.
+
+        TODO: Make fast function for integrator; combine with make_f and make_f_lin
 
         '''
         H_nonlin_sp = sp.Float(0.)

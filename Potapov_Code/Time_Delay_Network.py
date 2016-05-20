@@ -110,6 +110,91 @@ class Time_Delay_Network():
             self.max_linewidth/2.,self.max_freq,N=self.N)
         return
 
+    def _find_commensurate(self,delays):
+        '''
+        Find the 'gcd' but for Decimal numbers.
+
+        Args:
+            delays(list of Demicals): numbers whose gcd will be found.
+
+        Returns:
+            Decimal gcd.
+        '''
+        mult = min([d.as_tuple().exponent for d in delays])
+        power = 10**-mult
+        delays = map(lambda x: x*power,delays)
+        int_gcd = gcd_lst(delays)
+        return int_gcd/power
+
+    def _make_T_denom_sym(self,):
+        r'''
+        A method to prepare the symbolic expression T_denom_sym for further
+        computations. This expression represents the denominator in terms of
+        a symbol x, which represents the shortest time delay in the network.
+        '''
+        self.Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
+        self.Decimal_gcd = self._find_commensurate(self.Decimal_delays)
+        self.x = sp.symbols('x')
+        E_sym = sp.Matrix(np.zeros_like(self.M1))
+        for i,delay in enumerate(self.Decimal_delays):
+            E_sym[i,i] = self.x**int(delay / self.Decimal_gcd)
+        M1_sym = sp.Matrix(self.M1)
+        self.T_denom_sym = sp.apart((E_sym - M1_sym).det())
+        return
+
+    def _find_instances_in_range_good_initial_point(self,z,freq_range,T):
+        '''
+        Find numbers of the form :math:`z + Tni` where :math:`T` is the
+        period and :math:`n` is an integer inside the given frequency range.
+        Assumes the given z is in the desired frequency range.
+
+        Args:
+            z (complex number)
+            freq_range (2-tuple): (minimum frequency, maximum frequency)
+
+        Returns:
+            list of numbers of the desired form.
+        '''
+        lst_in_range = [z]
+        num_below = int((z.imag - freq_range[0])/T )
+        num_above = int((freq_range[1] - z.imag)/T )
+        above_range = (np.asarray(range(num_above))+1) * T
+        below_range = (np.asarray(range(num_below))+1) * T
+        lst_in_range += [z + 1j * disp for disp in above_range]
+        lst_in_range += [z - 1j * disp for disp in below_range]
+        return lst_in_range
+
+    def _find_instances_in_range(self,z,freq_range,T):
+        '''
+        Find numbers of the form :math:`z + Tni` where :math:`T` is the
+        period and :math:`n` is an integer inside the given frequency range.
+
+        Args:
+            z (complex number)
+            freq_range (2-tuple): (minimum frequency, maximum frequency)
+
+        Returns:
+            list of numbers of the desired form. Empty list if none exist.
+        '''
+        if z.imag >= freq_range[0] and z.imag <= freq_range[1]:
+            return self._find_instances_in_range_good_initial_point(z,freq_range,T)
+        elif z.imag > freq_range[1]:
+            min_dist = (int((z.imag - freq_range[1])/T)+1) * T
+            max_dist = int((z.imag - freq_range[0]) / T) * T
+            if min_dist > max_dist:
+                return []
+            else:
+                return self._find_instances_in_range_good_initial_point(
+                    z - 1j*min_dist,freq_range,T)
+        else:
+            min_dist = (int((freq_range[0] - z.imag)/T)+1) * T
+            max_dist = int((freq_range[1] - z.imag)/T)  * T
+            if min_dist > max_dist:
+                return []
+            else:
+                return self._find_instances_in_range_good_initial_point(
+                    z + 1j*min_dist,freq_range,T)
+
     def make_commensurate_roots(self,list_of_ranges = []):
         '''
         Assuming the delays are commensurate, obtain all the roots within the
@@ -121,98 +206,29 @@ class Time_Delay_Network():
             ranges of interest in the form:
             (minimum frequency, maximum frequency).
         '''
-        def _find_commensurate(delays):
-            '''
-            Find the 'gcd' but for Decimal numbers.
 
-            Args:
-                delays(list of Demicals): numbers whose gcd will be found.
+        try:
+            self.T_denom_sym
+            self.Decimal_delays
+            self.Decimal_gcd
+            self.x
+        except AttributeError: ## self.T_denom_sym not defined, make expression
+            self._make_T_denom_sym()
 
-            Returns:
-                Decimal gcd.
-            '''
-            mult = min([d.as_tuple().exponent for d in delays])
-            power = 10**-mult
-            delays = map(lambda x: x*power,delays)
-            int_gcd = gcd_lst(delays)
-            return int_gcd/power
-
-        def _find_instances_in_range_good_initial_point(z,freq_range,T):
-            '''
-            Find numbers of the form :math:`z + Tni` where :math:`T` is the
-            period and :math:`n` is an integer inside the given frequency range.
-            Assumes the given z is in the desired frequency range.
-
-            Args:
-                z (complex number)
-                freq_range (2-tuple): (minimum frequency, maximum frequency)
-
-            Returns:
-                list of numbers of the desired form.
-            '''
-            lst_in_range = [z]
-            num_below = int((z.imag - freq_range[0])/T )
-            num_above = int((freq_range[1] - z.imag)/T )
-            above_range = (np.asarray(range(num_above))+1) * T
-            below_range = (np.asarray(range(num_below))+1) * T
-            lst_in_range += [z + 1j * disp for disp in above_range]
-            lst_in_range += [z - 1j * disp for disp in below_range]
-            return lst_in_range
-
-        def _find_instances_in_range(z,freq_range,T):
-            '''
-            Find numbers of the form :math:`z + Tni` where :math:`T` is the
-            period and :math:`n` is an integer inside the given frequency range.
-
-            Args:
-                z (complex number)
-                freq_range (2-tuple): (minimum frequency, maximum frequency)
-
-            Returns:
-                list of numbers of the desired form. Empty list if none exist.
-            '''
-            if z.imag >= freq_range[0] and z.imag <= freq_range[1]:
-                return _find_instances_in_range_good_initial_point(z,freq_range,T)
-            elif z.imag > freq_range[1]:
-                min_dist = (int((z.imag - freq_range[1])/T)+1) * T
-                max_dist = int((z.imag - freq_range[0]) / T) * T
-                if min_dist > max_dist:
-                    return []
-                else:
-                    return _find_instances_in_range_good_initial_point(
-                        z - 1j*min_dist,freq_range,T)
-            else:
-                min_dist = (int((freq_range[0] - z.imag)/T)+1) * T
-                max_dist = int((freq_range[1] - z.imag)/T)  * T
-                if min_dist > max_dist:
-                    return []
-                else:
-                    return _find_instances_in_range_good_initial_point(
-                        z + 1j*min_dist,freq_range,T)
-
-        Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
-        Decimal_gcd = _find_commensurate(Decimal_delays)
-
-        x = sp.symbols('x')
-        E_sym = sp.Matrix(np.zeros_like(self.M1))
-        for i,delay in enumerate(Decimal_delays):
-            E_sym[i,i] = x**int(delay / Decimal_gcd)
-        M1_sym = sp.Matrix(self.M1)
-        expr = sp.apart((E_sym - M1_sym).det())
-        poly = sp.Poly(expr, x)
+        poly = sp.Poly(self.T_denom_sym, self.x)
         poly_coeffs = poly.all_coeffs()
         roots = np.roots(poly_coeffs)
-        zs = np.asarray(map(lambda r: np.log(r) / float(Decimal_gcd),
+        zs = np.asarray(map(lambda r: np.log(r) / float(self.Decimal_gcd),
                         roots))
 
-        T_gcd = 2.*np.pi / float(Decimal_gcd)
+        T_gcd = 2.*np.pi / float(self.Decimal_gcd)
 
         self.map_root_to_commensurate_index = {}
         lst_to_return = []
         for freq_range in list_of_ranges:
             for i,r in enumerate(zs):
                 prev_len = len(lst_to_return)
-                new_roots = _find_instances_in_range(r,freq_range,T_gcd)
+                new_roots = self._find_instances_in_range(r,freq_range,T_gcd)
                 len_new_roots = len(new_roots)
                 lst_to_return += new_roots
                 for j in range(prev_len,prev_len + len_new_roots):
