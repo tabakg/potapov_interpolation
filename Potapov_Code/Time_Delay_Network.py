@@ -132,23 +132,18 @@ class Time_Delay_Network():
         computations. This expression represents the denominator in terms of
         a symbol x, which represents the shortest time delay in the network.
         '''
-        try:
-            self.T_denom_sym
-            self.Decimal_delays
-            self.Decimal_gcd
-            self.x
-        except AttributeError: ## self.T_denom_sym not defined, make expression
-            self.Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
-            self.Decimal_gcd = self._find_commensurate(self.Decimal_delays)
-            self.x = sp.symbols('x')
-            E_sym = sp.Matrix(np.zeros_like(self.M1))
-            for i,delay in enumerate(self.Decimal_delays):
-                E_sym[i,i] = self.x**int(delay / self.Decimal_gcd)
-            M1_sym = sp.Matrix(self.M1)
-            self.T_denom_sym = sp.apart((E_sym - M1_sym).det())
-            ## I use apart above because sympy yields a function that is not
-            ## completely reduced. Alternatively, can use *.as_numer_denom()
-            ## and take the first component for the numerator.
+
+        self.Decimal_delays = map(lambda x: Decimal(str(x)),self.delays)
+        self.Decimal_gcd = self._find_commensurate(self.Decimal_delays)
+        self.x = sp.symbols('x')
+        E_sym = sp.Matrix(np.zeros_like(self.M1))
+        for i,delay in enumerate(self.Decimal_delays):
+            E_sym[i,i] = self.x**int(delay / self.Decimal_gcd)
+        M1_sym = sp.Matrix(self.M1)
+        self.T_denom_sym = sp.apart((E_sym - M1_sym).det())
+        ## I use apart above because sympy yields a function that is not
+        ## completely reduced. Alternatively, can use *.as_numer_denom()
+        ## and take the first component for the numerator.
         return
 
     def _find_instances_in_range_good_initial_point(self,z,freq_range,T):
