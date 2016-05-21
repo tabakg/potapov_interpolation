@@ -105,7 +105,7 @@ class Hamiltonian():
         else:
             self.Omega = Omega
         if polarizations is None:
-            self.polarizations = [1.]*self.m
+            self.polarizations = [1.]*len(self.delays)
         else:
             self.polarizations = polarizations
         self.volumes = self.mode_volumes()
@@ -120,6 +120,10 @@ class Hamiltonian():
         self.t = sp.symbols('t')
         self.H = 0.
         self.nonlin_coeff = nonlin_coeff
+        ## TODO: add Delta_delays, and a method to generate them from refraction_index_func
+        ## TODO: Make recursive method that uses make_symbolic_frequency_perturbation
+        ## to take delays, Delta_delays, and roots, and generate the new_roots.
+        ## make sure to update omegas.
 
     def Dagger(self, symbol):
         if self.using_qnet_symbols:
@@ -127,7 +131,31 @@ class Hamiltonian():
         else:
             return Dagger(symbol)
 
-    def perturb_roots(self,):
+    def make_Delta_delays(self,):
+        '''
+        Each different frequency will experience a different shift in delay
+        length. We will store those shifts as a list of lists. The ith list
+        will be the shifts in all the original delays for the ith
+        root (i.e. frequency).
+        '''
+        self.Delta_delays = [[0.]*len(self.delays)]*self.m
+        for chi in self.chi_nonlinearities:
+            for i,omega in enumerate(self.omegas):
+                for delay_index in chi.delay_indices:
+                    pol = self.polarizations[delay_index]
+                    index_of_refraction = chi.refraction_index_func(omega,pol)
+                    self.Delta_delays[i][delay_index] = (
+                        index_of_refraction - 1.)* chi.length_nonlin / consts.c
+        return
+
+    def perturb_roots(self,pertub_func):
+        '''
+        For each root,
+        '''
+
+        self.Delta_delays
+
+        ## update omegas
 
         return
 
@@ -145,7 +173,8 @@ class Hamiltonian():
             nonlinearity. If a list/tuple then each nonlinearity begins at a
             different time along its corresponding delay line.
 
-            length_nonlin (float): duration of the nonlinearity in terms of length.
+            length_nonlin (float): duration of the nonlinearity in terms of
+            length. (Units in length)
 
             refraction_index_func (function): the indices of refraction as a
             function of the netural frequency :math:`/omega`.
@@ -157,6 +186,8 @@ class Hamiltonian():
             combinations and polarizations. The first chi_order+1 parameters
             correspond to frequencies combined the the next chi_order+1 parameters
             correspond to the various polarizations.
+
+            TODO: check units everywhere
         '''
 
         chi_nonlinearity = Chi_nonlin(delay_indices,start_nonlin,
@@ -169,6 +200,7 @@ class Hamiltonian():
 
         '''
         for mode in self.modes:
+            ## TODO: incorporate Delta_delays
             mode /= functions._norm_of_mode(mode,self.delays)
 
     def mode_volumes(self,):
@@ -181,6 +213,7 @@ class Hamiltonian():
 
         volumes = []
         for mode in self.modes:
+            ## TODO: incorporate Delta_delays
             for i,delay in enumerate(self.delays):
                 volumes.append( delay * abs(mode[i,0]**2) *
                                 self.cross_sectional_area )
@@ -225,7 +258,9 @@ class Hamiltonian():
         '''
         omegas_to_use = np.array([self.omegas[i] for i in combination])
         modes_to_use = [self.modes[i] for i in combination]
-        indices_of_refraction = map(chi.refraction_index_func, omegas_to_use)
+        polarizations_to_use = [self.polarizations[i] for i in chi.delay_indices]
+        indices_of_refraction = map(chi.refraction_index_func,
+            zip(omegas_to_use,polarizations_to_use) )
         return functions.make_nonlinear_interaction(
                     omegas_to_use, modes_to_use, self.delays, chi.delay_indices,
                     chi.start_nonlin, chi.length_nonlin, pm_arr,
@@ -338,7 +373,7 @@ class Hamiltonian():
                 omegas_to_use = map(lambda i: self.omegas[i],combination)
                 omegas_with_sign = [omega * pm for omega,pm
                                     in zip(omegas_to_use,pm_arr)]
-                pols = map(lambda i: self.polarizations[i],combination)
+                pols = map(lambda i: self.polarizations[i],chi.delay_indices)
                 chi_args = omegas_with_sign + pols
                 H_nonlin_sp += ( self.make_nonlin_term_sympy(combination,pm_arr) *
                     chi.chi_function(*chi_args) *

@@ -10,33 +10,74 @@ import Hamiltonian
 import numpy as np
 import numpy.linalg as la
 from scipy.integrate import ode
+import scipy.constants as consts
 
 import matplotlib.pyplot as plt
 import time
 
-def test_make_T_denom_sym_separate_delays():
-    X = Time_Delay_Network.Example3(tau1 = 0.1, tau2 = 0.2,tau3 = 0.1,tau4 = 0.2,)
-    print X.make_symbolic_frequency_perturbation(simplify = False)
+def test_delay_perturbations(eps=1e-5):
+    '''
+    This funciton tests the parturbations for the delays for each frequency.
 
-def test_commensurate_vecs_example_3():
-    times = [time.clock()]
-    X = Time_Delay_Network.Example3(tau1 = 0.1, tau2 = 0.2,tau3 = 0.1,tau4 = 0.2,)
-    times.append(time.clock())
-    X.make_commensurate_roots([(-60000,60000)])
-    times.append(time.clock())
-    X.make_commensurate_vecs()
-    times.append(time.clock())
-    times.append(time.clock())
-    #print len(X.vecs)
-    assert(len(X.roots) == len(X.vecs))
-    times.append(time.clock())
-    X.make_T_Testing()
-    times.append(time.clock())
-    T_testing = X.T_testing
-    T = X.T
-    print abs(T(-10j)-T_testing(-10j))
-    print abs(T(-100j)-T_testing(-100j))
-    print abs(T(-200j)-T_testing(-200j))
+    It also tests the corresponding perturbation in the frequencies.
+    '''
+    Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=20.)
+    Ex.run_Potapov()
+    modes = Ex.spatial_modes
+    M = len(Ex.roots)
+
+    A,B,C,D = Ex.get_Potapov_ABCD(doubled=False)
+
+    ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A,
+                nonlin_coeff = 0.)
+
+    ham.make_chi_nonlinearity(delay_indices=[0],start_nonlin=0,
+                               length_nonlin=0.1*consts.c)
+    ham.make_Delta_delays()
+    #print ham.Delta_delays
+    for row in ham.Delta_delays:
+        for el in row:
+            assert(el == 0)
+
+    ## Now let's make a non-trivial nonlinearity.
+
+    ## turn on the nonlin_coeff
+    ham.nonlin_coeff = 1.
+
+    ## set the index of refraction to be 2 for the nonlinearity
+    ham.chi_nonlinearities[0].refraction_index_func = lambda *args: 2.
+
+    ham.make_Delta_delays()
+    print ham.Delta_delays
+
+
+# def test_make_T_denom_sym_separate_delays():
+#     X = Time_Delay_Network.Example3(tau1 = 0.1, tau2 = 0.2,tau3 = 0.1,tau4 = 0.2,)
+#     X.get_symbolic_frequency_perturbation(simplify = False)  ## symbolic expr
+#     X.make_commensurate_roots([(-100,100)])
+#     M = len(X.delays)
+#     perturb_func = X.get_frequency_pertub_func()
+#     print perturb_func(X.roots[2],tuple(X.delays),(1e-3,)*M) ## value
+
+# def test_commensurate_vecs_example_3():
+#     times = [time.clock()]
+#     X = Time_Delay_Network.Example3(tau1 = 0.1, tau2 = 0.2,tau3 = 0.1,tau4 = 0.2,)
+#     times.append(time.clock())
+#     X.make_commensurate_roots([(-60000,60000)])
+#     times.append(time.clock())
+#     X.make_commensurate_vecs()
+#     times.append(time.clock())
+#     times.append(time.clock())
+#     #print len(X.vecs)
+#     assert(len(X.roots) == len(X.vecs))
+#     times.append(time.clock())
+#     X.make_T_Testing()
+#     times.append(time.clock())
+#     T_testing = X.T_testing
+#     T = X.T
+#     print abs(T(-10j)-T_testing(-10j))
+#     print abs(T(-100j)-T_testing(-100j))
+#     print abs(T(-200j)-T_testing(-200j))
 
     #print [times[i+1]-times[i] for i in range(len(times)-1)]
 
@@ -77,7 +118,7 @@ def test_commensurate_vecs_example_3():
 #                 nonlin_coeff = 0.)
 #
 #     ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
-#                                length_nonlin=0.1)
+#                                length_nonlin=0.1*consts.c)
 #
 #     ham.make_H()
 #     eq_mot = ham.make_eq_motion()
@@ -230,6 +271,7 @@ def test_commensurate_vecs_example_3():
 
 
 if __name__ == "__main__":
-    test_make_T_denom_sym_separate_delays()
+    test_delay_perturbations()
+    #test_make_T_denom_sym_separate_delays()
     #test_Hamiltonian_with_doubled_equations()
     #test_example_3()

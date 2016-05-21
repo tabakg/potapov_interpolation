@@ -134,6 +134,7 @@ Sample Usage -- Time Domain Simulation
     import Time_Sims_nonlin
     import functions
     import Hamiltonian
+    import scipy.constants as consts
 
     ## Make a sample Time_Delay_Network, changing some parameters.
     X = Time_Delay_Network.Example3(r1 = 0.7, r3 = 0.7, max_linewidth=35.)
@@ -155,8 +156,9 @@ Sample Usage -- Time Domain Simulation
     A_d,B_d,C_d,D_d = X.get_Potapov_ABCD(doubled=True)
 
     ## Add a chi nonlinearity to ham.
-    ham.make_chi_nonlinearity(delay_indices=0,start_nonlin=0,
-                                 length_nonlin=0.1,indices_of_refraction=1.,
+    ham.make_chi_nonlinearity(delay_indices=[0],start_nonlin=0,
+                                 length_nonlin=0.1*consts.c,
+                                 indices_of_refraction=1.,
                                  chi_order=3,chi_function=None)
 
     ## Make the Hamiltonian expression

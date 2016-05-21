@@ -383,7 +383,7 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
         # is different, length_nonlin is multiplied by the refractiive index.
         # However, the duration of the delay lengthens by the same amount so the
         # condition remains unchanged.
-        if length_nonlin + start_loc > delays[delay_index]:
+        if length_nonlin / consts.c + start_loc > delays[delay_index]:
             raise Exception('length_nonlin + start_loc must be less than the '
                            +'delay of index delay_index for start_loc in '
                            +'start_nonlin and delay_index in delay_indices.')

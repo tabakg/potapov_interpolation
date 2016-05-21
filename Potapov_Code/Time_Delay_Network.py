@@ -149,7 +149,7 @@ class Time_Delay_Network():
         ## results in spurious roots if the denominator is nontrivial.
         return
 
-    def make_symbolic_frequency_perturbation(self,simplify = True):
+    def get_symbolic_frequency_perturbation(self,simplify = False):
         r'''
         A method to prepare the symbolic expression T_denom_sym for further
         computations. This expression represents the denominator in terms of
@@ -163,9 +163,12 @@ class Time_Delay_Network():
         '''
         M = len(self.delays)
         self._make_decimal_delays()
-        z, z_Delta = sp.symbols('z dz')
-        Ts = [sp.symbols('T_'+str(i)) for i in range(M)]
-        Ts_Delta = [sp.symbols('dT_'+str(i)) for i in range(M)]
+        try:
+            self.z,self.z_Delta,self.Ts,self.Ts_Delta
+        except:
+            self.z, self.z_Delta = sp.symbols('z dz')
+            self.Ts = [sp.symbols('T_'+str(i)) for i in range(M)]
+            self.Ts_Delta = [sp.symbols('dT_'+str(i)) for i in range(M)]
 
         xs = [sp.symbols('x_'+str(i)) for i in range(4) ]
         E_sym = sp.Matrix(np.zeros_like(self.M1))
@@ -173,26 +176,30 @@ class Time_Delay_Network():
             E_sym[i,i] = xs[i]
         M1_sym = sp.Matrix(self.M1)
         num, den = (E_sym - M1_sym).det().as_numer_denom()
-        D = {x: sp.exp(-z*T) for x,T in zip(xs,Ts)}
+        D = {x: sp.exp(-self.z*T) for x,T in zip(xs,self.Ts)}
         exp_periodic = num.subs(D)
         T_expression = sum([exp_periodic.diff(T)*T_d
-            for T,T_d in zip(Ts,Ts_Delta)])
+            for T,T_d in zip(self.Ts,self.Ts_Delta)])
 
         ## Next solve for the first-order perturbation.
         ## The commented-out line might be slow -- the code below does the same.
         #sol = sp.solve(T_expression + exp_periodic.diff(z)*z_Delta, z_Delta)[0]
 
-        diff_z = exp_periodic.diff(z)
+        diff_z = exp_periodic.diff(self.z)
         T_temps = [sp.symbols('T_temp_'+str(i)) for i in range(M)]
-        D_tmp = {z*T:T_t for T,T_t in zip(Ts,T_temps)}
-        D_inv = {T_t:z*T for T,T_t in zip(Ts,T_temps)}
-        D = {T:dT for T,dT in zip(Ts,Ts_Delta)}
+        D_tmp = {self.z*T:T_t for T,T_t in zip(self.Ts,T_temps)}
+        D_inv = {T_t:self.z*T for T,T_t in zip(self.Ts,T_temps)}
+        D = {T:dT for T,dT in zip(self.Ts,self.Ts_Delta)}
         diff_z2 = diff_z.subs(D_tmp)
         diff_z3 = diff_z2.subs(D)
         diff_z4 = diff_z3.subs(D_inv)
-        sol = -z*diff_z4 / diff_z
+        sol = -self.z*diff_z4 / diff_z
 
         return sp.simplify(sol) if simplify else sol
+
+    def get_frequency_pertub_func(self,simplify = False):
+        sym_freq_pert = self.get_symbolic_frequency_perturbation(simplify = simplify)
+        return sp.lambdify( (self.z,self.Ts,self.Ts_Delta), sym_freq_pert)
 
     def _find_instances_in_range_good_initial_point(self,z,freq_range,T):
         '''
