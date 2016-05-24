@@ -46,8 +46,6 @@ class Chi_nonlin():
         first (chi_order+1) args are frequencies,
         next (chi_order+1) args are indices of polarization.
 
-    TODO: make refraction_index_func a function of also the polarization.
-
     '''
     def __init__(self,delay_indices,start_nonlin,length_nonlin,
             refraction_index_func = lambda *args: 1.,
@@ -99,8 +97,13 @@ class Hamiltonian():
         self.modes = modes
         self.m = len(roots)
         self.delays = delays
-        self.normalize_modes()
+
         self.cross_sectional_area = cross_sectional_area
+
+        self.Delta_delays = [[0.]*len(self.delays)]*self.m
+        self.volumes = self.mode_volumes()
+        self.normalize_modes()
+
         if Omega is None:
             self.Omega = np.asmatrix(np.zeros((m,m)))
         else:
@@ -109,7 +112,6 @@ class Hamiltonian():
             self.polarizations = [1.]*len(self.delays)
         else:
             self.polarizations = polarizations
-        self.volumes = self.mode_volumes()
         self.E_field_weights = self.make_E_field_weights()
         self.chi_nonlinearities = chi_nonlinearities
         self.using_qnet_symbols = using_qnet_symbols
@@ -121,10 +123,6 @@ class Hamiltonian():
         self.t = sp.symbols('t')
         self.H = 0.
         self.nonlin_coeff = nonlin_coeff
-        ## TODO: add Delta_delays, and a method to generate them from refraction_index_func
-        ## TODO: Make recursive method that uses make_symbolic_frequency_perturbation
-        ## to take delays, Delta_delays, and roots, and generate the new_roots.
-        ## make sure to update omegas.
 
     def _update_omegas(self,):
         self.omegas = map(lambda z: z.imag / (2.*consts.pi), self.roots)
@@ -235,7 +233,7 @@ class Hamiltonian():
             correspond to frequencies combined the the next chi_order+1 parameters
             correspond to the various polarizations.
 
-            TODO: check units everywhere
+            TODO: check units everywhere, including f versus \omega = f / 2 pi.
         '''
 
         chi_nonlinearity = Chi_nonlin(delay_indices,start_nonlin,
@@ -247,9 +245,8 @@ class Hamiltonian():
         ''' Normalize the modes of Hamiltonian.
 
         '''
-        for mode in self.modes:
-            ## TODO: incorporate Delta_delays
-            mode /= functions._norm_of_mode(mode,self.delays)
+        for i,mode in enumerate(self.modes):
+            mode /= functions._norm_of_mode(mode,map(sum, zip(self.delays,self.Delta_delays[i])))
 
     def mode_volumes(self,):
         '''Find the effective volume of each mode to normalize the field.
@@ -260,10 +257,9 @@ class Hamiltonian():
         '''
 
         volumes = []
-        for mode in self.modes:
-            ## TODO: incorporate Delta_delays
-            for i,delay in enumerate(self.delays):
-                volumes.append( delay * abs(mode[i,0]**2) *
+        for i,mode in enumerate(self.modes):
+            for j,delay in enumerate(map(sum, zip(self.delays,self.Delta_delays[i]))):
+                volumes.append( delay * abs(mode[j,0]**2) *
                                 self.cross_sectional_area )
         return volumes
 

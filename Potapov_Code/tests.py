@@ -50,6 +50,9 @@ def test_altered_delay_pert(eps=1e-5):
 
     ham.chi_nonlinearities.append(chi_nonlin_test)
 
+    ## update delays
+    ham.make_Delta_delays()
+
     ## TODO: find average Delta_delays for each delay over all frequencies.
 
     ## TODO: Make the new roots based on the average-adjusted delays
