@@ -15,40 +15,93 @@ import scipy.constants as consts
 import matplotlib.pyplot as plt
 import time
 
-def test_delay_perturbations(eps=1e-5):
+
+def test_altered_delay_pert(eps=1e-5):
     '''
-    This funciton tests the parturbations for the delays for each frequency.
+    We will have a method to shift the delays in the network before the
+    commensurate root analysis, which will be based on taking the average
+    Delta_delays that result from the nonlinearities over the different
+    frequencies. We test this here.
 
     It also tests the corresponding perturbation in the frequencies.
     '''
-    Ex = Time_Delay_Network.Example3(r1 = 0.9, r3 = 0.9, max_linewidth=15.,max_freq=20.)
-    Ex.run_Potapov()
+
+    Ex = Time_Delay_Network.Example3( max_linewidth=15.,max_freq=30.)
+
+    ## We still need to get the frequencies from the network WITHOUT
+    ## nonlinearities since the approximate frequencies are needed
+    ## to find the indices of refraction.
+
+    Ex.run_Potapov(commensurate_roots=True)
     modes = Ex.spatial_modes
-    M = len(Ex.roots)
 
     A,B,C,D = Ex.get_Potapov_ABCD(doubled=False)
 
     ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A,
-                nonlin_coeff = 0.)
-
-    ham.make_chi_nonlinearity(delay_indices=[0],start_nonlin=0,
-                               length_nonlin=0.1*consts.c)
-    ham.make_Delta_delays()
-    #print ham.Delta_delays
-    for row in ham.Delta_delays:
-        for el in row:
-            assert(el == 0)
+                nonlin_coeff = 1.)
 
     ## Now let's make a non-trivial nonlinearity.
+    ## This nonlinearity will depend on the frequency.
 
-    ## turn on the nonlin_coeff
-    ham.nonlin_coeff = 1.
+    chi_nonlin_test = Hamiltonian.Chi_nonlin(delay_indices=[0],start_nonlin=0,
+                               length_nonlin=0.1*consts.c)
 
-    ## set the index of refraction to be 2 for the nonlinearity
-    ham.chi_nonlinearities[0].refraction_index_func = lambda *args: 2.
+    chi_nonlin_test.refraction_index_func = lambda freq, pol: 2. + freq / (2*np.pi*100)
 
-    ham.make_Delta_delays()
-    print ham.Delta_delays
+    ham.chi_nonlinearities.append(chi_nonlin_test)
+
+    ## TODO: find average Delta_delays for each delay over all frequencies.
+
+    ## TODO: Make the new roots based on the average-adjusted delays
+
+    ## Perturb the roots to account for deviations in the index of refraction
+    ## as a function of frequency.
+    ## TODO: make a function to perturb in several steps to avoid root-skipping.
+
+    perturb_func = Ex.get_frequency_pertub_func_z(use_ufuncify = True)
+    ham.perturb_roots_z(perturb_func)
+    print ham.roots
+
+# def test_delay_perturbations(eps=1e-5):
+#     '''
+#     This funciton tests the parturbations for the delays for each frequency.
+#
+#     It also tests the corresponding perturbation in the frequencies.
+#     '''
+#
+#     Ex = Time_Delay_Network.Example3( max_linewidth=15.,max_freq=30.)
+#     Ex.run_Potapov(commensurate_roots=True)
+#     modes = Ex.spatial_modes
+#     M = len(Ex.roots)
+#
+#     A,B,C,D = Ex.get_Potapov_ABCD(doubled=False)
+#
+#     ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A,
+#                 nonlin_coeff = 0.)
+#
+#     ham.make_chi_nonlinearity(delay_indices=[0],start_nonlin=0,
+#                                length_nonlin=0.1*consts.c)
+#     ham.make_Delta_delays()
+#     #print ham.Delta_delays
+#     for row in ham.Delta_delays:
+#         for el in row:
+#             assert(el == 0)
+#
+#     ## Now let's make a non-trivial nonlinearity.
+#
+#     ## turn on the nonlin_coeff
+#     ham.nonlin_coeff = 1.
+#
+#     ## set the index of refraction to be 2 for the nonlinearity
+#     ham.chi_nonlinearities[0].refraction_index_func = lambda *args: 2.
+#
+#     ham.make_Delta_delays()
+#     # print ham.Delta_delays
+#
+#     ## Next, generate the perturb_func and perturb the roots
+#     #print Ex.roots
+#     perturb_func = Ex.get_frequency_pertub_func_z(use_ufuncify = True)
+#     ham.perturb_roots_z(perturb_func)
 
 
 # def test_make_T_denom_sym_separate_delays():
@@ -271,7 +324,7 @@ def test_delay_perturbations(eps=1e-5):
 
 
 if __name__ == "__main__":
-    test_delay_perturbations()
+    test_altered_delay_pert()
     #test_make_T_denom_sym_separate_delays()
     #test_Hamiltonian_with_doubled_equations()
     #test_example_3()

@@ -18,6 +18,7 @@ from functions import Pade
 from functions import spatial_modes
 from functions import gcd_lst
 import matplotlib.patches as patches
+from sympy.utilities.autowrap import ufuncify
 
 from decimal import Decimal
 
@@ -149,57 +150,130 @@ class Time_Delay_Network():
         ## results in spurious roots if the denominator is nontrivial.
         return
 
-    def get_symbolic_frequency_perturbation(self,simplify = False):
+    # def get_symbolic_frequency_perturbation_T_and_z(self,simplify = False):
+    #     r'''
+    #     A method to prepare the symbolic expression T_denom_sym for further
+    #     computations. This expression represents the denominator in terms of
+    #     the various delays :math:`T_1,...,T_k` and the complex variable
+    #     :math:`z`.
+    #
+    #     This method treats the various delays as separate variables.
+    #     To get the expression we Taylor expand about both :math:`\Delta_z`
+    #     as well as :math:`\Delta T_j`.
+    #
+    #     Args:
+    #         simplify (optiona[boolean]): simplify the output sympy expression.
+    #     '''
+    #     M = len(self.delays)
+    #     self._make_decimal_delays()
+    #     try:
+    #         self.z,self.z_Delta,self.Ts,self.Ts_Delta
+    #     except:
+    #         self.z, self.z_Delta = sp.symbols('z dz')
+    #         self.Ts = [sp.symbols('T_'+str(i)) for i in range(M)]
+    #         self.Ts_Delta = [sp.symbols('dT_'+str(i)) for i in range(M)]
+    #
+    #     xs = [sp.symbols('x_'+str(i)) for i in range(4) ]
+    #     E_sym = sp.Matrix(np.zeros_like(self.M1))
+    #     for i,delay in enumerate(self.Decimal_delays):
+    #         E_sym[i,i] = xs[i]
+    #     M1_sym = sp.Matrix(self.M1)
+    #     num, den = (E_sym - M1_sym).det().as_numer_denom()
+    #     D = {x: sp.exp(-self.z*T) for x,T in zip(xs,self.Ts)}
+    #     exp_periodic = num.subs(D)
+    #     T_expression = sum([exp_periodic.diff(T)*T_d
+    #         for T,T_d in zip(self.Ts,self.Ts_Delta)])
+    #
+    #     ## Next solve for the first-order perturbation.
+    #     ## The commented-out line might be slow -- the code below does the same.
+    #     #sol = sp.solve(T_expression + exp_periodic.diff(z)*z_Delta, z_Delta)[0]
+    #
+    #     diff_z = exp_periodic.diff(self.z)
+    #     T_temps = [sp.symbols('T_temp_'+str(i)) for i in range(M)]
+    #     D_tmp = {self.z*T:T_t for T,T_t in zip(self.Ts,T_temps)}
+    #     D_inv = {T_t:self.z*T for T,T_t in zip(self.Ts,T_temps)}
+    #     D = {T:dT for T,dT in zip(self.Ts,self.Ts_Delta)}
+    #     diff_z2 = diff_z.subs(D_tmp)
+    #     diff_z3 = diff_z2.subs(D)
+    #     diff_z4 = diff_z3.subs(D_inv)
+    #     sol = -self.z*diff_z4 / diff_z
+    #
+    #     return sp.simplify(sol) if simplify else sol
+
+    def get_symbolic_frequency_perturbation_z(self,):
         r'''
         A method to prepare the symbolic expression T_denom_sym for further
         computations. This expression represents the denominator in terms of
         the various delays :math:`T_1,...,T_k` and the complex variable
         :math:`z`.
 
+        The inputs should be :math:`z,(T_1+\Delta T_1,...,T_k+\Delta T_k)`
+
         This method treats the various delays as separate variables.
 
-        Args:
-            simplify (optiona[boolean]): simplify the output sympy expression.
         '''
         M = len(self.delays)
         self._make_decimal_delays()
         try:
-            self.z,self.z_Delta,self.Ts,self.Ts_Delta
+            self.z,self.z_Delta,self.Ts
         except:
-            self.z, self.z_Delta = sp.symbols('z dz')
-            self.Ts = [sp.symbols('T_'+str(i)) for i in range(M)]
-            self.Ts_Delta = [sp.symbols('dT_'+str(i)) for i in range(M)]
+            self.z, self.z_Delta = sp.symbols('z dz',complex=True)
+            self.Ts = [sp.symbols('T_'+str(i),real=True) for i in range(M)]
 
-        xs = [sp.symbols('x_'+str(i)) for i in range(4) ]
+        xs = [sp.symbols('x_'+str(i)) for i in range(M) ]
         E_sym = sp.Matrix(np.zeros_like(self.M1))
         for i,delay in enumerate(self.Decimal_delays):
             E_sym[i,i] = xs[i]
         M1_sym = sp.Matrix(self.M1)
         num, den = (E_sym - M1_sym).det().as_numer_denom()
-        D = {x: sp.exp(-self.z*T) for x,T in zip(xs,self.Ts)}
+        D = {x: sp.exp(self.z*T) for x,T in zip(xs,self.Ts)}
         exp_periodic = num.subs(D)
-        T_expression = sum([exp_periodic.diff(T)*T_d
-            for T,T_d in zip(self.Ts,self.Ts_Delta)])
-
-        ## Next solve for the first-order perturbation.
-        ## The commented-out line might be slow -- the code below does the same.
-        #sol = sp.solve(T_expression + exp_periodic.diff(z)*z_Delta, z_Delta)[0]
 
         diff_z = exp_periodic.diff(self.z)
-        T_temps = [sp.symbols('T_temp_'+str(i)) for i in range(M)]
-        D_tmp = {self.z*T:T_t for T,T_t in zip(self.Ts,T_temps)}
-        D_inv = {T_t:self.z*T for T,T_t in zip(self.Ts,T_temps)}
-        D = {T:dT for T,dT in zip(self.Ts,self.Ts_Delta)}
-        diff_z2 = diff_z.subs(D_tmp)
-        diff_z3 = diff_z2.subs(D)
-        diff_z4 = diff_z3.subs(D_inv)
-        sol = -self.z*diff_z4 / diff_z
 
-        return sp.simplify(sol) if simplify else sol
+        return (exp_periodic, diff_z)
 
-    def get_frequency_pertub_func(self,simplify = False):
-        sym_freq_pert = self.get_symbolic_frequency_perturbation(simplify = simplify)
-        return sp.lambdify( (self.z,self.Ts,self.Ts_Delta), sym_freq_pert)
+    # def get_frequency_pertub_func_T_and_z(self,simplify = False):
+    #     sym_freq_pert = self.get_symbolic_frequency_perturbation_T_and_z(simplify = simplify)
+    #     def new_func(z_num,Ts_num,Delta_Ts_num):
+    #         D = {T:T_num for T,T_num in zip(self.Ts,Ts_num)}
+    #         D.update({self.z:z_num})
+    #         D.update({Delta_T:Delta_T_num for Delta_T,Delta_T_num in zip(self.Ts_Delta,Delta_Ts_num)})
+    #         return complex((sym_freq_pert.subs(D)).evalf())
+    #     return new_func
+    #     ## lambdify below seems to ignore the imaginary part.
+    #     #return sp.lambdify( (self.z,self.Ts,self.Ts_Delta), sym_freq_pert.expand(complex=True))
+
+    def _get_newtons_func(self,expression):
+        '''
+        Takes an expression in terms of Ts and sp.exp(-z*T) for T in Ts.
+        Here :math:`z = x + i y` is a complex number.
+        '''
+        x,y = sp.symbols('x y', real = True)
+        D = {sp.exp(self.z*T): sp.exp(x*T)*(1j*sp.sin(y*T)+sp.cos(y*T)) for T in self.Ts}
+        expression2 = expression.subs(D)
+        num_real,num_imag = expression2.expand().as_real_imag()
+        f_r =  ufuncify( [x,y]+self.Ts, num_real)
+        f_i =  ufuncify( [x,y]+self.Ts, num_imag)
+        return lambda x,y,Ts: f_r(x,y,*Ts)+f_i(x,y,*Ts)*1j
+
+    def get_frequency_pertub_func_z(self,use_ufuncify = True):
+        sym_freq_pert = self.get_symbolic_frequency_perturbation_z()
+        if not use_ufuncify:
+            sym_freq_pert = -sym_freq_pert[0] / sym_freq_pert[1]
+            def func(z_num,Ts_num):
+                D = {T:T_num for T,T_num in zip(self.Ts,Ts_num)}
+                D.update({self.z:z_num})
+                return complex((sym_freq_pert.subs(D)).evalf())
+            return func
+        else:
+            real_imag_func_num = self._get_newtons_func(sym_freq_pert[0])
+            real_imag_func_denom = self._get_newtons_func(sym_freq_pert[1])
+            def func(z_num,Ts_num):
+                x,y = z_num.real,z_num.imag
+                return - ( real_imag_func_num(x,y,Ts_num) /
+                    real_imag_func_denom (x,y,Ts_num) )
+            return func
 
     def _find_instances_in_range_good_initial_point(self,z,freq_range,T):
         '''

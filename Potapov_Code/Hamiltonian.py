@@ -25,6 +25,7 @@ from sympy.physics.quantum.boson import *
 from sympy.physics.quantum.operatorordering import *
 from qnet.algebra.circuit_algebra import *
 
+
 class Chi_nonlin():
     r'''Class to store the information in a particular nonlinear chi element.
 
@@ -94,7 +95,7 @@ class Hamiltonian():
         using_qnet_symbols = False,
         ):
         self.roots = roots
-        self.omegas = [root.imag / (2.*consts.pi) for root in self.roots]
+        self._update_omegas()
         self.modes = modes
         self.m = len(roots)
         self.delays = delays
@@ -125,6 +126,10 @@ class Hamiltonian():
         ## to take delays, Delta_delays, and roots, and generate the new_roots.
         ## make sure to update omegas.
 
+    def _update_omegas(self,):
+        self.omegas = map(lambda z: z.imag / (2.*consts.pi), self.roots)
+        return
+
     def Dagger(self, symbol):
         if self.using_qnet_symbols:
             return symbol.dag()
@@ -134,8 +139,10 @@ class Hamiltonian():
     def make_Delta_delays(self,):
         '''
         Each different frequency will experience a different shift in delay
-        length. We will store those shifts as a list of lists. The ith list
-        will be the shifts in all the original delays for the ith
+        lengths due to all nonlinearities present.
+        We will store those shifts as a list of lists in the class.
+        This list is called Delta_delays.
+        The ith list will be the shifts in all the original delays for the ith
         root (i.e. frequency).
         '''
         self.Delta_delays = [[0.]*len(self.delays)]*self.m
@@ -145,19 +152,60 @@ class Hamiltonian():
                     pol = self.polarizations[delay_index]
                     index_of_refraction = chi.refraction_index_func(omega,pol)
                     self.Delta_delays[i][delay_index] = (
-                        index_of_refraction - 1.)* chi.length_nonlin / consts.c
+                        (index_of_refraction - 1.)* chi.length_nonlin/consts.c)
         return
 
-    def perturb_roots(self,pertub_func):
-        '''
-        For each root,
-        '''
+    def perturb_roots_z(self,perturb_func,eps = 1e-12):
+        max_count = 10
+        for j in range(max_count):
+            ## The new delays are computed every step since the frequencies
+            ## have been updated.
+            self.make_Delta_delays()
+            old_roots = copy.copy(self.roots)
+            for i,root in enumerate(self.roots):
+                pert = perturb_func(root,map(sum,zip(self.delays,self.Delta_delays[i])))
+                self.roots[i] += pert
+            #print self.roots
+            self._update_omegas()
+            if all([abs(new-old) < eps for new,old in zip(self.roots,old_roots)]):
+                print "root adjustment converged!"
+                break
+        else:
+            "root adjustment aborted."
 
-        self.Delta_delays
-
-        ## update omegas
-
-        return
+    # # def perturb_roots_T_and_z(self,perturb_func,eps = 1e-15):
+    #     r'''
+    #     For each root, use the corresponding perturbations in the delays
+    #     to generate the perturbation of the root.
+    #
+    #     Args:
+    #         perturb_func (function): A function whose input is a tuple of the
+    #         form (z,Ts,Ts_Delta), where z is a complex number, while each
+    #         Ts and Ts_Delta are lists of floats.
+    #
+    #         Each network pole `z^*` with the corresponding perturbed
+    #         delays will satisfy `perturb_func(z^*,Ts,Ts_Delta) = 0`.
+    #     '''
+    #     # print 'roots before'
+    #     # print self.roots
+    #
+    #     max_count = 200
+    #     for j in range(max_count):
+    #         old_roots = copy.copy(self.roots)
+    #         for i,root in enumerate(self.roots):
+    #             #updated_delays = map(sum,zip(self.delays,self.Delta_delays[i]))
+    #             #self.make_Delta_delays()
+    #             #updated_delta_delays = map(sum,zip(self.delays,self.Delta_delays[i]))
+    #             pert = perturb_func(root,self.delays,self.Delta_delays[i])
+    #             # print pert
+    #             self.roots[i] += pert
+    #         self._update_omegas()
+    #         if all([abs(new-old) < eps for new,old in zip(self.roots,old_roots)]):
+    #             break
+    #
+    #     # print 'roots after:'
+    #     # print self.roots
+    #     return
 
     def make_chi_nonlinearity(self,delay_indices,start_nonlin,
                                length_nonlin,refraction_index_func = lambda *args: 1.,
@@ -447,6 +495,9 @@ class Hamiltonian():
             resulting from a change of basis. This can be set to False if all
             such terms have already been eliminated (i.e. if the rotating wave
             approximation has been applied).
+
+            ## TODO: replace the sine and cosine stuff with something nicer.
+            ## Maybe utilize the _get_real_imag_func method in Time_Delay_Network.
 
         '''
         if type(freqs) in [float,long,int]:
