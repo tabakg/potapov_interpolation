@@ -16,7 +16,6 @@ import numpy.linalg as la
 import sympy as sp
 import scipy.constants as consts
 #from scipy.optimize import minimize
-import scipy.optimize.minimize
 
 import itertools
 import copy
