@@ -20,7 +20,7 @@ from scipy.optimize import minimize
 import itertools
 import copy
 
-from sympy.printing.theanocode import theano_function
+#from sympy.printing.theanocode import theano_function
 
 from sympy.physics.quantum import *
 from sympy.physics.quantum.boson import *

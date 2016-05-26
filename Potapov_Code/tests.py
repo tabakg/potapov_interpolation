@@ -341,7 +341,7 @@ def test_altered_delay_pert(eps=1e-5):
 
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and False:
     test_altered_delay_pert()
     #test_make_T_denom_sym_separate_delays()
     #test_Hamiltonian_with_doubled_equations()
