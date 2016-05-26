@@ -67,7 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="includeme.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="includeme.html#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="includeme.html#files">Files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="includeme.html#sample-usage">Sample Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="includeme.html#sample-usage-time-domain-simulation">Sample Usage &#8211; Time Domain Simulation</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Potapov_Code package</a><ul>
@@ -130,21 +130,21 @@
 &#64;title: examples</p>
 <dl class="class">
 <dt id="Potapov_Code.Time_Delay_Network.Example1">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example1</code><span class="sig-paren">(</span><em>max_freq=30.0</em>, <em>max_linewidth=1.0</em>, <em>N=1000</em>, <em>tau=0.3</em>, <em>r=0.8</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example1" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example1</code><span class="sig-paren">(</span><em>max_freq=30.0</em>, <em>max_linewidth=1.0</em>, <em>N=1000</em>, <em>center_freq=0.0</em>, <em>tau=0.3</em>, <em>r=0.8</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Single input, single output with a single delay.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Potapov_Code.Time_Delay_Network.Example2">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example2</code><span class="sig-paren">(</span><em>max_freq=10.0</em>, <em>max_linewidth=10.0</em>, <em>N=1000</em>, <em>r=0.9</em>, <em>tau=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example2" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example2</code><span class="sig-paren">(</span><em>max_freq=10.0</em>, <em>max_linewidth=10.0</em>, <em>N=1000</em>, <em>center_freq=0.0</em>, <em>r=0.9</em>, <em>tau=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Two inputs, two outputs with a delay (i.e. Fabry-Perot).</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Potapov_Code.Time_Delay_Network.Example3">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example3</code><span class="sig-paren">(</span><em>max_freq=60.0</em>, <em>max_linewidth=1.0</em>, <em>N=5000</em>, <em>r1=0.9</em>, <em>r2=0.4</em>, <em>r3=0.8</em>, <em>tau1=0.1</em>, <em>tau2=0.23</em>, <em>tau3=0.1</em>, <em>tau4=0.17</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example3" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example3</code><span class="sig-paren">(</span><em>max_freq=60.0</em>, <em>max_linewidth=1.0</em>, <em>N=5000</em>, <em>center_freq=0.0</em>, <em>r1=0.9</em>, <em>r2=0.4</em>, <em>r3=0.8</em>, <em>tau1=0.1</em>, <em>tau2=0.23</em>, <em>tau3=0.1</em>, <em>tau4=0.17</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Two inputs and two outputs, with four delays and third mirror
 This corresponds to figures 7 and 8 in our paper.</p>
@@ -152,7 +152,7 @@ This corresponds to figures 7 and 8 in our paper.</p>
 
 <dl class="class">
 <dt id="Potapov_Code.Time_Delay_Network.Example4">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example4</code><span class="sig-paren">(</span><em>max_freq=100.0</em>, <em>max_linewidth=3.0</em>, <em>N=5000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example4" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example4</code><span class="sig-paren">(</span><em>max_freq=100.0</em>, <em>max_linewidth=3.0</em>, <em>N=5000</em>, <em>center_freq=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example4" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Two inputs and two outputs, with free delay (i.e. not in a loop).
 This corresponds to figures 9 and 10 in our paper.</p>
@@ -160,22 +160,24 @@ This corresponds to figures 9 and 10 in our paper.</p>
 
 <dl class="class">
 <dt id="Potapov_Code.Time_Delay_Network.Example5">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example5</code><span class="sig-paren">(</span><em>max_freq=50.0</em>, <em>max_linewidth=3.0</em>, <em>N=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example5" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Example5</code><span class="sig-paren">(</span><em>max_freq=50.0</em>, <em>max_linewidth=3.0</em>, <em>N=1000</em>, <em>center_freq=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Example5" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Potapov_Code.Time_Delay_Network.Time_Delay_Network"><code class="xref py py-class docutils literal"><span class="pre">Potapov_Code.Time_Delay_Network.Time_Delay_Network</span></code></a></p>
 <p>Modified example 4, with analytic term.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Time_Delay_Network</code><span class="sig-paren">(</span><em>max_freq=30.0</em>, <em>max_linewidth=1.0</em>, <em>N=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Time_Delay_Network</code><span class="sig-paren">(</span><em>max_freq=30.0</em>, <em>max_linewidth=1.0</em>, <em>N=1000</em>, <em>center_freq=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to contain the information of a passive linear network with time
 delays.</p>
 <dl class="docutils">
 <dt>Attributes:</dt>
 <dd><p class="first">max_freq (optional [float]): maximum height in the complex plane</p>
 <p>max_linewidth (optional [float]): maximum width in the complex plane.</p>
-<p class="last">N (optional [int]): number of points to use on the contour for finding
+<p>N (optional [int]): number of points to use on the contour for finding
 the roots/poles of the network.</p>
+<p class="last">center_freq (optional [float] ): how much to move the frame up or down
+the complex plane.</p>
 </dd>
 </dl>
 <dl class="method">
@@ -191,6 +193,31 @@ the roots/poles of the network.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_frequency_pertub_func_z">
+<code class="descname">get_frequency_pertub_func_z</code><span class="sig-paren">(</span><em>use_ufuncify=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_frequency_pertub_func_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a function that can be used to perturb roots using
+Newton&#8217;s method. This function has form <span class="math">\(-f(z) / f'(z)\)</span>
+when the time delays are held fixed.</p>
+<p>We give two ways to generate the perturbative function. One is
+by directly plugging in numbers into a sympy expression and the
+second is by using the ufuncify method to creative a wrapper for
+the function.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>use_ufuncify (optional [boolean]): whether to use ufuncify
+or not.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_minimizing_function_z">
+<code class="descname">get_minimizing_function_z</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_minimizing_function_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimizing this function gives the adjusted roots.</p>
+<p>Gives a function to minimize, its arguments are
+<span class="math">\(x,y,Ts\)</span>. Also gives its derivative.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_outputs">
 <code class="descname">get_outputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get some of the relevant outputs from the Potapov procedure.</p>
@@ -203,11 +230,41 @@ and the vectors representing the form of the Potapov factors.</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_symbolic_frequency_perturbation_z">
+<code class="descname">get_symbolic_frequency_perturbation_z</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_symbolic_frequency_perturbation_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to prepare the symbolic expression T_denom_sym for further
+computations. This expression represents the denominator in terms of
+the various delays <span class="math">\(T_1,...,T_k\)</span> and the complex variable
+<span class="math">\(z\)</span>.</p>
+<p>The inputs should be <span class="math">\(z,(T_1+\Delta T_1,...,T_k+\Delta T_k)\)</span></p>
+<p>This method treats the various delays as separate variables.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_T_Testing">
 <code class="descname">make_T_Testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_T_Testing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate the approximating transfer function using the identified
 poles of the transfer function.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_commensurate_roots">
+<code class="descname">make_commensurate_roots</code><span class="sig-paren">(</span><em>list_of_ranges=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_commensurate_roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assuming the delays are commensurate, obtain all the roots within the
+frequency ranges of interest. Sets self.roots a list of complex roots
+in the desired frequency ranges.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>list_of_ranges (optional [list of 2-tuples]): list of frequency
+ranges of interest in the form:
+(minimum frequency, maximum frequency).</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_commensurate_vecs">
+<code class="descname">make_commensurate_vecs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_commensurate_vecs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.make_roots">
@@ -230,8 +287,19 @@ Potapov factors.</p>
 
 <dl class="method">
 <dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.run_Potapov">
-<code class="descname">run_Potapov</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.run_Potapov" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run the entire Potapov procedure to find all important information.</p>
+<code class="descname">run_Potapov</code><span class="sig-paren">(</span><em>commensurate_roots=False</em>, <em>filtering_roots=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.run_Potapov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the entire Potapov procedure to find all important information.
+The generated roots, vecs, approximated transfer function T_Testing,
+and the spatial_modes are all stored in the class.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">commensurate_roots (optional[boolean]): which root-finding method
+to use.</p>
+<p class="last">filtering_roots (optional[boolean]): makes sure the poles of the
+transfer function all have negative real part. Drops ones that
+might not.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -288,7 +356,7 @@ name (str): name of the file to save
 &#64;title: Hamiltonian.py</p>
 <dl class="class">
 <dt id="Potapov_Code.Hamiltonian.Chi_nonlin">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Hamiltonian.</code><code class="descname">Chi_nonlin</code><span class="sig-paren">(</span><em>delay_indices</em>, <em>start_nonlin</em>, <em>length_nonlin</em>, <em>indices_of_refraction</em>, <em>chi_order=3</em>, <em>chi_function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Potapov_Code.Hamiltonian.</code><code class="descname">Chi_nonlin</code><span class="sig-paren">(</span><em>delay_indices</em>, <em>start_nonlin</em>, <em>length_nonlin</em>, <em>refraction_index_func=&lt;function &lt;lambda&gt;&gt;</em>, <em>chi_order=3</em>, <em>chi_function=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to store the information in a particular nonlinear chi element.</p>
 <dl class="docutils">
 <dt>Attributes:</dt>
@@ -296,17 +364,19 @@ name (str): name of the file to save
 <p>start_nonlin (positive float or list of positive floats): location of
 nonlinear crystal with respect to each edge.</p>
 <p>length_nonlin (float): length of the nonlinear element.</p>
+<p>refraction_index_func (function): the indices of refraction as a
+function of the netural frequency <span class="math">\(/omega\)</span>.</p>
 <p>chi_order (optional [int]): order of nonlinearity</p>
 <p class="last">chi_function (optional [function]): strength of nonlinearity.
-first chi_order args are frequencies, next first chi_order args are
-frequencies, next chi_order args are indices of polarization.</p>
+first (chi_order+1) args are frequencies,
+next (chi_order+1) args are indices of polarization.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="class">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian">
-<em class="property">class </em><code class="descclassname">Potapov_Code.Hamiltonian.</code><code class="descname">Hamiltonian</code><span class="sig-paren">(</span><em>roots</em>, <em>modes</em>, <em>delays</em>, <em>Omega=None</em>, <em>nonlin_coeff=1.0</em>, <em>polarizations=None</em>, <em>cross_sectional_area=1e-10</em>, <em>chi_nonlinearities=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Potapov_Code.Hamiltonian.</code><code class="descname">Hamiltonian</code><span class="sig-paren">(</span><em>roots</em>, <em>modes</em>, <em>delays</em>, <em>Omega=None</em>, <em>nonlin_coeff=1.0</em>, <em>polarizations=None</em>, <em>cross_sectional_area=1e-10</em>, <em>chi_nonlinearities=[]</em>, <em>using_qnet_symbols=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to create a sympy expression for the Hamiltonian of a network.</p>
 <dl class="docutils">
 <dt>Attributes:</dt>
@@ -321,13 +391,19 @@ dynamics.</p>
 modes. These should match the arguments in Chi_nonlin.chi_func.</p>
 <p>cross_sectional_area (float): area of beams, used to determines the
 scaling for the various modes.</p>
-<p class="last">chi_nonlinearities (lst): a list of Chi_nonlin instances.</p>
+<p>chi_nonlinearities (lst): a list of Chi_nonlin instances.</p>
+<p class="last">TODO: Return L operator for QNET</p>
 </dd>
 </dl>
 <dl class="method">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.Dagger">
+<code class="descname">Dagger</code><span class="sig-paren">(</span><em>symbol</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.Dagger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.E_field_weight">
 <code class="descname">E_field_weight</code><span class="sig-paren">(</span><em>mode_index</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.E_field_weight" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make the weights for each field component <span class="math">\(E_i(n) = [     ext{weight}] (a+a^\dagger)\)</span>.</p>
+<dd><p>Make the weights for each field component <span class="math">\(E_i(n) = [\text{weight}] (a+a^\dagger)\)</span>.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd>mode_index (int): The index of the mode.</dd>
@@ -335,6 +411,17 @@ scaling for the various modes.</p>
 <dd>The weight in the equation above. It has form:
 <span class="math">\(sqrt[\hbar * \omega(n) / 2 V_eff(n) \epsilon]`\)</span>.</dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_Delta_delays">
+<code class="descname">make_Delta_delays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_Delta_delays" title="Permalink to this definition">¶</a></dt>
+<dd><p>Each different frequency will experience a different shift in delay
+lengths due to all nonlinearities present.
+We will store those shifts as a list of lists in the class.
+This list is called Delta_delays.
+The ith list will be the shifts in all the original delays for the ith
+root (i.e. frequency).</p>
 </dd></dl>
 
 <dl class="method">
@@ -350,6 +437,18 @@ scaling for the various modes.</p>
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_H">
 <code class="descname">make_H</code><span class="sig-paren">(</span><em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_H" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a Hamiltonian combining the linear and nonlinear parts.</p>
+<p>The term -1j*A carries the effective linear Hamiltonian, including the
+decay term <span class="math">\(-\frac{i}{2} L^\dagger L\)</span>. However, this term does
+not include material effects including dielectric and nonlinear terms.
+It also does not include a term with contribution from the inputs.</p>
+<p>If one wishes to include terms due to coherent input, one can impose a
+linear Hamiltonian term consistent with the classical equations of
+motion. This yields the usual term <span class="math">\(i(a \alpha^* - a^\dagger \alpha)\)</span>.</p>
+<p>To obtain the form <span class="math">\(A = i \Omega - \frac{1}{2} C^\dagger C\)</span> with
+<span class="math">\(Omega\)</span> Hermitian, we notice <span class="math">\(A\)</span> can be split into Hermitian
+and anti-Hermitian parts. The anti-Hermitian part of A describes the
+closed dynamics only and the Hermitian part corresponds to the decay
+terms due to the coupling to the environment at the input/output ports.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd>Omega (complex-valued matrix) describes the Hamiltonian of the system.
@@ -363,7 +462,7 @@ eps (optional[float]): Cutoff for the significance of a particular term.</dd>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_chi_nonlinearity">
-<code class="descname">make_chi_nonlinearity</code><span class="sig-paren">(</span><em>delay_indices</em>, <em>start_nonlin</em>, <em>length_nonlin</em>, <em>indices_of_refraction</em>, <em>chi_order=3</em>, <em>chi_function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_chi_nonlinearity" title="Permalink to this definition">¶</a></dt>
+<code class="descname">make_chi_nonlinearity</code><span class="sig-paren">(</span><em>delay_indices</em>, <em>start_nonlin</em>, <em>length_nonlin</em>, <em>refraction_index_func=&lt;function &lt;lambda&gt;&gt;</em>, <em>chi_order=3</em>, <em>chi_function=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_chi_nonlinearity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an instance of Chi_nonlin to Hamiltonian.</p>
 <dl class="docutils">
 <dt>Args:</dt>
@@ -373,35 +472,40 @@ then the nonlinearity interacts the N different modes.</p>
 <p>start_nonlin (float OR list/tuple of floats): the beginning of the
 nonlinearity. If a list/tuple then each nonlinearity begins at a
 different time along its corresponding delay line.</p>
-<p>length_nonlin (float): duration of the nonlinearity in terms of length.
-indices_of_refraction (float/int or list/tuple of float/int): the
-indices of refraction corresponding to the various modes. If float
-or int then all are the same.</p>
+<p>length_nonlin (float): duration of the nonlinearity in terms of
+length. (Units in length)</p>
+<p>refraction_index_func (function): the indices of refraction as a
+function of the netural frequency <span class="math">\(/omega\)</span>.</p>
 <p>chi_order (optional [int]): order of the chi nonlinearity.</p>
-<p class="last">chi_function (function): a function of 2*chi_order+1 parameters that
+<p>chi_function (function): a function of 2*chi_order+2 parameters that
 returns the strenght of the interaction for given frequency
 combinations and polarizations. The first chi_order+1 parameters
-correspond to frequencies combined the the next chi_order parameters
+correspond to frequencies combined the the next chi_order+1 parameters
 correspond to the various polarizations.</p>
+<p class="last">TODO: check units everywhere, including f versus omega = f / 2 pi.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_eq_motion">
-<code class="descname">make_eq_motion</code><span class="sig-paren">(</span><em>type='doubled'</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_eq_motion" title="Permalink to this definition">¶</a></dt>
+<code class="descname">make_eq_motion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_eq_motion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input is a tuple or list, output is a matrix vector.
 This generates Hamilton&#8217;s equations of motion for a and a^H.
 These equations are CLASSICAL equations of motion. This means
-we replace the operators with c-numbers. The order of the operators
+we replace the operators with c-numbers. The orde   r of the operators
 will yield different results, so we assume the Hamiltonian is already
 in the desired order (e.g. normally ordered).</p>
+<p>These equations of motion will not show effects of squeezing. To do
+this, we will need a full quantum picture.</p>
 <dl class="docutils">
 <dt>Returns:</dt>
 <dd>A function that yields the Hamiltonian equations of motion based on
-the Hamiltonian given.
-The equations of motion take an array as an input and return a column
-vector as an output.</dd>
+the Hamiltonian given. The equations of motion map
+<span class="math">\((t,a) \to v\)</span>. where math:<cite>t</cite> is a scalar corresponding to
+time, <span class="math">\(a\)</span> is an array of inputs correpsonding to the internal
+degrees of freedom, and <span class="math">\(v\)</span> is a complex-valued column matrix
+describing the gradient.</dd>
 </dl>
 </dd></dl>
 
@@ -419,7 +523,7 @@ vector as an output.</dd>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_nonlin_H_from_chi">
-<code class="descname">make_nonlin_H_from_chi</code><span class="sig-paren">(</span><em>chi</em>, <em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_nonlin_H_from_chi" title="Permalink to this definition">¶</a></dt>
+<code class="descname">make_nonlin_H_from_chi</code><span class="sig-paren">(</span><em>chi</em>, <em>filtering_phase_weights=False</em>, <em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_nonlin_H_from_chi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a nonlinear Hamiltonian based on nonlinear interaction terms</p>
 <dl class="docutils">
 <dt>Args:</dt>
@@ -427,9 +531,11 @@ vector as an output.</dd>
 eps (optional[float]): Cutoff for the significance of a particular term.</dd>
 <dt>Returns:</dt>
 <dd>A symbolic expression for the nonlinear Hamiltonian.</dd>
-<dt>TODO: Further restrict terms iterated over to make the RWA (i.e.</dt>
-<dd>frequency-match terms).</dd>
 </dl>
+<p>TODO:  Make separate dictionaries for values of chi_function,
+for phase_matching_weights, and for producs of E_field_weights. filter
+the keys before generating terms.</p>
+<p>TODO: Make fast function for integrator; combine with make_f and make_f_lin</p>
 </dd></dl>
 
 <dl class="method">
@@ -456,17 +562,56 @@ operators.</dd>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_phase_matching_weights">
-<code class="descname">make_phase_matching_weights</code><span class="sig-paren">(</span><em>chi</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_phase_matching_weights" title="Permalink to this definition">¶</a></dt>
+<code class="descname">make_phase_matching_weights</code><span class="sig-paren">(</span><em>weight_keys</em>, <em>chi</em>, <em>filtering_phase_weights=False</em>, <em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_phase_matching_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a dict to store the weights for the selected components and the
 creation/annihilation information.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>chi (Chi_nonlin): the chi nonlinearity for which to compute
-the phase coefficient.</dd>
-<dt>Returns:</dt>
-<dd>A dictionary of weights. Each key is a tuple consisting of two
+<dd><p class="first">weight_keys (list of tuples): keys for weights to consider.
+Each key is a tuple consisting of two
 components: the first is a tuple of the indices of modes and the
-second is a tuple of +1 and -1.</dd>
+second is a tuple of +1 and -1.</p>
+<p>filtering_phase_weights (optional[Boolean]): Whether or not to
+filter the phase_matching_weights by the size of their values. The
+cutoff for their absolute value is given by eps</p>
+<p class="last">eps (optional [float]): Cutoff for filtering of weights.</p>
+</dd>
+<dt>Returns:</dt>
+<dd>A dictionary of weights with values corresponding to the
+phase matching coefficients.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_weight_keys">
+<code class="descname">make_weight_keys</code><span class="sig-paren">(</span><em>chi</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_weight_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a list of keys for which various weights will be determined.
+Each key is a tuple consisting of two
+components: the first is a tuple of the indices of modes and the
+second is a tuple of +1 and -1.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>chi (Chi_nonlin): the nonlinearity for which the weight will be
+found.</dd>
+<dt>Returns:</dt>
+<dd>A list of keys of the type described.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.minimize_roots_z">
+<code class="descname">minimize_roots_z</code><span class="sig-paren">(</span><em>func</em>, <em>dfunc</em>, <em>eps=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.minimize_roots_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>One approach to perturb the roots is to use a function in <span class="math">\(x,y\)</span>
+that becomes minimized at a zero. This is done here.</p>
+<p>The result is an update to roots, omegas, and Delta_delays.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">func, dfuncs (functions): Functions in x,y. The first becomes
+minimized at a zero and the second is the gradient in x,y.
+These functions are generated in
+Time_Delay_Network.get_minimizing_function_z.</p>
+<p class="last">eps (optional [float]): desired precision for convergence.</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -481,9 +626,47 @@ second is a tuple of +1 and -1.</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.move_to_rotating_frame">
+<code class="descname">move_to_rotating_frame</code><span class="sig-paren">(</span><em>freqs=0.0</em>, <em>include_time_terms=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.move_to_rotating_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves the Hamiltonian to a rotating frame</p>
+<p>We apply a change of basis <span class="math">\(a_j \to a e^{- i \omega_j}\)</span> for
+each mode <span class="math">\(a_j\)</span>. This method modifies the symbolic Hamiltonian,
+so to use it the Hamiltonian sould already be constructed and stored.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">freqs (optional [real number or list/tuple]): Frequency or list
+of frequencies to use to displace the Hamiltonian.</p>
+<p>include_time_terms (optional [boolean]): If this is set to true,
+we include the terms <span class="math">\(e^{- i \omega_j}\)</span> in the Hamiltonian
+resulting from a change of basis. This can be set to False if all
+such terms have already been eliminated (i.e. if the rotating wave
+approximation has been applied).</p>
+<p class="last">## TODO: replace the sine and cosine stuff with something nicer.
+## Maybe utilize the _get_real_imag_func method in Time_Delay_Network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.normalize_modes">
 <code class="descname">normalize_modes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.normalize_modes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize the modes of Hamiltonian.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.perturb_roots_z">
+<code class="descname">perturb_roots_z</code><span class="sig-paren">(</span><em>perturb_func</em>, <em>eps=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.perturb_roots_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>One approach to perturbing the roots is to use Newton&#8217;s method.
+This is done here using a function perturb_func that corresponds to
+<span class="math">\(-f(z) / f'(z)\)</span> when the time delays are held fixed.
+The function perturb_func is generated in
+get_frequency_pertub_func_z.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">perturb_func (function): the Newton&#8217;s method function.</p>
+<p class="last">eps (optional [float]): desired precision for convergence</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -525,7 +708,7 @@ transfer function.</p>
 <dt>Args:</dt>
 <dd><p class="first">z (complex number): value where product is evaluated</p>
 <p>poles(list of complex numbers): The poles of the Potapov product.</p>
-<p>vecs(list of complex-valued matrices): The eigenvectors corresponding to
+<p>vecs (list of complex-valued matrices): The eigenvectors corresponding to
 the orthogonal projectors of the Potapov product.</p>
 <p class="last">N (int): Dimensionality of the the range.</p>
 </dd>
@@ -592,7 +775,7 @@ and eigenvector.</p>
 
 <dl class="function">
 <dt id="Potapov_Code.Potapov.get_Potapov">
-<code class="descclassname">Potapov_Code.Potapov.</code><code class="descname">get_Potapov</code><span class="sig-paren">(</span><em>T</em>, <em>poles</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Potapov.get_Potapov" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Potapov_Code.Potapov.</code><code class="descname">get_Potapov</code><span class="sig-paren">(</span><em>T</em>, <em>poles</em>, <em>found_vecs</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Potapov.get_Potapov" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a transfer function T and some poles, generate the Blaschke-Potapov
 product to reconstruct or approximate T, assuming that T can be represented
 by the Blaschke-Potapov product with the given poles. Also match the values
@@ -604,7 +787,9 @@ a Blaschke-Potapov approximation.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><p class="first">T (matrix-valued function): A given meromorphic function</p>
-<p class="last">poles (a list of complex valued numbers): The given poles of T</p>
+<p>poles (a list of complex valued numbers): The given poles of T</p>
+<p class="last">vecs (list of complex-valued matrices): The eigenvectors corresponding to
+the orthogonal projectors of the Potapov product.</p>
 </dd>
 <dt>Returns:</dt>
 <dd>A matrix-valued function equation to T at z=0 and approximating T
@@ -948,38 +1133,16 @@ port_in and port_out are where the system is driven.</p>
 <p>&#64;author: gil
 &#64;title: Time_Sims_Nonlin.py</p>
 <dl class="function">
-<dt id="Potapov_Code.Time_Sims_nonlin.double_up">
-<code class="descclassname">Potapov_Code.Time_Sims_nonlin.</code><code class="descname">double_up</code><span class="sig-paren">(</span><em>M1</em>, <em>M2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Sims_nonlin.double_up" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a given matrix M1 and an optional matrix M2 and generates a
-doubled-up matrix to use for simulations when the doubled-up notation
-is needed. i.e.</p>
-<div class="math">
-\[\begin{split}\begin{pmatrix}
-    M_1 &amp;&amp; M_2
-\end{pmatrix}
-\to
-\begin{pmatrix}
-    M_1 &amp;&amp; M_2 \\
-    M_2^\# &amp;&amp; M_1^\#
-\end{pmatrix}\end{split}\]</div>
-<p>In the case M2 == None, it becomes replaced by the zero matrix.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>M1: matrix to double-up
-M2: optional second matrix to double-up</dd>
-<dt>Returns:</dt>
-<dd>The doubled-up matrix.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
 <dt id="Potapov_Code.Time_Sims_nonlin.make_f">
 <code class="descclassname">Potapov_Code.Time_Sims_nonlin.</code><code class="descname">make_f</code><span class="sig-paren">(</span><em>eq_mot</em>, <em>B</em>, <em>a_in</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Sims_nonlin.make_f" title="Permalink to this definition">¶</a></dt>
 <dd><p>Equations of motion, including possibly nonlinear internal dynamics.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd><p class="first">eq_mot (function): The equations of motion, which take an array and return a
-matrix column.</p>
+<dd><p class="first">eq_mot (function): The equations of motion, which map
+<span class="math">\((t,a) \to v\)</span>. Here math:<cite>t</cite> is a scalar corresponding to time,
+<span class="math">\(a\)</span> is an array of inputs correpsonding to the internal degrees
+of freedom, and <span class="math">\(v\)</span> is a complex-valued column matrix describing
+the gradient.</p>
 <p>B (matrix): The matrix multiplying the inputs to the system.</p>
 <p class="last">a_in (function): The inputs to the system</p>
 </dd>
@@ -1008,7 +1171,7 @@ a is an array representing the state of the system.</dd>
 
 <dl class="function">
 <dt id="Potapov_Code.Time_Sims_nonlin.run_ODE">
-<code class="descclassname">Potapov_Code.Time_Sims_nonlin.</code><code class="descname">run_ODE</code><span class="sig-paren">(</span><em>f</em>, <em>a_in</em>, <em>C</em>, <em>D</em>, <em>num_of_variables</em>, <em>T=100</em>, <em>dt=0.01</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Sims_nonlin.run_ODE" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Potapov_Code.Time_Sims_nonlin.</code><code class="descname">run_ODE</code><span class="sig-paren">(</span><em>f</em>, <em>a_in</em>, <em>C</em>, <em>D</em>, <em>num_of_variables</em>, <em>T=10</em>, <em>dt=0.01</em>, <em>y0=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Sims_nonlin.run_ODE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the ODE for the given set of equations and record the outputs.</p>
 <dl class="docutils">
 <dt>Args:</dt>
@@ -1073,6 +1236,31 @@ z (complex number):</dd>
 </dd></dl>
 
 <dl class="function">
+<dt id="Potapov_Code.functions.double_up">
+<code class="descclassname">Potapov_Code.functions.</code><code class="descname">double_up</code><span class="sig-paren">(</span><em>M1</em>, <em>M2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.double_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a given matrix M1 and an optional matrix M2 and generates a
+doubled-up matrix to use for simulations when the doubled-up notation
+is needed. i.e.</p>
+<div class="math">
+\[\begin{split}\begin{pmatrix}
+    M_1 &amp;&amp; M_2
+\end{pmatrix}
+\to
+\begin{pmatrix}
+    M_1 &amp;&amp; M_2 \\
+    M_2^\# &amp;&amp; M_1^\#
+\end{pmatrix}\end{split}\]</div>
+<p>In the case M2 == None, it becomes replaced by the zero matrix.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>M1: matrix to double-up
+M2: optional second matrix to double-up</dd>
+<dt>Returns:</dt>
+<dd>The doubled-up matrix.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="Potapov_Code.functions.factorial">
 <code class="descclassname">Potapov_Code.functions.</code><code class="descname">factorial</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.factorial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the factorial of n.</p>
@@ -1083,6 +1271,11 @@ z (complex number):</dd>
 <dd>factorial of n</dd>
 </dl>
 </dd></dl>
+
+<dl class="function">
+<dt id="Potapov_Code.functions.gcd_lst">
+<code class="descclassname">Potapov_Code.functions.</code><code class="descname">gcd_lst</code><span class="sig-paren">(</span><em>lst</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.gcd_lst" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.functions.inner_product_of_two_modes">
@@ -1141,8 +1334,6 @@ creation (1, a^dag) or annihilation (-1,a) operator. The corresponding
 electric field integrated will be E^dag for 1 and E for -1.</p>
 <p>The k-vectors are computed from the following formula:
 k = omega / v_p = omega n(omega) / c.</p>
-<p>Below we assume c == 1. We can modify the frequencies or n&#8217;s to make the
-units work.</p>
 <p>If the indices of refraction n(omega_i) are given, we use them to compute
 the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.</p>
 <dl class="docutils">
@@ -1245,71 +1436,32 @@ Otherwise, the modes will not be normalized.</p>
 <div class="section" id="module-Potapov_Code.tests">
 <span id="potapov-code-tests-module"></span><h2>Potapov_Code.tests module<a class="headerlink" href="#module-Potapov_Code.tests" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="Potapov_Code.tests.test_Hamiltonian_with_doubled_equations">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_Hamiltonian_with_doubled_equations</code><span class="sig-paren">(</span><em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_Hamiltonian_with_doubled_equations" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method tests various methods in Hamiltonian and Time_Sims_nonlin.
-In particular, we compare the output from the classical equations of motion
-that results directly from the ABCD model versus the classical Hamiltonian
-equations of motion when we set the coefficient of the nonlinearity to zero.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>eps[optional(float)]: how closely each point in time along the two
-tested trajectories should match.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="Potapov_Code.tests.test_Potapov_1">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_Potapov_1</code><span class="sig-paren">(</span><em>eps=1e-07</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_Potapov_1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a finite_transfer_function from eigenvectors and eigenvalues.
-Then generate a Potapov product from the finite transfer function. These
-should be analytically equal. We test to see if they are close within some
-precision.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Potapov_Code.tests.test_Roots_1">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_Roots_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_Roots_1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a square of length just under 5*pi. Find the roots of sine.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Potapov_Code.tests.test_Roots_2">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_Roots_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_Roots_2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a square of length just over 5*pi. Find the roots of sine.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Potapov_Code.tests.test_example_1">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_example_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_example_1" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Potapov_Code.tests.test_example_2">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_example_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_example_2" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Potapov_Code.tests.test_example_3">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_example_3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_example_3" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Potapov_Code.tests.test_example_4">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_example_4</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_example_4" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Potapov_Code.tests.two_sets_almost_equal">
-<code class="descclassname">Potapov_Code.tests.</code><code class="descname">two_sets_almost_equal</code><span class="sig-paren">(</span><em>S1</em>, <em>S2</em>, <em>eps=1e-07</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.two_sets_almost_equal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests if two iterables have the same elements up to some tolerance eps.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>S1,S2 (lists): two lists
-eps (optional[float]): precision for testing each elements</dd>
-<dt>Returns:</dt>
-<dd>True if the two sets are equal up to eps, false otherwise</dd>
-</dl>
+<dt id="Potapov_Code.tests.test_altered_delay_pert">
+<code class="descclassname">Potapov_Code.tests.</code><code class="descname">test_altered_delay_pert</code><span class="sig-paren">(</span><em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.tests.test_altered_delay_pert" title="Permalink to this definition">¶</a></dt>
+<dd><p>We will have a method to shift the delays in the network before the
+commensurate root analysis, which will be based on taking the average
+Delta_delays that result from the nonlinearities over the different
+frequencies. We test this here.</p>
+<p>It also tests the corresponding perturbation in the frequencies.</p>
+<p>We assume that the refraction_index_func and the input delays into
+the Time_Delay_Network have been adjusted so that refraction_index_func
+is close to zero in the desired frequency range.</p>
+<p>There are several effects of the delays being different for different
+modes. The most important one is an effective detuning for different
+modes (as well as decay). There are other effects as well. The effective
+mode volume will also change (this is taken into account in the
+Hamitonian class). However, this is not taken into account in the Potapov
+expansion because it becomes computationally difficult and the effect
+will be small. This could be done in principle. The time delays in the
+transfer function could be written as a function of frequency,
+<span class="math">\(T = T(\omega)\)</span>.
+The above function can be analytically continued to the complex plane.
+Then the transfer function would be expressed
+in terms of <span class="math">\(exp(-z T) = exp ( -z T (z))\)</span>.
+Once this is done, the complex root-finding procedure can be applied.
+The difficulty in using this approach is that the resulting functions no
+longer have a periodic structure that we could identify when the delays
+were commensurate.</p>
 </dd></dl>
 
 </div>
