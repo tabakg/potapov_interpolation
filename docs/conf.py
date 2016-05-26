@@ -33,6 +33,7 @@ import mock
 
 MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot',
     'numpy.linalg','scipy.constants','scipy.integrate',
+    'scipy.optimize',
     'numpy.testing',
     'matplotlib.patches',
     'qnet.algebra.circuit_algebra',
