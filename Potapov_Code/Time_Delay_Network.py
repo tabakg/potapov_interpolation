@@ -258,6 +258,20 @@ class Time_Delay_Network():
         return lambda x,y,Ts: f_r(x,y,*Ts)+f_i(x,y,*Ts)*1j
 
     def get_frequency_pertub_func_z(self,use_ufuncify = True):
+        '''
+        Generates a function that can be used to perturb roots using
+        Newton's method. This function has form :math:`-f(z) / f'(z)`
+        when the time delays are held fixed.
+
+        We give two ways to generate the perturbative function. One is
+        by directly plugging in numbers into a sympy expression and the
+        second is by using the ufuncify method to creative a wrapper for
+        the function.
+
+        Args:
+            use_ufuncify (optional [boolean]): whether to use ufuncify
+            or not.
+        '''
         sym_freq_pert = self.get_symbolic_frequency_perturbation_z()
         if not use_ufuncify:
             sym_freq_pert = -sym_freq_pert[0] / sym_freq_pert[1]
@@ -274,6 +288,28 @@ class Time_Delay_Network():
                 return - ( real_imag_func_num(x,y,Ts_num) /
                     real_imag_func_denom (x,y,Ts_num) )
             return func
+
+    def get_minimizing_function_z(self,):
+        r'''
+        Minimizing this function gives the adjusted roots.
+
+        Gives a function to minimize, its arguments are
+        :math:`x,y,Ts`. Also gives its derivative.
+        '''
+        expression = self.get_symbolic_frequency_perturbation_z()[0]
+        x,y = sp.symbols('x y', real = True)
+        D = {sp.exp(self.z*T): sp.exp(x*T)*(1j*sp.sin(y*T)+sp.cos(y*T)) for T in self.Ts}
+        expression2 = expression.subs(D)
+        num_real,num_imag = expression2.expand().as_real_imag()
+
+        diff_x_real = num_real.diff(x)
+        diff_y_imag = num_real.diff(y)
+
+        func =  ufuncify( [x,y]+self.Ts, num_real**2 + num_imag**2)
+        dfunc_x =  ufuncify( [x,y]+self.Ts,num_real*diff_x_real)
+        dfunc_y =  ufuncify( [x,y]+self.Ts, num_imag*diff_y_imag)
+
+        return func, lambda x,y,*Ts: np.asarray([dfunc_x(x,y,*Ts),dfunc_y(x,y,*Ts)])
 
     def _find_instances_in_range_good_initial_point(self,z,freq_range,T):
         '''

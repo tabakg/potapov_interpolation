@@ -15,6 +15,8 @@ import numpy as np
 import numpy.linalg as la
 import sympy as sp
 import scipy.constants as consts
+from scipy.optimize import minimize
+
 import itertools
 import copy
 
@@ -100,7 +102,7 @@ class Hamiltonian():
 
         self.cross_sectional_area = cross_sectional_area
 
-        self.Delta_delays = [[0.]*len(self.delays)]*self.m
+        self.Delta_delays = np.zeros((self.m,len(self.delays)))
         self.volumes = self.mode_volumes()
         self.normalize_modes()
 
@@ -134,6 +136,18 @@ class Hamiltonian():
         else:
             return Dagger(symbol)
 
+    # def adjusted_delays(self):
+    #     '''
+    #
+    #     '''
+    #     N = len(self.delays)
+    #     M = len(self.Delta_delays)
+    #     delay_adjustment = [0.]*N
+    #     for i in range(M):
+    #         for j in range(N):
+    #             delay_adjustment[j] += self.Delta_delays[i,j] / M
+    #     return map(sum, zip(delay_adjustment, self.delays))
+
     def make_Delta_delays(self,):
         '''
         Each different frequency will experience a different shift in delay
@@ -142,27 +156,76 @@ class Hamiltonian():
         This list is called Delta_delays.
         The ith list will be the shifts in all the original delays for the ith
         root (i.e. frequency).
+
+
         '''
-        self.Delta_delays = [[0.]*len(self.delays)]*self.m
+        self.Delta_delays = np.zeros((self.m,len(self.delays)))
         for chi in self.chi_nonlinearities:
             for i,omega in enumerate(self.omegas):
                 for delay_index in chi.delay_indices:
                     pol = self.polarizations[delay_index]
                     index_of_refraction = chi.refraction_index_func(omega,pol)
-                    self.Delta_delays[i][delay_index] = (
+                    self.Delta_delays[i,delay_index] = (
                         (index_of_refraction - 1.)* chi.length_nonlin/consts.c)
+                #     print i,delay_index,'delta delay is', self.Delta_delays[i,delay_index]
+                # print "Delta delays are", self.Delta_delays
         return
 
     def perturb_roots_z(self,perturb_func,eps = 1e-12):
+        '''
+        One approach to perturbing the roots is to use Newton's method.
+        This is done here using a function perturb_func that corresponds to
+        :math:`-f(z) / f'(z)` when the time delays are held fixed.
+        The function perturb_func is generated in
+        get_frequency_pertub_func_z.
+
+        Args:
+            perturb_func (function): the Newton's method function.
+
+            eps (optional [float]): desired precision for convergence
+        '''
         max_count = 10
         for j in range(max_count):
-            ## The new delays are computed every step since the frequencies
-            ## have been updated.
-            self.make_Delta_delays()
+            self.make_Delta_delays() #delays depend on omegas
             old_roots = copy.copy(self.roots)
             for i,root in enumerate(self.roots):
                 pert = perturb_func(root,map(sum,zip(self.delays,self.Delta_delays[i])))
                 self.roots[i] += pert
+            self._update_omegas()
+            if all([abs(new-old) < eps for new,old in zip(self.roots,old_roots)]):
+                print "root adjustment converged!"
+                break
+        else:
+            "root adjustment aborted."
+
+    def minimize_roots_z(self,func,dfunc,eps = 1e-12):
+        '''
+        One approach to perturb the roots is to use a function in :math:`x,y`
+        that becomes minimized at a zero. This is done here.
+
+        The result is an update to roots, omegas, and Delta_delays.
+
+        Args:
+            func, dfuncs (functions): Functions in x,y. The first becomes
+            minimized at a zero and the second is the gradient in x,y.
+            These functions are generated in
+            Time_Delay_Network.get_minimizing_function_z.
+
+            eps (optional [float]): desired precision for convergence.
+
+        '''
+        max_count = 1
+        for j in range(max_count):
+            self.make_Delta_delays()
+            old_roots = copy.copy(self.roots)
+            for i,root in enumerate(self.roots):
+                fun_z = lambda x,y: func(x,y,*map(sum,zip(self.delays,self.Delta_delays[i])))
+                fun_z_2 = lambda arr: fun_z(*arr)
+                dfun_z = lambda x,y: dfunc(x,y,*map(sum,zip(self.delays,self.Delta_delays[i])))
+                dfun_z_2 = lambda arr: dfun_z(*arr)
+                x0 = np.asarray([root.real,root.imag])
+                minimized = minimize(fun_z_2,x0,jac = dfun_z_2).x
+                self.roots[i] = minimized[0] + minimized[1] * 1j
             #print self.roots
             self._update_omegas()
             if all([abs(new-old) < eps for new,old in zip(self.roots,old_roots)]):
@@ -299,6 +362,7 @@ class Hamiltonian():
             the phase coefficient.
         Returns:
             The weight to add to the Hamiltonian
+
         '''
         omegas_to_use = np.array([self.omegas[i] for i in combination])
         modes_to_use = [self.modes[i] for i in combination]

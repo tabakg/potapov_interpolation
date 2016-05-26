@@ -17,53 +17,68 @@ import time
 
 
 def test_altered_delay_pert(eps=1e-5):
-    '''
+    r'''
     We will have a method to shift the delays in the network before the
     commensurate root analysis, which will be based on taking the average
     Delta_delays that result from the nonlinearities over the different
     frequencies. We test this here.
 
     It also tests the corresponding perturbation in the frequencies.
+
+    We assume that the refraction_index_func and the input delays into
+    the Time_Delay_Network have been adjusted so that refraction_index_func
+    is close to zero in the desired frequency range.
+
+    There are several effects of the delays being different for different
+    modes. The most important one is an effective detuning for different
+    modes (as well as decay). There are other effects as well. The effective
+    mode volume will also change (this is taken into account in the
+    Hamitonian class). However, this is not taken into account in the Potapov
+    expansion because it becomes computationally difficult and the effect
+    will be small. This could be done in principle. The time delays in the
+    transfer function could be written as a function of frequency,
+    :math:`T = T(\omega)`.
+    The above function can be analytically continued to the complex plane.
+    Then the transfer function would be expressed
+    in terms of :math:`exp(-z T) = exp ( -z T (z))`.
+    Once this is done, the complex root-finding procedure can be applied.
+    The difficulty in using this approach is that the resulting functions no
+    longer have a periodic structure that we could identify when the delays
+    were commensurate.
     '''
 
-    Ex = Time_Delay_Network.Example3( max_linewidth=15.,max_freq=30.)
-
-    ## We still need to get the frequencies from the network WITHOUT
-    ## nonlinearities since the approximate frequencies are needed
-    ## to find the indices of refraction.
-
+    Ex = Time_Delay_Network.Example3( max_linewidth=15.,max_freq=500.)
     Ex.run_Potapov(commensurate_roots=True)
     modes = Ex.spatial_modes
-
     A,B,C,D = Ex.get_Potapov_ABCD(doubled=False)
-
     ham = Hamiltonian.Hamiltonian(Ex.roots,modes,Ex.delays,Omega=-1j*A,
                 nonlin_coeff = 1.)
 
-    ## Now let's make a non-trivial nonlinearity.
     ## This nonlinearity will depend on the frequency.
-
     chi_nonlin_test = Hamiltonian.Chi_nonlin(delay_indices=[0],start_nonlin=0,
                                length_nonlin=0.1*consts.c)
-
-    chi_nonlin_test.refraction_index_func = lambda freq, pol: 2. + freq / (2*np.pi*100)
-
+    chi_nonlin_test.refraction_index_func = lambda freq, pol: 1. + abs(freq / (10*np.pi))
     ham.chi_nonlinearities.append(chi_nonlin_test)
 
-    ## update delays
+    ## update delays, which are different becuase of the nonlinearity.
     ham.make_Delta_delays()
-
-    ## TODO: find average Delta_delays for each delay over all frequencies.
-
-    ## TODO: Make the new roots based on the average-adjusted delays
+    #print ham.Delta_delays
 
     ## Perturb the roots to account for deviations in the index of refraction
     ## as a function of frequency.
-    ## TODO: make a function to perturb in several steps to avoid root-skipping.
 
+
+    # print ham.roots
     perturb_func = Ex.get_frequency_pertub_func_z(use_ufuncify = True)
     ham.perturb_roots_z(perturb_func)
-    print ham.roots
+    # print ham.roots
+    print len(ham.roots)
+    # plt.plot(ham.omegas)
+    plt.scatter(np.asarray(ham.roots).real,np.asarray(ham.roots).imag)
+    plt.show()
+
+    ## TODO: make a function to perturb in several steps to avoid root-skipping.
+
 
 # def test_delay_perturbations(eps=1e-5):
 #     '''
