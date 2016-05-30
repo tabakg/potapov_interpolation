@@ -28,12 +28,19 @@ def plot_all(L,dx,labels,colors,lw,name,*args):
     of matrix-valued functions in the complex plane along an axis.
 
     Args:
+    -----
         L (float): plot from 0 to L
+
         dx (float):  distance between points
+
         labels (list of str): labels to use
+
         colors (list of srt): indicators of color for different curves
+
         lw (float): line width to use
+
         name (str): name of the file to save
+
         * args (a list of functions): A list of functions to plot
 
     Returns:
@@ -120,6 +127,7 @@ class Time_Delay_Network():
         Find the 'gcd' but for Decimal numbers.
 
         Args:
+        -----
             delays(list of Demicals): numbers whose gcd will be found.
 
         Returns:
@@ -162,6 +170,7 @@ class Time_Delay_Network():
     #     as well as :math:`\Delta T_j`.
     #
     #     Args:
+    #     -----
     #         simplify (optiona[boolean]): simplify the output sympy expression.
     #     '''
     #     M = len(self.delays)
@@ -269,6 +278,7 @@ class Time_Delay_Network():
         the function.
 
         Args:
+        -----
             use_ufuncify (optional [boolean]): whether to use ufuncify
             or not.
         '''
@@ -318,7 +328,9 @@ class Time_Delay_Network():
         Assumes the given z is in the desired frequency range.
 
         Args:
+        -----
             z (complex number)
+
             freq_range (2-tuple): (minimum frequency, maximum frequency)
 
         Returns:
@@ -339,7 +351,9 @@ class Time_Delay_Network():
         period and :math:`n` is an integer inside the given frequency range.
 
         Args:
+        -----
             z (complex number)
+
             freq_range (2-tuple): (minimum frequency, maximum frequency)
 
         Returns:
@@ -371,6 +385,7 @@ class Time_Delay_Network():
         in the desired frequency ranges.
 
         Args:
+        -----
             list_of_ranges (optional [list of 2-tuples]): list of frequency
             ranges of interest in the form:
             (minimum frequency, maximum frequency).
@@ -436,6 +451,7 @@ class Time_Delay_Network():
         and the spatial_modes are all stored in the class.
 
         Args:
+        -----
             commensurate_roots (optional[boolean]): which root-finding method
             to use.
 
@@ -478,6 +494,7 @@ class Time_Delay_Network():
         Find the ABCD matrices from the Time_Delay_Network.
 
         Args:
+        -----
             z (optional [complex number]): location where to estimate D.
 
         Return:

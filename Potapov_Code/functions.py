@@ -31,6 +31,7 @@ def der(f,z,eps = 1e-5):
     Estimate the derivative of the function f at z
 
     Args:
+    -----
         f (function): the function to use.
 
         z (complex number): point at which to evaluate derivative.
@@ -50,6 +51,7 @@ def limit(f,z0,N=10,eps=1e-3):
     points at a distance eps.
 
     Args:
+    -----
         f (function): the function for which the limit will be found.
 
         z0 (complex number): The value at which the limit is evaluated.
@@ -76,6 +78,7 @@ def factorial(n):
     '''Find the factorial of n.
 
     Args:
+    -----
         n (integer)
 
     Returns:
@@ -91,6 +94,7 @@ def pade_approx(n):
     '''Numerator coefficients of symmetric Pade approximation of math:`e^z` of order n.
 
     Args:
+    -----
         n (integer)
 
     Returns:
@@ -107,6 +111,7 @@ def pade_roots(n):
     '''Extract roots of Pade polynomial.
 
     Args:
+    -----
         n (integer).
 
     Returns:
@@ -118,7 +123,8 @@ def pade_roots(n):
 def Q(z,n):
     r'''Numerator of Pade approximation of :math:`e^z`.
 
-    args:
+    Args:
+    -----
         n (integer): order of approximation
         z (complex number):
 
@@ -135,7 +141,8 @@ def Q(z,n):
 def Pade(n,z):
     r'''Pade pproximation of :math:`e^z`
 
-    args:
+    Args:
+    -----
         n (integer): order of approximation
         z (complex number):
 
@@ -165,6 +172,7 @@ def double_up(M1,M2=None):
     In the case M2 == None, it becomes replaced by the zero matrix.
 
     Args:
+    -----
         M1: matrix to double-up
         M2: optional second matrix to double-up
 
@@ -185,6 +193,7 @@ def spatial_modes(roots,M1,E,delays=None):
     Otherwise, the modes will not be normalized.
 
     Args:
+    -----
         roots (list of complex numbers): The eigenvalues of the system
 
         M1 (matrix): The connectivity matrix among internal nodes
@@ -220,6 +229,7 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
     The frequency is assumed to be the imaginary part of each root.
 
     Args:
+    -----
         root1,root2 (complex number): the two roots
 
         v1,v2 (column matrices): the amplitude of each mode at the
@@ -252,6 +262,7 @@ def _norm_of_mode(mode,delays):
     Find the norm of the given mode
 
     Args:
+    -----
         mode (vector): column of complex numbers describing the amplitude of
         each mode at the various nodes.
 
@@ -273,6 +284,7 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
     TODO: add weights for different delays to account for geometry.
 
     Args:
+    -----
         roots (list of complex numbers): The roots of the various eigenmodes
 
         modes (list of column matrices): the amplitudes of the modes at
@@ -325,6 +337,7 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
     the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.
 
     Args:
+    -----
         natural_freqs (list of complex numbers): The natural frequencies of the
         various eigenmodes.
 
