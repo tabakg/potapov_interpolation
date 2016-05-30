@@ -155,7 +155,8 @@ def finite_transfer_function(U,eigenvectors,eigenvalues):
 
     Args:
     -----
-        U (complex-valued matrix): A unitary matrix.
+        U : complex-valued matrix
+            A unitary matrix giving the overall phase of the function.
 
         eigenvectors(list of complex-valued matrices): eigenvectors to use
 
