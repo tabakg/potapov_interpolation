@@ -149,23 +149,24 @@ def prod(z,U,eigenvectors,eigenvalues):
             (np.eye(N) - vec*vec.H + vec*vec.H*(z+val.conjugate())/(z-val))
 
 def finite_transfer_function(U,eigenvectors,eigenvalues):
-    '''
+    r'''
     Give a rational Blaschke-Potapov product of z with the given
     eigenvalues and eigenvectors and constant unitary factor U.
 
     Parameters
     ----------
-        U : complex-valued matrix
-            A unitary matrix.
+    U : complex-valued matrix
+        A unitary matrix.
 
-        eigenvectors : list of complex-valued matrices
-            eigenvectors to use
+    eigenvectors : list of complex-valued matrices
+        eigenvectors to use
 
-        eigenvalues : list of complex numebrs
-            eigenvalues to use
+    eigenvalues : list of complex numebrs
+        eigenvalues to use
 
-    Returns:
-    --------
+    Returns
+    -------
+    out : function
         A function that takes a complex number and returns the Potapov product
         evaluated at that number.
 
