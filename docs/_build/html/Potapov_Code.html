@@ -292,13 +292,9 @@ the various delays <span class="math">\(T_1,...,T_k\)</span> and the complex var
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>T_denom_sym and its derivative</dt>
-<dd>in <span class="math">\(z\)</span>.</dd>
-</dl>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>A pair of two symbolic expressions</strong> &#8211;     T_denom_sym and its derivative in <span class="math">\(z\)</span>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A pair of two symbolic expressions</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></td>
 </tr>
 </tbody>
 </table>
@@ -394,10 +390,10 @@ return a different kind of function (see below).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>(matrix-valued function T</strong> &#8211; n is the order of the approximation
-and z is the location of the function to be evaluated.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>T</strong> &#8211;     An approximation to <span class="math">\(T(z)\)</span> using Pade approximation of
+order <span class="math">\(n\)</span>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">z,n</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">matrix-valued function in complex number <cite>z</cite> and integer <cite>n</cite></td>
 </tr>
 </tbody>
 </table>
@@ -516,19 +512,19 @@ next (chi_order+1) args are indices of polarization.</p>
 <dl class="attribute">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.omegas">
 <code class="descname">omegas</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.omegas" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list of floats</em> &#8211; the natural frequencies of the modes.</p>
+<dd><p><em>list of floats</em> &#8211; The natural frequencies of the modes.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.modes">
 <code class="descname">modes</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.modes" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list of complex-valued column matrices</em> &#8211; modes of the network.</p>
+<dd><p><em>list of complex-valued column matrices</em> &#8211; Modes of the network.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.delays">
 <code class="descname">delays</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.delays" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list of floats</em> &#8211; the delays in the network.</p>
+<dd><p><em>list of floats</em> &#8211; The delays in the network.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -541,27 +537,27 @@ dynamics.</p>
 <dl class="attribute">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.nonlin_coeff">
 <code class="descname">nonlin_coeff</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.nonlin_coeff" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>optional [float]</em> &#8211; overall scaling for the nonlinearities.</p>
+<dd><p><em>optional [float]</em> &#8211; Overall scaling for the nonlinearities.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.polarizations">
 <code class="descname">polarizations</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.polarizations" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>optional [list]</em> &#8211; the polarizations of the respective
+<dd><p><em>optional [list]</em> &#8211; The polarizations of the respective
 modes. These should match the arguments in Chi_nonlin.chi_func.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.cross_sectional_area">
 <code class="descname">cross_sectional_area</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.cross_sectional_area" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>float</em> &#8211; area of beams, used to determines the
+<dd><p><em>float</em> &#8211; Area of beams, used to determines the
 scaling for the various modes.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.chi_nonlinearities">
 <code class="descname">chi_nonlinearities</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.chi_nonlinearities" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>lst</em> &#8211; a list of Chi_nonlin instances.</p>
+<dd><p><em>list</em> &#8211; A list of Chi_nonlin instances.</p>
 </dd></dl>
 
 <p>TODO: Return L operator for QNET.</p>
@@ -580,7 +576,7 @@ scaling for the various modes.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mode_index</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The index of the mode.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>Weight of E-field</strong> &#8211; It has form:
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>Weight of E-field</strong> &#8211;     It has form:
 <span class="math">\([\hbar * \omega(n) / 2 V_{eff}(n) \epsilon]^{1/2}\)</span>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></td>
@@ -598,6 +594,14 @@ We will store those shifts as a list of lists in the class.
 This list is called Delta_delays.
 The ith list will be the shifts in all the original delays for the ith
 root (i.e. frequency).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -607,7 +611,9 @@ root (i.e. frequency).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary from mode index to the E-field weight.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Weights</strong> &#8211;     A dictionary from mode index to the E-field weight.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
 </tr>
 </tbody>
 </table>
@@ -633,11 +639,26 @@ terms due to the coupling to the environment at the input/output ports.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Omega</strong> (<em>complex-valued matrix</em>) &#8211; Omega = -1j*A        &lt;&#8212; full dynamics (not necessarily Hermitian)
-Omega = (A-A.H)/(2j) &lt;&#8212; closed dynamics only (Hermitian part of above)
-eps (optional[float]): Cutoff for the significance of a particular term.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Omega</strong> (<em>complex-valued matrix</em>) &#8211; Describes the Hamiltonian of the system.</li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; Cutoff for the significance of a particular term.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A symbolic expression for the full Hamiltonian.</td>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Omega = -1j*A        &lt;&#8212; full dynamics (not necessarily Hermitian)</p>
+<p class="last">Omega = (A-A.H)/(2j) &lt;&#8212; closed dynamics only (Hermitian part of above)</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Expression</strong> &#8211;     A symbolic expression for the full Hamiltonian.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">sympy expression</td>
 </tr>
 </tbody>
 </table>
@@ -652,18 +673,18 @@ eps (optional[float]): Cutoff for the significance of a particular term.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>delay_indices</strong> (<em>int OR list/tuple of ints</em>) &#8211; the index representing the
+<li><strong>delay_indices</strong> (<em>int OR list/tuple of ints</em>) &#8211; The index representing the
 delay line along which the nonlinearity lies. If given a list/tuple
 then the nonlinearity interacts the N different modes.</li>
-<li><strong>start_nonlin</strong> (<em>float OR list/tuple of floats</em>) &#8211; the beginning of the
+<li><strong>start_nonlin</strong> (<em>float OR list/tuple of floats</em>) &#8211; The beginning of the
 nonlinearity. If a list/tuple then each nonlinearity begins at a
 different time along its corresponding delay line.</li>
-<li><strong>length_nonlin</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; duration of the nonlinearity in terms of
+<li><strong>length_nonlin</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Duration of the nonlinearity in terms of
 length. (Units in length)</li>
-<li><strong>refraction_index_func</strong> (<em>function</em>) &#8211; the indices of refraction as a
+<li><strong>refraction_index_func</strong> (<em>function</em>) &#8211; The indices of refraction as a
 function of the netural frequency <span class="math">\(/omega\)</span>.</li>
-<li><strong>chi_order</strong> (<em>optional [int]</em>) &#8211; order of the chi nonlinearity.</li>
-<li><strong>chi_function</strong> (<em>function</em>) &#8211; a function of 2*chi_order+2 parameters that
+<li><strong>chi_order</strong> (<em>optional [int]</em>) &#8211; Order of the chi nonlinearity.</li>
+<li><strong>chi_function</strong> (<em>function</em>) &#8211; A function of 2*chi_order+2 parameters that
 returns the strenght of the interaction for given frequency
 combinations and polarizations. The first chi_order+1 parameters
 correspond to frequencies combined the the next chi_order+1 parameters
@@ -691,12 +712,14 @@ this, we will need a full quantum picture.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A function that yields the Hamiltonian equations of motion based on
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Equations of Motion</strong> &#8211;     A function that yields the Hamiltonian equations of motion based on
 the Hamiltonian given. The equations of motion map
 <span class="math">\((t,a) \to v\)</span>. where math:<cite>t</cite> is a scalar corresponding to
 time, <span class="math">\(a\)</span> is an array of inputs correpsonding to the internal
 degrees of freedom, and <span class="math">\(v\)</span> is a complex-valued column matrix
 describing the gradient.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">function</td>
 </tr>
 </tbody>
 </table>
@@ -710,9 +733,11 @@ describing the gradient.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Omega</strong> (<em>complex-valued matrix</em>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Omega</strong> (<em>complex-valued matrix</em>) &#8211; A matrix that describes the Hamiltonian of the system.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A symbolic expression for the nonlinear Hamiltonian.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>Expression</strong> &#8211;     A symbolic expression for the nonlinear Hamiltonian.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">sympy expression</td>
 </tr>
 </tbody>
 </table>
@@ -726,10 +751,17 @@ describing the gradient.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>chi</strong> (<a class="reference internal" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Potapov_Code.Hamiltonian.Chi_nonlin"><em>Chi_nonlin</em></a>) &#8211; nonlinearity to use
-eps (optional[float]): Cutoff for the significance of a particular term.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>chi</strong> (<a class="reference internal" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Potapov_Code.Hamiltonian.Chi_nonlin"><em>Chi_nonlin</em></a>) &#8211; Nonlinearity to use.</li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; Cutoff for the significance of a particular term.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A symbolic expression for the nonlinear Hamiltonian.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Expression</strong> &#8211;     A symbolic expression for the nonlinear Hamiltonian.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">sympy expression</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -753,12 +785,19 @@ the keys before generating terms.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>combination</strong> (<em>tuple/list of integers</em>) &#8211; indices of which terms to
-include pm_arr (tuple/list of +1 and -1): creation and
-annihilation indicators for the respective terms in combination.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>combination</strong> (<em>tuple/list of integers</em>) &#8211; indices of which terms to include.</li>
+<li><strong>pm_arr</strong> (<em>tuple/list of +1 and -1</em>) &#8211; Creation and
+annihilation indicators for the respective terms in combination.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">symbolic expression for the combination of creation and annihilation
-operators.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">symbolic expression for the combination of creation and annihilation
+operators.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(sympy expression)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -774,7 +813,7 @@ creation/annihilation information.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>weight_keys</strong> (<em>list of tuples</em>) &#8211; keys for weights to consider.
+<li><strong>weight_keys</strong> (<em>list of tuples</em>) &#8211; Keys for weights to consider.
 Each key is a tuple consisting of two
 components: the first is a tuple of the indices of modes and the
 second is a tuple of +1 and -1.</li>
@@ -785,8 +824,11 @@ cutoff for their absolute value is given by eps.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dictionary of weights with values corresponding to the
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Weights</strong> &#8211;     A dictionary of weights with values corresponding to the
 phase matching coefficients.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></p>
 </td>
 </tr>
 </tbody>
@@ -807,7 +849,9 @@ second is a tuple of +1 and -1.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>chi</strong> (<a class="reference internal" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Potapov_Code.Hamiltonian.Chi_nonlin"><em>Chi_nonlin</em></a>) &#8211; the nonlinearity for which the weight will be
 found.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of keys of the type described.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>Keys</strong> &#8211;     A list of keys of the type described.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#list" title="(in Python v2.7)">list</a></td>
 </tr>
 </tbody>
 </table>
@@ -828,7 +872,7 @@ that becomes minimized at a zero. This is done here.</p>
 minimized at a zero and the second is the gradient in x,y.
 These functions are generated in
 Time_Delay_Network.get_minimizing_function_z.</li>
-<li><strong>eps</strong> (<em>optional [float]</em>) &#8211; desired precision for convergence.</li>
+<li><strong>eps</strong> (<em>optional [float]</em>) &#8211; Desired precision for convergence.</li>
 </ul>
 </td>
 </tr>
@@ -874,8 +918,8 @@ approximation has been applied).</li>
 </tr>
 </tbody>
 </table>
-<p>## TODO: replace the sine and cosine stuff with something nicer.
-## Maybe utilize the _get_real_imag_func method in Time_Delay_Network.</p>
+<p>TODO: replace the sine and cosine stuff with something nicer.
+Maybe utilize the _get_real_imag_func method in Time_Delay_Network.</p>
 </dd></dl>
 
 <dl class="method">
@@ -897,8 +941,8 @@ get_frequency_pertub_func_z.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>perturb_func</strong> (<em>function</em>) &#8211; the Newton&#8217;s method function.</li>
-<li><strong>eps</strong> (<em>optional [float]</em>) &#8211; desired precision for convergence</li>
+<li><strong>perturb_func</strong> (<em>function</em>) &#8211; The Newton&#8217;s method function.</li>
+<li><strong>eps</strong> (<em>optional [float]</em>) &#8211; Desired precision for convergence.</li>
 </ul>
 </td>
 </tr>
@@ -915,12 +959,16 @@ combination and pm_arr.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>combination</strong> (<em>list/tuple of integers</em>) &#8211; which modes/roots to pick
-pm_arr (list of +1 and -1): creation and annihilation of modes
-chi (Chi_nonlin): the chi nonlinearity for which to compute
-the phase coefficient.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>combination</strong> (<em>list/tuple of integers</em>) &#8211; Which modes/roots to pick</li>
+<li><strong>pm_arr</strong> (<em>list of +1 and -1</em>) &#8211; creation and annihilation of modes</li>
+<li><strong>chi</strong> (<a class="reference internal" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Potapov_Code.Hamiltonian.Chi_nonlin"><em>Chi_nonlin</em></a>) &#8211; The chi nonlinearity for which to compute
+the phase coefficient.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The weight to add to the Hamiltonian.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The weight to add to the Hamiltonian.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -958,7 +1006,10 @@ the orthogonal projectors of the Potapov product.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Complex-valued matrix of size <span class="math">\(N \times N\)</span>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Complex-valued matrix of size <span class="math">\(N \times N\)</span>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(matrix)</p>
 </td>
 </tr>
 </tbody>
@@ -981,17 +1032,16 @@ the transfer function T at a frequency <span class="math">\(z = i \omega\)</span
 state-space representation.</li>
 <li><strong>T</strong> (<em>matrix-valued function</em>) &#8211; The input/output function
 to estimate.</li>
-<li><strong>z</strong> (<em>complex number</em>) &#8211; the location at which the scattering
+<li><strong>z</strong> (<em>complex number</em>) &#8211; The location at which the scattering
 matrix will be estimated.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><dl class="docutils">
-<dt>The estimated S=D scaterring matrix based on the value of</dt>
-<dd><p class="first last">the function T and the ABC matrices.</p>
-</dd>
-</dl>
-</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>D</strong> &#8211;     The estimated S=D scaterring matrix based on the value of
+the function T and the ABC matrices.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
 </td>
 </tr>
 </tbody>
@@ -1014,12 +1064,11 @@ eigenvalues and eigenvectors and constant unitary factor U.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><dl class="docutils">
-<dt>A function that takes a complex number and returns the Potapov product</dt>
-<dd><p class="first last">evaluated at that number.</p>
-</dd>
-</dl>
-</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Transfer function</strong> &#8211;     A function that takes a complex number and returns the Potapov product
+evaluated at that number.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">function</p>
 </td>
 </tr>
 </tbody>
@@ -1044,7 +1093,10 @@ and eigenvector.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list [A,B,C,D] of four matrices representing the ABCD model.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>[A,B,C,D]</strong> &#8211;     Four matrices representing the ABCD model.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#list" title="(in Python v2.7)">list</a></p>
 </td>
 </tr>
 </tbody>
@@ -1074,12 +1126,11 @@ the orthogonal projectors of the Potapov product.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><dl class="docutils">
-<dt>A matrix-valued function equation to T at z=0 and approximating T</dt>
-<dd><p class="first last">using a Potapov product generated by its poles and residues.</p>
-</dd>
-</dl>
-</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Potapov product</strong> &#8211;     equation to T at z=0 and approximating T
+using a Potapov product generated by its poles and residues.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix-valued function</p>
 </td>
 </tr>
 </tbody>
@@ -1100,7 +1151,10 @@ the orthogonal projectors of the Potapov product.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list [A,B,C,D] of four matrices representing the ABCD model.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>[A,B,C,D]</strong> &#8211;     Four matrices representing the ABCD model.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#list" title="(in Python v2.7)">list</a></p>
 </td>
 </tr>
 </tbody>
@@ -1123,9 +1177,11 @@ in the Blaschke-Potapov factorization.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vec</strong> (<em>complex-valued matrix</em>) &#8211; a vector.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vec</strong> (<em>complex-valued matrix</em>) &#8211; A vector.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The normalized vector.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(vector)</td>
 </tr>
 </tbody>
 </table>
@@ -1169,7 +1225,10 @@ eigenvectors and constant unitary factor U evaluated at z.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex-valued matrix equal to the Potapov product evaluated at z.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Product</strong> &#8211;     The Potapov product evaluated at z.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">complex-valued matrix</p>
 </td>
 </tr>
 </tbody>
@@ -1718,15 +1777,15 @@ is needed. i.e.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>M1</strong> &#8211; matrix to double-up</li>
-<li><strong>M2</strong> &#8211; optional second matrix to double-up</li>
+<li><strong>M1</strong> (<em>matrix</em>) &#8211; matrix to double-up</li>
+<li><strong>M2</strong> (<em>matrix</em>) &#8211; optional second matrix to double-up</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>The doubled-up matrix.</strong></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The doubled-up matrix.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">complex-valued matrix</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(complex-valued matrix)</p>
 </td>
 </tr>
 </tbody>
@@ -1804,12 +1863,11 @@ points at a distance eps.</p>
 <li><strong>f</strong> (<em>function</em>) &#8211; the function for which the limit will be found.</li>
 <li><strong>z0</strong> (<em>complex number</em>) &#8211; The value at which the limit is evaluated.</li>
 <li><strong>N</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of points used in the estimate.</li>
-<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; distance from z0 at which estimating points are
-placed.</li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; distance from z0 at which estimating points are placed.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Limit value</strong> &#8211; The estimated value of <span class="math">\(limit_{z -&gt; z_0} f(z)\)</span>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Limit value</strong> &#8211;     The estimated value of <span class="math">\(limit_{z -&gt; z_0} f(z)\)</span>.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#complex" title="(in Python v2.7)">complex</a></p>
@@ -1861,7 +1919,7 @@ or int then all are the same.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>strength of nonlienarity</strong></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>nonlinear interaction</strong> &#8211;     strength of nonlinearity.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#complex" title="(in Python v2.7)">complex</a></p>

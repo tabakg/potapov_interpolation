@@ -56,12 +56,12 @@ def limit(f,z0,N=10,eps=1e-3):
 
         N (int): number of points used in the estimate.
 
-        eps (optional[float]): distance from z0 at which estimating points are
-            placed.
+        eps (optional[float]):
+            distance from z0 at which estimating points are placed.
 
     Returns:
         Limit value (complex):
-        The estimated value of :math:`limit_{z -> z_0} f(z)`.
+            The estimated value of :math:`limit_{z -> z_0} f(z)`.
 
     '''
     t=np.linspace(0.,2.*np.pi*(N-1.)/N,num=N)
@@ -168,11 +168,13 @@ def double_up(M1,M2=None):
     In the case M2 == None, it becomes replaced by the zero matrix.
 
     Args:
-        M1: matrix to double-up
-        M2: optional second matrix to double-up
+        M1 (matrix): matrix to double-up
+
+        M2 (matrix): optional second matrix to double-up
 
     Returns:
-        The doubled-up matrix. (complex-valued matrix):
+        (complex-valued matrix):
+            The doubled-up matrix.
 
     '''
     if M2 == None:
@@ -225,15 +227,19 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
     Args:
         root1,root2 (complex number): the two roots.
 
-        v1,v2 (column matrices): the amplitude of each mode at the
+        v1,v2 (column matrices):
+            the amplitude of each mode at the
             various nodes.
 
-        delays (list of floats): The duration of each delay following
+        delays (list of floats):
+            The duration of each delay following
             each node in the system.
 
-        eps(optional[float]): cutoff for two frequencies being equal
+        eps(optional[float]):
+            cutoff for two frequencies being equal
 
-        func (optional[funciton]): used to transform the roots. Default
+        func (optional[funciton]):
+            used to transform the roots. Default
             value is set to lambda z: z.imag, meaning we take the frequency
             of each mode.
 
@@ -255,13 +261,16 @@ def _norm_of_mode(mode,delays):
     Find the norm of the given mode
 
     Args:
-        mode (vector): column of complex numbers describing the amplitude of
+        mode (vector):
+            column of complex numbers describing the amplitude of
             each mode at the various nodes.
 
-        delays (list of floats): time delays in the network.
+        delays (list of floats):
+            time delays in the network.
 
     Returns:
-        the norm of the mode. (float):
+        norm (float):
+            the norm of the mode.
     '''
     return np.sqrt(inner_product_of_two_modes(0,0,mode,mode,delays))
 
@@ -276,17 +285,22 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
     TODO: add weights for different delays to account for geometry.
 
     Args:
-        roots (list of complex numbers): The roots of the various eigenmodes.
+        roots (list of complex numbers):
+            The roots of the various eigenmodes.
 
-        modes (list of column matrices): the amplitudes of the modes at
+        modes (list of column matrices):
+            the amplitudes of the modes at
             various nodes.
 
-        delays (list of floats): The duration of each delay following
+        delays (list of floats):
+            The duration of each delay following
             each node in the system.
 
-        eps(optional[float]): cutoff for two frequencies being equal.
+        eps(optional[float]):
+            cutoff for two frequencies being equal.
 
-        func (optional[funciton]): used to transform the roots. Default
+        func (optional[funciton]):
+            used to transform the roots. Default
             value is set to lambda z: z.imag, meaning we take the frequency
             of each mode.
 
@@ -329,36 +343,46 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
     the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.
 
     Args:
-        natural_freqs (list of complex numbers): The natural frequencies of the
-        various eigenmodes.
+        natural_freqs (list of complex numbers):
+            The natural frequencies of the
+            various eigenmodes.
 
-        modes (list of column matrices): the amplitudes of the modes at
-        various nodes.
+        modes (list of column matrices):
+            the amplitudes of the modes at
+            various nodes.
 
-        delays (list of floats): The duration of each delay following
-        each node in the system.
+        delays (list of floats):
+            The duration of each delay following
+            each node in the system.
 
-        delay_indices (int OR list/tuple of ints): the index representing the
-        delay line along which the nonlinearity lies. If given a list/tuple
-        then the nonlinearity interacts the N different modes.
+        delay_indices (int OR list/tuple of ints):
+            the index representing the
+            delay line along which the nonlinearity lies. If given a list/tuple
+            then the nonlinearity interacts the N different modes.
 
-        start_nonlin (float OR list/tuple of floats): the beginning of the
-        nonlinearity. If a list/tuple then each nonlinearity begins at a
-        different time along its corresponding delay line.
+        start_nonlin (float OR list/tuple of floats):
+            the beginning of the
+            nonlinearity. If a list/tuple then each nonlinearity begins at a
+            different time along its corresponding delay line.
 
-        length_nonlin (float): duration of the nonlinearity in terms of length.
+        length_nonlin (float):
+            duration of the nonlinearity in terms of length.
 
-        plus_or_minus_arr (array of 1s and -1s): Creation/annihilation of
-        a photon in each of the given modes.
+        plus_or_minus_arr (array of 1s and -1s):
+            Creation/annihilation of
+            a photon in each of the given modes.
 
-        indices_of_refraction (float/int or list/tuple of float/int): the
-        indices of refraction corresponding to the various modes. If float
-        or int then all are the same.
+        indices_of_refraction (float/int or list/tuple of float/int):
+            the
+            indices of refraction corresponding to the various modes. If float
+            or int then all are the same.
 
-        eps(optional[float]): cutoff for two frequencies being equal.
+        eps(optional[float]):
+            cutoff for two frequencies being equal.
 
     Returns:
-        strength of nonlienarity (complex):
+        nonlinear interaction (complex):
+            strength of nonlinearity.
     '''
 
     M = len(natural_freqs)

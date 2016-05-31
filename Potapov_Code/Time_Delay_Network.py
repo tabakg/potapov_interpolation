@@ -218,8 +218,8 @@ class Time_Delay_Network():
         This method treats the various delays as separate variables.
 
         Returns:
-            A pair of two symbolic expressions: T_denom_sym and its derivative
-                in :math:`z`.
+            A pair of two symbolic expressions (tuple):
+                T_denom_sym and its derivative in :math:`z`.
 
         '''
         M = len(self.delays)
@@ -720,9 +720,9 @@ def example6_pade():
     This is used for figure 14 of our paper.
 
     Returns:
-        (matrix-valued function T(z,n)):
-        n is the order of the approximation
-        and z is the location of the function to be evaluated.
+        T (matrix-valued function in complex number `z` and integer `n`):
+            An approximation to :math:`T(z)` using Pade approximation of
+            order :math:`n`.
     '''
     tau1 = 0.1
     tau2 = 0.23
