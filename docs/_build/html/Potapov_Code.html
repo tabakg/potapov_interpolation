@@ -170,26 +170,54 @@ This corresponds to figures 9 and 10 in our paper.</p>
 <em class="property">class </em><code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">Time_Delay_Network</code><span class="sig-paren">(</span><em>max_freq=30.0</em>, <em>max_linewidth=1.0</em>, <em>N=1000</em>, <em>center_freq=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to contain the information of a passive linear network with time
 delays.</p>
-<dl class="docutils">
-<dt>Attributes:</dt>
-<dd><p class="first">max_freq (optional [float]): maximum height in the complex plane</p>
-<p>max_linewidth (optional [float]): maximum width in the complex plane.</p>
-<p>N (optional [int]): number of points to use on the contour for finding
-the roots/poles of the network.</p>
-<p class="last">center_freq (optional [float] ): how much to move the frame up or down
-the complex plane.</p>
-</dd>
-</dl>
+<dl class="attribute">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.max_freq">
+<code class="descname">max_freq</code><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.max_freq" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>optional [float]</em> &#8211; maximum height in the complex plane</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.max_linewidth">
+<code class="descname">max_linewidth</code><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.max_linewidth" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>optional [float]</em> &#8211; maximum width in the complex plane.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.N">
+<code class="descname">N</code><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.N" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>optional [int]</em> &#8211; number of points to use on the contour for finding</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">the roots/poles of the network.</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.center_freq">
+<code class="descname">center_freq</code><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.center_freq" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>optional [float]</em> &#8211; how much to move the frame up or down</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">the complex plane.</code></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_Potapov_ABCD">
 <code class="descname">get_Potapov_ABCD</code><span class="sig-paren">(</span><em>z=0.0</em>, <em>doubled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_Potapov_ABCD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the ABCD matrices from the Time_Delay_Network.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>z (optional [complex number]): location where to estimate D.</dd>
-<dt>Return:</dt>
-<dd>A,B,C,D matrices.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>optional [complex number]</em>) &#8211; location where to estimate D.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A,B,C,D matrices.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -202,11 +230,18 @@ when the time delays are held fixed.</p>
 by directly plugging in numbers into a sympy expression and the
 second is by using the ufuncify method to creative a wrapper for
 the function.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>use_ufuncify (optional [boolean]): whether to use ufuncify
-or not.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>use_ufuncify</strong> (<em>optional [boolean]</em>) &#8211; whether to use ufuncify</li>
+<li><strong>not.</strong> (<em>or</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -221,12 +256,16 @@ or not.</dd>
 <dt id="Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_outputs">
 <code class="descname">get_outputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.Time_Delay_Network.get_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get some of the relevant outputs from the Potapov procedure.</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>The original transfer function, the approximating generated
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The original transfer function, the approximating generated
 transfer function, the identified poles of the transfer function,
-and the vectors representing the form of the Potapov factors.</dd>
-</dl>
+and the vectors representing the form of the Potapov factors.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -253,12 +292,19 @@ poles of the transfer function.</p>
 <dd><p>Assuming the delays are commensurate, obtain all the roots within the
 frequency ranges of interest. Sets self.roots a list of complex roots
 in the desired frequency ranges.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>list_of_ranges (optional [list of 2-tuples]): list of frequency
-ranges of interest in the form:
-(minimum frequency, maximum frequency).</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>list_of_ranges</strong> (<em>optional [list of 2-tuples]</em>) &#8211; list of frequency</li>
+<li><strong>of interest in the form</strong> (<em>ranges</em>) &#8211; </li>
+<li><strong>frequency, maximum frequency).</strong> (<em>(minimum</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -291,15 +337,21 @@ Potapov factors.</p>
 <dd><p>Run the entire Potapov procedure to find all important information.
 The generated roots, vecs, approximated transfer function T_Testing,
 and the spatial_modes are all stored in the class.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">commensurate_roots (optional[boolean]): which root-finding method
-to use.</p>
-<p class="last">filtering_roots (optional[boolean]): makes sure the poles of the
-transfer function all have negative real part. Drops ones that
-might not.</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>commensurate_roots</strong> (<em>optional[boolean]</em>) &#8211; which root-finding method</li>
+<li><strong>use.</strong> (<em>to</em>) &#8211; </li>
+<li><strong>filtering_roots</strong> (<em>optional[boolean]</em>) &#8211; makes sure the poles of the</li>
+<li><strong>function all have negative real part. Drops ones that</strong> (<em>transfer</em>) &#8211; </li>
+<li><strong>not.</strong> (<em>might</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -311,11 +363,15 @@ might not.</p>
 instead of a Potapov approximation. Instead of returnings roots, etc., we
 return a different kind of function (see below).</p>
 <p>This is used for figure 14 of our paper.</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>A matrix-valued function T(z,n). n is the order of the approximation
-and z is the location of the function to be evaluated.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A matrix-valued function T(z,n). n is the order of the approximation
+and z is the location of the function to be evaluated.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -334,18 +390,26 @@ points(optional[int]): number of points to use per dimension</dd>
 <code class="descclassname">Potapov_Code.Time_Delay_Network.</code><code class="descname">plot_all</code><span class="sig-paren">(</span><em>L</em>, <em>dx</em>, <em>labels</em>, <em>colors</em>, <em>lw</em>, <em>name</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Delay_Network.plot_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>A method to plot the absolute value and phase of each component for a list
 of matrix-valued functions in the complex plane along an axis.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>L (float): plot from 0 to L
-dx (float):  distance between points
-labels (list of str): labels to use
-colors (list of srt): indicators of color for different curves
-lw (float): line width to use
-name (str): name of the file to save
-* args (a list of functions): A list of functions to plot</dd>
-<dt>Returns:</dt>
-<dd>None</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>L</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; plot from 0 to L</li>
+<li><strong>dx</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; distance between points</li>
+<li><strong>labels</strong> (<em>list of str</em>) &#8211; labels to use</li>
+<li><strong>colors</strong> (<em>list of srt</em>) &#8211; indicators of color for different curves</li>
+<li><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; line width to use</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to save</li>
+<li><strong>args</strong> (<em>*</em>) &#8211; A list of functions to plot</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -358,43 +422,145 @@ name (str): name of the file to save
 <dt id="Potapov_Code.Hamiltonian.Chi_nonlin">
 <em class="property">class </em><code class="descclassname">Potapov_Code.Hamiltonian.</code><code class="descname">Chi_nonlin</code><span class="sig-paren">(</span><em>delay_indices</em>, <em>start_nonlin</em>, <em>length_nonlin</em>, <em>refraction_index_func=&lt;function &lt;lambda&gt;&gt;</em>, <em>chi_order=3</em>, <em>chi_function=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to store the information in a particular nonlinear chi element.</p>
-<dl class="docutils">
-<dt>Attributes:</dt>
-<dd><p class="first">delay_indices (list of indices): indices of delays to use.</p>
-<p>start_nonlin (positive float or list of positive floats): location of
-nonlinear crystal with respect to each edge.</p>
-<p>length_nonlin (float): length of the nonlinear element.</p>
-<p>refraction_index_func (function): the indices of refraction as a
-function of the netural frequency <span class="math">\(/omega\)</span>.</p>
-<p>chi_order (optional [int]): order of nonlinearity</p>
-<p class="last">chi_function (optional [function]): strength of nonlinearity.
-first (chi_order+1) args are frequencies,
-next (chi_order+1) args are indices of polarization.</p>
-</dd>
-</dl>
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Chi_nonlin.delay_indices">
+<code class="descname">delay_indices</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin.delay_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list of indices</em> &#8211; indices of delays to use.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Chi_nonlin.start_nonlin">
+<code class="descname">start_nonlin</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin.start_nonlin" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>positive float or list of positive floats</em> &#8211; location of</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">nonlinear crystal with respect to each edge.</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Chi_nonlin.length_nonlin">
+<code class="descname">length_nonlin</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin.length_nonlin" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em> &#8211; length of the nonlinear element.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Chi_nonlin.refraction_index_func">
+<code class="descname">refraction_index_func</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin.refraction_index_func" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>function</em> &#8211; the indices of refraction as a</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">function of the netural frequency :math:`/omega`.</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Chi_nonlin.chi_order">
+<code class="descname">chi_order</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin.chi_order" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>optional [int]</em> &#8211; order of nonlinearity</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Chi_nonlin.chi_function">
+<code class="descname">chi_function</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin.chi_function" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>optional [function]</em> &#8211; strength of nonlinearity.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Chi_nonlin.first">
+<code class="descname">first</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin.first" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>chi_order+1</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Chi_nonlin.next">
+<code class="descname">next</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Chi_nonlin.next" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>chi_order+1</em></p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian">
 <em class="property">class </em><code class="descclassname">Potapov_Code.Hamiltonian.</code><code class="descname">Hamiltonian</code><span class="sig-paren">(</span><em>roots</em>, <em>modes</em>, <em>delays</em>, <em>Omega=None</em>, <em>nonlin_coeff=1.0</em>, <em>polarizations=None</em>, <em>cross_sectional_area=1e-10</em>, <em>chi_nonlinearities=[]</em>, <em>using_qnet_symbols=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to create a sympy expression for the Hamiltonian of a network.</p>
-<dl class="docutils">
-<dt>Attributes:</dt>
-<dd><p class="first">roots (list of complex numbers): the poles of the transfer function.</p>
-<p>omegas (list of floats): the natural frequencies of the modes.</p>
-<p>modes (list of complex-valued column matrices): modes of the network.</p>
-<p>delays (list of floats): the delays in the network.</p>
-<p>Omega (optional [matrix]): Quadratic Hamiltonian term for linear
-dynamics.</p>
-<p>nonlin_coeff (optional [float]): overall scaling for the nonlinearities.</p>
-<p>polarizations (optional [list]): the polarizations of the respective
-modes. These should match the arguments in Chi_nonlin.chi_func.</p>
-<p>cross_sectional_area (float): area of beams, used to determines the
-scaling for the various modes.</p>
-<p>chi_nonlinearities (lst): a list of Chi_nonlin instances.</p>
-<p class="last">TODO: Return L operator for QNET</p>
-</dd>
-</dl>
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.roots">
+<code class="descname">roots</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list of complex numbers</em> &#8211; the poles of the transfer function.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.omegas">
+<code class="descname">omegas</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.omegas" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list of floats</em> &#8211; the natural frequencies of the modes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.modes">
+<code class="descname">modes</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.modes" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list of complex-valued column matrices</em> &#8211; modes of the network.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.delays">
+<code class="descname">delays</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.delays" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list of floats</em> &#8211; the delays in the network.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.Omega">
+<code class="descname">Omega</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.Omega" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>optional [matrix]</em> &#8211; Quadratic Hamiltonian term for linear</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">dynamics.</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.nonlin_coeff">
+<code class="descname">nonlin_coeff</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.nonlin_coeff" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>optional [float]</em> &#8211; overall scaling for the nonlinearities.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.polarizations">
+<code class="descname">polarizations</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.polarizations" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>optional [list]</em> &#8211; the polarizations of the respective</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">modes. These should match the arguments in Chi_nonlin.chi_func.</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.cross_sectional_area">
+<code class="descname">cross_sectional_area</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.cross_sectional_area" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em> &#8211; area of beams, used to determines the</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">scaling for the various modes.</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.chi_nonlinearities">
+<code class="descname">chi_nonlinearities</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.chi_nonlinearities" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>lst</em> &#8211; a list of Chi_nonlin instances.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Potapov_Code.Hamiltonian.Hamiltonian.TODO">
+<code class="descname">TODO</code><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.TODO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return L operator for QNET</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.Dagger">
 <code class="descname">Dagger</code><span class="sig-paren">(</span><em>symbol</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.Dagger" title="Permalink to this definition">¶</a></dt>
@@ -404,13 +570,18 @@ scaling for the various modes.</p>
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.E_field_weight">
 <code class="descname">E_field_weight</code><span class="sig-paren">(</span><em>mode_index</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.E_field_weight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make the weights for each field component <span class="math">\(E_i(n) = [\text{weight}] (a+a^\dagger)\)</span>.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>mode_index (int): The index of the mode.</dd>
-<dt>Returns:</dt>
-<dd>The weight in the equation above. It has form:
-<span class="math">\(sqrt[\hbar * \omega(n) / 2 V_eff(n) \epsilon]`\)</span>.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mode_index</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The index of the mode.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><span class="math">\(sqrt[\hbar * \omega(n) / 2 V_eff(n) \epsilon]`\)</span>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">The weight in the equation above. It has form</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -427,10 +598,14 @@ root (i.e. frequency).</p>
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_E_field_weights">
 <code class="descname">make_E_field_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_E_field_weights" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Returns:</dt>
-<dd>A dictionary from mode index to the E-field weight.</dd>
-</dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary from mode index to the E-field weight.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -449,42 +624,58 @@ motion. This yields the usual term <span class="math">\(i(a \alpha^* - a^\dagger
 and anti-Hermitian parts. The anti-Hermitian part of A describes the
 closed dynamics only and the Hermitian part corresponds to the decay
 terms due to the coupling to the environment at the input/output ports.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>Omega (complex-valued matrix) describes the Hamiltonian of the system.
-Omega = -1j*A        &lt;&#8212; full dynamics (not necessarily Hermitian)
-Omega = (A-A.H)/(2j) &lt;&#8212; closed dynamics only (Hermitian part of above)
-eps (optional[float]): Cutoff for the significance of a particular term.</dd>
-<dt>Returns:</dt>
-<dd>A symbolic expression for the full Hamiltonian.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Omega</strong> (<em>complex-valued matrix</em>) &#8211; </li>
+<li><strong>= -1j*A        &lt;--- full dynamics</strong> (<a class="reference internal" href="#Potapov_Code.Hamiltonian.Hamiltonian.Omega" title="Potapov_Code.Hamiltonian.Hamiltonian.Omega"><em>Omega</em></a>) &#8211; </li>
+<li><strong>=</strong> (<a class="reference internal" href="#Potapov_Code.Hamiltonian.Hamiltonian.Omega" title="Potapov_Code.Hamiltonian.Hamiltonian.Omega"><em>Omega</em></a>) &#8211; </li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; Cutoff for the significance of a particular term.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A symbolic expression for the full Hamiltonian.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_chi_nonlinearity">
 <code class="descname">make_chi_nonlinearity</code><span class="sig-paren">(</span><em>delay_indices</em>, <em>start_nonlin</em>, <em>length_nonlin</em>, <em>refraction_index_func=&lt;function &lt;lambda&gt;&gt;</em>, <em>chi_order=3</em>, <em>chi_function=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_chi_nonlinearity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an instance of Chi_nonlin to Hamiltonian.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">delay_indices (int OR list/tuple of ints): the index representing the
-delay line along which the nonlinearity lies. If given a list/tuple
-then the nonlinearity interacts the N different modes.</p>
-<p>start_nonlin (float OR list/tuple of floats): the beginning of the
-nonlinearity. If a list/tuple then each nonlinearity begins at a
-different time along its corresponding delay line.</p>
-<p>length_nonlin (float): duration of the nonlinearity in terms of
-length. (Units in length)</p>
-<p>refraction_index_func (function): the indices of refraction as a
-function of the netural frequency <span class="math">\(/omega\)</span>.</p>
-<p>chi_order (optional [int]): order of the chi nonlinearity.</p>
-<p>chi_function (function): a function of 2*chi_order+2 parameters that
-returns the strenght of the interaction for given frequency
-combinations and polarizations. The first chi_order+1 parameters
-correspond to frequencies combined the the next chi_order+1 parameters
-correspond to the various polarizations.</p>
-<p class="last">TODO: check units everywhere, including f versus omega = f / 2 pi.</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>delay_indices</strong> (<em>int OR list/tuple of ints</em>) &#8211; the index representing the</li>
+<li><strong>line along which the nonlinearity lies. If given a list/tuple</strong> (<em>delay</em>) &#8211; </li>
+<li><strong>the nonlinearity interacts the N different modes.</strong> (<em>then</em>) &#8211; </li>
+<li><strong>start_nonlin</strong> (<em>float OR list/tuple of floats</em>) &#8211; the beginning of the</li>
+<li><strong>If a list/tuple then each nonlinearity begins at a</strong> (<em>nonlinearity.</em>) &#8211; </li>
+<li><strong>time along its corresponding delay line.</strong> (<em>different</em>) &#8211; </li>
+<li><strong>length_nonlin</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; duration of the nonlinearity in terms of</li>
+<li><strong>length.</strong> (<em>Units in length</em>) &#8211; </li>
+<li><strong>refraction_index_func</strong> (<em>function</em>) &#8211; the indices of refraction as a</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:param function of the netural frequency <span class="math">\(/omega\)</span>.:
+:param chi_order: order of the chi nonlinearity.
+:type chi_order: optional [int]
+:param chi_function: a function of 2*chi_order+2 parameters that
+:type chi_function: function
+:param returns the strenght of the interaction for given frequency:
+:param combinations and polarizations. The first chi_order+1 parameters:
+:param correspond to frequencies combined the the next chi_order+1 parameters:
+:param correspond to the various polarizations.:
+:param TODO: check units everywhere, including f versus omega = f / 2 pi.</p>
 </dd></dl>
 
 <dl class="method">
@@ -498,40 +689,56 @@ will yield different results, so we assume the Hamiltonian is already
 in the desired order (e.g. normally ordered).</p>
 <p>These equations of motion will not show effects of squeezing. To do
 this, we will need a full quantum picture.</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>A function that yields the Hamiltonian equations of motion based on
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A function that yields the Hamiltonian equations of motion based on
 the Hamiltonian given. The equations of motion map
 <span class="math">\((t,a) \to v\)</span>. where math:<cite>t</cite> is a scalar corresponding to
 time, <span class="math">\(a\)</span> is an array of inputs correpsonding to the internal
 degrees of freedom, and <span class="math">\(v\)</span> is a complex-valued column matrix
-describing the gradient.</dd>
-</dl>
+describing the gradient.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_lin_H">
 <code class="descname">make_lin_H</code><span class="sig-paren">(</span><em>Omega</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_lin_H" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a linear Hamiltonian based on Omega.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>Omega (complex-valued matrix) describes the Hamiltonian of the system.</dd>
-<dt>Returns:</dt>
-<dd>A symbolic expression for the nonlinear Hamiltonian.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Omega</strong> (<em>complex-valued matrix</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A symbolic expression for the nonlinear Hamiltonian.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_nonlin_H_from_chi">
 <code class="descname">make_nonlin_H_from_chi</code><span class="sig-paren">(</span><em>chi</em>, <em>filtering_phase_weights=False</em>, <em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_nonlin_H_from_chi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a nonlinear Hamiltonian based on nonlinear interaction terms</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>chi (Chi_nonlin): nonlinearity to use
-eps (optional[float]): Cutoff for the significance of a particular term.</dd>
-<dt>Returns:</dt>
-<dd>A symbolic expression for the nonlinear Hamiltonian.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>chi</strong> (<a class="reference internal" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Potapov_Code.Hamiltonian.Chi_nonlin"><em>Chi_nonlin</em></a>) &#8211; nonlinearity to use</li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; Cutoff for the significance of a particular term.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A symbolic expression for the nonlinear Hamiltonian.</p>
+</td>
+</tr>
+</tbody>
+</table>
 <p>TODO:  Make separate dictionaries for values of chi_function,
 for phase_matching_weights, and for producs of E_field_weights. filter
 the keys before generating terms.</p>
@@ -542,22 +749,29 @@ the keys before generating terms.</p>
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.make_nonlin_term_sympy">
 <code class="descname">make_nonlin_term_sympy</code><span class="sig-paren">(</span><em>combination</em>, <em>pm_arr</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_nonlin_term_sympy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make symbolic nonlinear term using sympy.</p>
-<dl class="docutils">
-<dt>Example:</dt>
-<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">combination</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span> <span class="n">pm_arr</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<p class="rubric">Example</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">combination</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span> <span class="n">pm_arr</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">Hamiltonian</span><span class="o">.</span><span class="n">make_nonlin_term_sympy</span><span class="p">(</span><span class="n">combination</span><span class="p">,</span><span class="n">pm_arr</span><span class="p">)</span>
 <span class="go">    a_1*Dagger(a_2)*Dagger(a_3)</span>
 </pre></div>
 </div>
-</dd>
-<dt>Args:</dt>
-<dd>combination (tuple/list of integers): indices of which terms to
-include pm_arr (tuple/list of +1 and -1): creation and
-annihilation indicators for the respective terms in combination.</dd>
-<dt>Returns:</dt>
-<dd>symbolic expression for the combination of creation and annihilation
-operators.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>combination</strong> (<em>tuple/list of integers</em>) &#8211; indices of which terms to</li>
+<li><strong>pm_arr</strong> (<em>include</em>) &#8211; creation and</li>
+<li><strong>indicators for the respective terms in combination.</strong> (<em>annihilation</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">symbolic expression for the combination of creation and annihilation
+operators.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -565,21 +779,28 @@ operators.</dd>
 <code class="descname">make_phase_matching_weights</code><span class="sig-paren">(</span><em>weight_keys</em>, <em>chi</em>, <em>filtering_phase_weights=False</em>, <em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.make_phase_matching_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a dict to store the weights for the selected components and the
 creation/annihilation information.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">weight_keys (list of tuples): keys for weights to consider.
-Each key is a tuple consisting of two
-components: the first is a tuple of the indices of modes and the
-second is a tuple of +1 and -1.</p>
-<p>filtering_phase_weights (optional[Boolean]): Whether or not to
-filter the phase_matching_weights by the size of their values. The
-cutoff for their absolute value is given by eps</p>
-<p class="last">eps (optional [float]): Cutoff for filtering of weights.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A dictionary of weights with values corresponding to the
-phase matching coefficients.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>weight_keys</strong> (<em>list of tuples</em>) &#8211; keys for weights to consider.</li>
+<li><strong>key is a tuple consisting of two</strong> (<em>Each</em>) &#8211; </li>
+<li><strong>components</strong> &#8211; the first is a tuple of the indices of modes and the</li>
+<li><strong>is a tuple of +1 and -1.</strong> (<em>second</em>) &#8211; </li>
+<li><strong>filtering_phase_weights</strong> (<em>optional[Boolean]</em>) &#8211; Whether or not to</li>
+<li><strong>the phase_matching_weights by the size of their values. The</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#filter" title="(in Python v2.7)"><em>filter</em></a>) &#8211; </li>
+<li><strong>for their absolute value is given by eps</strong> (<em>cutoff</em>) &#8211; </li>
+<li><strong>eps</strong> (<em>optional [float]</em>) &#8211; Cutoff for filtering of weights.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dictionary of weights with values corresponding to the
+phase matching coefficients.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -589,13 +810,21 @@ phase matching coefficients.</dd>
 Each key is a tuple consisting of two
 components: the first is a tuple of the indices of modes and the
 second is a tuple of +1 and -1.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>chi (Chi_nonlin): the nonlinearity for which the weight will be
-found.</dd>
-<dt>Returns:</dt>
-<dd>A list of keys of the type described.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>chi</strong> (<a class="reference internal" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Potapov_Code.Hamiltonian.Chi_nonlin"><em>Chi_nonlin</em></a>) &#8211; the nonlinearity for which the weight will be</li>
+<li><strong>found.</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of keys of the type described.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -604,25 +833,35 @@ found.</dd>
 <dd><p>One approach to perturb the roots is to use a function in <span class="math">\(x,y\)</span>
 that becomes minimized at a zero. This is done here.</p>
 <p>The result is an update to roots, omegas, and Delta_delays.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">func, dfuncs (functions): Functions in x,y. The first becomes
-minimized at a zero and the second is the gradient in x,y.
-These functions are generated in
-Time_Delay_Network.get_minimizing_function_z.</p>
-<p class="last">eps (optional [float]): desired precision for convergence.</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dfuncs</strong> (<em>func,</em>) &#8211; Functions in x,y. The first becomes</li>
+<li><strong>at a zero and the second is the gradient in x,y.</strong> (<em>minimized</em>) &#8211; </li>
+<li><strong>functions are generated in</strong> (<em>These</em>) &#8211; </li>
+<li><strong>Time_Delay_Network.get_minimizing_function_z.</strong> &#8211; </li>
+<li><strong>eps</strong> (<em>optional [float]</em>) &#8211; desired precision for convergence.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Potapov_Code.Hamiltonian.Hamiltonian.mode_volumes">
 <code class="descname">mode_volumes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.mode_volumes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the effective volume of each mode to normalize the field.</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>A list of the effective lengths of the various modes.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of the effective lengths of the various modes.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -632,19 +871,25 @@ Time_Delay_Network.get_minimizing_function_z.</p>
 <p>We apply a change of basis <span class="math">\(a_j \to a e^{- i \omega_j}\)</span> for
 each mode <span class="math">\(a_j\)</span>. This method modifies the symbolic Hamiltonian,
 so to use it the Hamiltonian sould already be constructed and stored.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">freqs (optional [real number or list/tuple]): Frequency or list
-of frequencies to use to displace the Hamiltonian.</p>
-<p>include_time_terms (optional [boolean]): If this is set to true,
-we include the terms <span class="math">\(e^{- i \omega_j}\)</span> in the Hamiltonian
-resulting from a change of basis. This can be set to False if all
-such terms have already been eliminated (i.e. if the rotating wave
-approximation has been applied).</p>
-<p class="last">## TODO: replace the sine and cosine stuff with something nicer.
-## Maybe utilize the _get_real_imag_func method in Time_Delay_Network.</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>freqs</strong> (<em>optional [real number or list/tuple]</em>) &#8211; Frequency or list</li>
+<li><strong>frequencies to use to displace the Hamiltonian.</strong> (<em>of</em>) &#8211; </li>
+<li><strong>include_time_terms</strong> (<em>optional [boolean]</em>) &#8211; If this is set to true,</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:param we include the terms <span class="math">\(e^{- i \omega_j}\)</span> in the Hamiltonian:
+:param resulting from a change of basis. This can be set to False if all:
+:param such terms have already been eliminated (i.e. if the rotating wave:
+:param approximation has been applied).:
+:param ## TODO: replace the sine and cosine stuff with something nicer.
+:param ## Maybe utilize the _get_real_imag_func method in Time_Delay_Network.:</p>
 </dd></dl>
 
 <dl class="method">
@@ -661,12 +906,18 @@ This is done here using a function perturb_func that corresponds to
 <span class="math">\(-f(z) / f'(z)\)</span> when the time delays are held fixed.
 The function perturb_func is generated in
 get_frequency_pertub_func_z.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">perturb_func (function): the Newton&#8217;s method function.</p>
-<p class="last">eps (optional [float]): desired precision for convergence</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>perturb_func</strong> (<em>function</em>) &#8211; the Newton&#8217;s method function.</li>
+<li><strong>eps</strong> (<em>optional [float]</em>) &#8211; desired precision for convergence</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -674,15 +925,23 @@ get_frequency_pertub_func_z.</p>
 <code class="descname">phase_weight</code><span class="sig-paren">(</span><em>combination</em>, <em>pm_arr</em>, <em>chi</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Hamiltonian.Hamiltonian.phase_weight" title="Permalink to this definition">¶</a></dt>
 <dd><p>The weight to give to each nonlinear term characterized by the given
 combination and pm_arr.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>combination (list/tuple of integers): which modes/roots to pick
-pm_arr (list of +1 and -1): creation and annihilation of modes
-chi (Chi_nonlin): the chi nonlinearity for which to compute
-the phase coefficient.</dd>
-<dt>Returns:</dt>
-<dd>The weight to add to the Hamiltonian</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>combination</strong> (<em>list/tuple of integers</em>) &#8211; which modes/roots to pick</li>
+<li><strong>pm_arr</strong> (<em>list of +1 and -1</em>) &#8211; creation and annihilation of modes</li>
+<li><strong>chi</strong> (<a class="reference internal" href="#Potapov_Code.Hamiltonian.Chi_nonlin" title="Potapov_Code.Hamiltonian.Chi_nonlin"><em>Chi_nonlin</em></a>) &#8211; the chi nonlinearity for which to compute</li>
+<li><strong>phase coefficient.</strong> (<em>the</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The weight to add to the Hamiltonian</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -704,17 +963,24 @@ products to approximate given functions near poles.</p>
 <span class="math">\(z = i \omega\)</span> and the desired poles that characterize the modes.
 Returns the Potapov product as a function approximating the original
 transfer function.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">z (complex number): value where product is evaluated</p>
-<p>poles(list of complex numbers): The poles of the Potapov product.</p>
-<p>vecs (list of complex-valued matrices): The eigenvectors corresponding to
-the orthogonal projectors of the Potapov product.</p>
-<p class="last">N (int): Dimensionality of the the range.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>Complex-valued matrix of size <span class="math">\(N \times N\)</span>.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>z</strong> (<em>complex number</em>) &#8211; value where product is evaluated</li>
+<li><strong>poles</strong> (<em>list of complex numbers</em>) &#8211; The poles of the Potapov product.</li>
+<li><strong>vecs</strong> (<em>list of complex-valued matrices</em>) &#8211; The eigenvectors corresponding to</li>
+<li><strong>orthogonal projectors of the Potapov product.</strong> (<em>the</em>) &#8211; </li>
+<li><strong>N</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Dimensionality of the the range.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Complex-valued matrix of size <span class="math">\(N \times N\)</span>.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -724,19 +990,26 @@ the orthogonal projectors of the Potapov product.</p>
 the transfer function T at a frequency <span class="math">\(z = i \omega\)</span>.</p>
 <p>Try to satisfy
 <span class="math">\(T(z) = D + C(zI-A)^{-1}B\)</span></p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">A,B,C (matrices): The A,B, and C matrices of the
-state-space representation</p>
-<p>T (matrix-valued function): The input/output function
-to estimate</p>
-<p class="last">z (complex number): the location at which the scattering
-matrix will be estimated</p>
-</dd>
-<dt>Returns:</dt>
-<dd>The estimated S=D scaterring matrix based on the value of
-the function T and the ABC matrices.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>A,B,C</strong> (<em>matrices</em>) &#8211; The A,B, and C matrices of the</li>
+<li><strong>representation</strong> (<em>state-space</em>) &#8211; </li>
+<li><strong>T</strong> (<em>matrix-valued function</em>) &#8211; The input/output function</li>
+<li><strong>estimate</strong> (<em>to</em>) &#8211; </li>
+<li><strong>z</strong> (<em>complex number</em>) &#8211; the location at which the scattering</li>
+<li><strong>will be estimated</strong> (<em>matrix</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The estimated S=D scaterring matrix based on the value of
+the function T and the ABC matrices.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -744,16 +1017,23 @@ the function T and the ABC matrices.</dd>
 <code class="descclassname">Potapov_Code.Potapov.</code><code class="descname">finite_transfer_function</code><span class="sig-paren">(</span><em>U</em>, <em>eigenvectors</em>, <em>eigenvalues</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Potapov.finite_transfer_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Give a rational Blaschke-Potapov product of z with the given
 eigenvalues and eigenvectors and constant unitary factor U.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">U (complex-valued matrix): A unitary matrix.</p>
-<p>eigenvectors(list of complex-valued matrices): eigenvectors to use</p>
-<p class="last">eigenvalues(list of complex numebrs): eigenvalues to use</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A function that takes a complex number and returns the Potapov product
-evaluated at that number.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>U</strong> (<em>complex-valued matrix</em>) &#8211; A unitary matrix.</li>
+<li><strong>eigenvectors</strong> (<em>list of complex-valued matrices</em>) &#8211; eigenvectors to use</li>
+<li><strong>eigenvalues</strong> (<em>list of complex numebrs</em>) &#8211; eigenvalues to use</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A function that takes a complex number and returns the Potapov product
+evaluated at that number.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -762,15 +1042,22 @@ evaluated at that number.</dd>
 <dd><p>Make the ABCD model of a single Potapov factor given some eigenvalue
 and eigenvector.</p>
 <p>The ABCD model can be used to obtain the dynamics of a linear system.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">val (complex number): an eigenvalue</p>
-<p>vec (complex-valued matrix): an eigenvector</p>
-<p class="last">sym (optiona[boolean]): Modify <span class="math">\(B\)</span> and <span class="math">\(C\)</span> so that <span class="math">\(B = C.H\)</span>.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A list [A,B,C,D] of four matrices representing the ABCD model.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>val</strong> (<em>complex number</em>) &#8211; an eigenvalue</li>
+<li><strong>vec</strong> (<em>complex-valued matrix</em>) &#8211; an eigenvector</li>
+<li><strong>sym</strong> (<em>optiona[boolean]</em>) &#8211; Modify <span class="math">\(B\)</span> and <span class="math">\(C\)</span> so that <span class="math">\(B = C.H\)</span>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list [A,B,C,D] of four matrices representing the ABCD model.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -784,31 +1071,45 @@ of the functions at zero.</p>
 then T will be reconstructed.</p>
 <p>In general, there is possibly an analytic term that is not captured by using
 a Blaschke-Potapov approximation.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">T (matrix-valued function): A given meromorphic function</p>
-<p>poles (a list of complex valued numbers): The given poles of T</p>
-<p class="last">vecs (list of complex-valued matrices): The eigenvectors corresponding to
-the orthogonal projectors of the Potapov product.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A matrix-valued function equation to T at z=0 and approximating T
-using a Potapov product generated by its poles and residues.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>T</strong> (<em>matrix-valued function</em>) &#8211; A given meromorphic function</li>
+<li><strong>poles</strong> (<em>a list of complex valued numbers</em>) &#8211; The given poles of T</li>
+<li><strong>vecs</strong> (<em>list of complex-valued matrices</em>) &#8211; The eigenvectors corresponding to</li>
+<li><strong>orthogonal projectors of the Potapov product.</strong> (<em>the</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A matrix-valued function equation to T at z=0 and approximating T
+using a Potapov product generated by its poles and residues.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.Potapov.get_Potapov_ABCD">
 <code class="descclassname">Potapov_Code.Potapov.</code><code class="descname">get_Potapov_ABCD</code><span class="sig-paren">(</span><em>poles</em>, <em>vecs</em>, <em>T=None</em>, <em>z=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Potapov.get_Potapov_ABCD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine the ABCD models for the different degrees of freedom.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">val (a list of complex numbers): given eigenvalues</p>
-<p class="last">vec (a list of complex-valued matrices): given eigenvectors</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A list [A,B,C,D] of four matrices representing the ABCD model.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>val</strong> (<em>a list of complex numbers</em>) &#8211; given eigenvalues</li>
+<li><strong>vec</strong> (<em>a list of complex-valued matrices</em>) &#8211; given eigenvectors</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list [A,B,C,D] of four matrices representing the ABCD model.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -823,27 +1124,37 @@ in the Blaschke-Potapov factorization.</p>
 <dt id="Potapov_Code.Potapov.normalize">
 <code class="descclassname">Potapov_Code.Potapov.</code><code class="descname">normalize</code><span class="sig-paren">(</span><em>vec</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Potapov.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize a vector.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>vec (complex-valued matrix): a vector</dd>
-<dt>Returns:</dt>
-<dd>The normalized vector.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vec</strong> (<em>complex-valued matrix</em>) &#8211; a vector</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The normalized vector.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.Potapov.plot">
 <code class="descclassname">Potapov_Code.Potapov.</code><code class="descname">plot</code><span class="sig-paren">(</span><em>L</em>, <em>dx</em>, <em>func</em>, <em>(i</em>, <em>j)</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Potapov.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A nice function for plotting components of matrix-valued functions.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">L (float): length along which to plot</p>
-<p>dx (float): step length to take</p>
-<p>func (function): complex matrix-valued function</p>
-<p>i,j (tuple of ints): coordinate to plot</p>
-<p class="last">args (functions): Desired transformations on the inputs</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>L</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; length along which to plot</li>
+<li><strong>dx</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; step length to take</li>
+<li><strong>func</strong> (<em>function</em>) &#8211; complex matrix-valued function</li>
+<li><strong>i,j</strong> (<em>tuple of ints</em>) &#8211; coordinate to plot</li>
+<li><strong>args</strong> (<a class="reference internal" href="#module-Potapov_Code.functions" title="Potapov_Code.functions"><em>functions</em></a>) &#8211; Desired transformations on the inputs</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -851,16 +1162,23 @@ in the Blaschke-Potapov factorization.</p>
 <code class="descclassname">Potapov_Code.Potapov.</code><code class="descname">prod</code><span class="sig-paren">(</span><em>z</em>, <em>U</em>, <em>eigenvectors</em>, <em>eigenvalues</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Potapov.prod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the Blaschke-Potapov product with the given eigenvalues and
 eigenvectors and constant unitary factor U evaluated at z.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">z (complex number): where product is evaluated</p>
-<p>U (complex-valued matrix): A unitary matrix</p>
-<p>eigenvectors(list of complex-valued matrices): eigenvectors to use</p>
-<p class="last">eigenvalues(list of complex numebrs): eigenvalues to use</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A complex-valued matrix equal to the Potapov product evaluated at z.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>z</strong> (<em>complex number</em>) &#8211; where product is evaluated</li>
+<li><strong>U</strong> (<em>complex-valued matrix</em>) &#8211; A unitary matrix</li>
+<li><strong>eigenvectors</strong> (<em>list of complex-valued matrices</em>) &#8211; eigenvectors to use</li>
+<li><strong>eigenvalues</strong> (<em>list of complex numebrs</em>) &#8211; eigenvalues to use</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex-valued matrix equal to the Potapov product evaluated at z.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -888,43 +1206,61 @@ to <span class="math">\(\sum_i z_i^k\)</span>, where i is the index of the roots
 <code class="descclassname">Potapov_Code.Roots.</code><code class="descname">Muller</code><span class="sig-paren">(</span><em>x1</em>, <em>x2</em>, <em>x3</em>, <em>f</em>, <em>tol=1e-12</em>, <em>N=400</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Roots.Muller" title="Permalink to this definition">¶</a></dt>
 <dd><p>A method that works well for finding roots locally in the complex plane.
 Uses three points for initial guess, x1,x2,x3.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">x1,x2,x3 (complex numbers): initial points for the algorithm</p>
-<p>f (function): complex valued function for which to find roots</p>
-<p>tol (optional[float]): tolerance</p>
-<p>N(optional[int]): maximum number of iterations</p>
-<p class="last">verbose (optional[boolean]): print warnings</p>
-</dd>
-<dt>Returns:</dt>
-<dd>estimated root of the function f.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x1,x2,x3</strong> (<em>complex numbers</em>) &#8211; initial points for the algorithm</li>
+<li><strong>f</strong> (<em>function</em>) &#8211; complex valued function for which to find roots</li>
+<li><strong>tol</strong> (<em>optional[float]</em>) &#8211; tolerance</li>
+<li><strong>N</strong> (<em>optional[int]</em>) &#8211; maximum number of iterations</li>
+<li><strong>verbose</strong> (<em>optional[boolean]</em>) &#8211; print warnings</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">estimated root of the function f.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.Roots.combine">
 <code class="descclassname">Potapov_Code.Roots.</code><code class="descname">combine</code><span class="sig-paren">(</span><em>eps=1e-05</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Roots.combine" title="Permalink to this definition">¶</a></dt>
 <dd><p>chain together several lists and purge redundancies.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">eps (optional[float]): tolerance for purging elements</p>
-<p class="last">args (lists): several lists</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A list of combined elements.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; tolerance for purging elements</li>
+<li><strong>args</strong> (<em>lists</em>) &#8211; several lists</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of combined elements.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.Roots.find_maxes">
 <code class="descclassname">Potapov_Code.Roots.</code><code class="descname">find_maxes</code><span class="sig-paren">(</span><em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Roots.find_maxes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a list of numbers, find the indices where local maxima happen.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>y(list of floats)</dd>
-<dt>Returns:</dt>
-<dd>list of indices where maxima occur</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>y</strong> (<em>list of floats</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of indices where maxima occur</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -932,10 +1268,14 @@ Uses three points for initial guess, x1,x2,x3.</p>
 <code class="descclassname">Potapov_Code.Roots.</code><code class="descname">find_roots</code><span class="sig-paren">(</span><em>y_smooth</em>, <em>c</em>, <em>num_roots_to_find</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Roots.find_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>given the values y_smooth, locations c, and the number to go up to,
 find the roots using the polynomial trick.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>y_smooth (list of complex numbers)</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>y_smooth</strong> (<em>list of complex numbers</em>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -943,15 +1283,22 @@ find the roots using the polynomial trick.</p>
 <code class="descclassname">Potapov_Code.Roots.</code><code class="descname">get_boundary</code><span class="sig-paren">(</span><em>x_cent</em>, <em>y_cent</em>, <em>width</em>, <em>height</em>, <em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Roots.get_boundary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a rectangle centered at x_cent,y_cent. Find points along this rectangle.
 I use the convention that width/height make up half the dimensions of the rectangle.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">x_cent,y_cent (floats): the coordinates of the center of the rectangle</p>
-<p>width,height (float): The (half) width and height of the rectangle</p>
-<p class="last">N (int): number of points to use along each edge.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A list of points along the edge of the rectangle in the complex plane.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_cent,y_cent</strong> (<em>floats</em>) &#8211; the coordinates of the center of the rectangle</li>
+<li><strong>width,height</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The (half) width and height of the rectangle</li>
+<li><strong>N</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of points to use along each edge.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of points along the edge of the rectangle in the complex plane.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -968,25 +1315,32 @@ in the numerically safe function new_f_frac_safe.</p>
 <p>TODO:
 save values along edges if iterating to a smaller rectangle
 extend to other kinds of functions, e.g. function with non-simple zeros.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">f (function): the function for which the roots (i.e. zeros) will be found</p>
-<p>fp (function): the derivative of f</p>
-<p>x_cent,y_cent (floats): The center of the rectangle in the complex plane</p>
-<p>width,height (floats): half the width and height of the rectangular region</p>
-<p>N (optional[int]): Number of points to sample per edge</p>
-<p>outlier_coeff (float): multiplier for coefficient used when subtracting
-poles to improve numerical stability. See new_f_frac_safe.</p>
-<p>max_step (optional[int]): Number of iterations allowed for algorithm to
-repeat on smaller rectangles</p>
-<p>known roots (optional[list of complex numbers]): Roots of f that are
-already known.</p>
-<p class="last">verbose (optional[boolean]): print warnings</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A list of roots for the function f inside the rectangle determined by
-the values x_cent,y_cent,width, and height.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> (<em>function</em>) &#8211; the function for which the roots (i.e. zeros) will be found</li>
+<li><strong>fp</strong> (<em>function</em>) &#8211; the derivative of f</li>
+<li><strong>x_cent,y_cent</strong> (<em>floats</em>) &#8211; The center of the rectangle in the complex plane</li>
+<li><strong>width,height</strong> (<em>floats</em>) &#8211; half the width and height of the rectangular region</li>
+<li><strong>N</strong> (<em>optional[int]</em>) &#8211; Number of points to sample per edge</li>
+<li><strong>outlier_coeff</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; multiplier for coefficient used when subtracting</li>
+<li><strong>to improve numerical stability. See new_f_frac_safe.</strong> (<em>poles</em>) &#8211; </li>
+<li><strong>max_step</strong> (<em>optional[int]</em>) &#8211; Number of iterations allowed for algorithm to</li>
+<li><strong>on smaller rectangles</strong> (<em>repeat</em>) &#8211; </li>
+<li><strong>roots</strong> (<em>known</em>) &#8211; Roots of f that are</li>
+<li><strong>known.</strong> (<em>already</em>) &#8211; </li>
+<li><strong>verbose</strong> (<em>optional[boolean]</em>) &#8211; print warnings</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of roots for the function f inside the rectangle determined by
+the values x_cent,y_cent,width, and height.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -994,29 +1348,43 @@ the values x_cent,y_cent,width, and height.</dd>
 <code class="descclassname">Potapov_Code.Roots.</code><code class="descname">inside_boundary</code><span class="sig-paren">(</span><em>roots_near_boundary</em>, <em>x_cent</em>, <em>y_cent</em>, <em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Roots.inside_boundary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes roots and the specification of a rectangular region
 returns the roots in the interior (and ON the boundary) of the region.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">roots_near_boundary (list of complex numbers): roots near the boundary</p>
-<p>x_cent,y_cent (floats): coordinates of the center of the region</p>
-<p class="last">width,height (floats): The (half) width of height of the rectangle</p>
-</dd>
-<dt>Returns:</dt>
-<dd>Roots in the interior and on the boundary of the rectangle</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>roots_near_boundary</strong> (<em>list of complex numbers</em>) &#8211; roots near the boundary</li>
+<li><strong>x_cent,y_cent</strong> (<em>floats</em>) &#8211; coordinates of the center of the region</li>
+<li><strong>width,height</strong> (<em>floats</em>) &#8211; The (half) width of height of the rectangle</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Roots in the interior and on the boundary of the rectangle</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.Roots.linspace">
 <code class="descclassname">Potapov_Code.Roots.</code><code class="descname">linspace</code><span class="sig-paren">(</span><em>c1</em>, <em>c2</em>, <em>num=50</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Roots.linspace" title="Permalink to this definition">¶</a></dt>
 <dd><p>make a linespace method for complex numbers.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">c1,c2 (complex numbers): The two points along which to draw a line.</p>
-<p class="last">num (optional [int]): number of points along the line</p>
-</dd>
-<dt>Returns:</dt>
-<dd>a list of num points starting at c1 and going to c2.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>c1,c2</strong> (<em>complex numbers</em>) &#8211; The two points along which to draw a line.</li>
+<li><strong>num</strong> (<em>optional [int]</em>) &#8211; number of points along the line</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list of num points starting at c1 and going to c2.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1026,17 +1394,24 @@ returns the roots in the interior (and ON the boundary) of the region.</p>
 This function does NOT check to see if there is division by zero of if the
 values become too large.</p>
 <p>We assume here that the poles are of order 1.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">f_frac (function): function for which roots will be subtracted</p>
-<p>z0 (complex number): point where new_f_frac is evaluated</p>
-<p>residues (list of complex numbers): The corresponding residues to subtract</p>
-<p>roots (list of complex numbers): The corresponding roots to subtract</p>
-<p class="last">val (optional[complex number]): We can impose a value f_frac(z0) if we wish.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>The new value of f_frac(z0) once the chosen poles have been subtracted.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f_frac</strong> (<em>function</em>) &#8211; function for which roots will be subtracted</li>
+<li><strong>z0</strong> (<em>complex number</em>) &#8211; point where new_f_frac is evaluated</li>
+<li><strong>residues</strong> (<em>list of complex numbers</em>) &#8211; The corresponding residues to subtract</li>
+<li><strong>roots</strong> (<em>list of complex numbers</em>) &#8211; The corresponding roots to subtract</li>
+<li><strong>val</strong> (<em>optional[complex number]</em>) &#8211; We can impose a value f_frac(z0) if we wish.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The new value of f_frac(z0) once the chosen poles have been subtracted.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1048,32 +1423,47 @@ If the value of f_frac(z0) is too large, subtracting the roots of f becomes
 numerically unstable. In this case, we approximate the new function f_frac
 by using the limit function.</p>
 <p>We assume here that the poles are of order 1.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">f_frac (function): function for which roots will be subtracted</p>
-<p>z0 (complex number): point where new_f_frac is evaluated</p>
-<p>residues (list of complex numbers): The corresponding residues to subtract</p>
-<p>roots (list of complex numbers): The corresponding roots to subtract</p>
-<p>val (optional[complex number]): We can impose a value f_frac(z0) if we wish.</p>
-<p>max_ok (float) Maximum absolute value of f_frac(z0 to use)</p>
-<p class="last">verbose (optional[boolean]): print warnings</p>
-</dd>
-<dt>Returns:</dt>
-<dd>The new value of f_frac(z0) once the chosen poles have been subtracted.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f_frac</strong> (<em>function</em>) &#8211; function for which roots will be subtracted</li>
+<li><strong>z0</strong> (<em>complex number</em>) &#8211; point where new_f_frac is evaluated</li>
+<li><strong>residues</strong> (<em>list of complex numbers</em>) &#8211; The corresponding residues to subtract</li>
+<li><strong>roots</strong> (<em>list of complex numbers</em>) &#8211; The corresponding roots to subtract</li>
+<li><strong>val</strong> (<em>optional[complex number]</em>) &#8211; We can impose a value f_frac(z0) if we wish.</li>
+<li><strong>max_ok</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; </li>
+<li><strong>verbose</strong> (<em>optional[boolean]</em>) &#8211; print warnings</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The new value of f_frac(z0) once the chosen poles have been subtracted.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.Roots.purge">
 <code class="descclassname">Potapov_Code.Roots.</code><code class="descname">purge</code><span class="sig-paren">(</span><em>lst</em>, <em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Roots.purge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get rid of redundant elements in a list. There is a precision cutoff eps.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>lst (list): elements
-eps (optional[float]): precision cutoff</dd>
-<dt>Returns:</dt>
-<dd>A list without redundant elements.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lst</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; elements</li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; precision cutoff</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list without redundant elements.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1081,14 +1471,21 @@ eps (optional[float]): precision cutoff</dd>
 <code class="descclassname">Potapov_Code.Roots.</code><code class="descname">residues</code><span class="sig-paren">(</span><em>f_frac</em>, <em>roots</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Roots.residues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the resides of <span class="math">\(f_{frac} = f'/f\)</span> given the location of some roots of f.
 The roots of f are the poles of f_frac.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">f_frac (function): a complex</p>
-<p class="last">roots (a list of complex numbers): the roots of f; poles of f_frac</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A list of residues of f_frac.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f_frac</strong> (<em>function</em>) &#8211; a complex</li>
+<li><strong>roots</strong> (<em>a list of complex numbers</em>) &#8211; the roots of f; poles of f_frac</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of residues of f_frac.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -1136,55 +1533,86 @@ port_in and port_out are where the system is driven.</p>
 <dt id="Potapov_Code.Time_Sims_nonlin.make_f">
 <code class="descclassname">Potapov_Code.Time_Sims_nonlin.</code><code class="descname">make_f</code><span class="sig-paren">(</span><em>eq_mot</em>, <em>B</em>, <em>a_in</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Sims_nonlin.make_f" title="Permalink to this definition">¶</a></dt>
 <dd><p>Equations of motion, including possibly nonlinear internal dynamics.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">eq_mot (function): The equations of motion, which map
-<span class="math">\((t,a) \to v\)</span>. Here math:<cite>t</cite> is a scalar corresponding to time,
-<span class="math">\(a\)</span> is an array of inputs correpsonding to the internal degrees
-of freedom, and <span class="math">\(v\)</span> is a complex-valued column matrix describing
-the gradient.</p>
-<p>B (matrix): The matrix multiplying the inputs to the system.</p>
-<p class="last">a_in (function): The inputs to the system</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A function that maps <span class="math">\((t,a) \to f'(t,a)\)</span>, where t is a scalar (time), and
-a is an array representing the state of the system.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>eq_mot</strong> (<em>function</em>) &#8211; The equations of motion, which map</td>
+</tr>
+</tbody>
+</table>
+<p>:param <span class="math">\(: `t\)</span> is a scalar corresponding to time,
+:type <span class="math">\(: t,a
+:param :math:`a\)</span> is an array of inputs correpsonding to the internal degrees:
+:param of freedom, and <span class="math">\(v\)</span> is a complex-valued column matrix describing:
+:param the gradient.:
+:param B: The matrix multiplying the inputs to the system.
+:type B: matrix
+:param a_in: The inputs to the system
+:type a_in: function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A function that maps <span class="math">\((t,a) \to f'(t,a)\)</span>, where t is a scalar (time), and
+a is an array representing the state of the system.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.Time_Sims_nonlin.make_f_lin">
 <code class="descclassname">Potapov_Code.Time_Sims_nonlin.</code><code class="descname">make_f_lin</code><span class="sig-paren">(</span><em>A</em>, <em>B</em>, <em>a_in</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Sims_nonlin.make_f_lin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear equations of motion</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">A (matrix): The matrix for the linear equations of motion:
-<span class="math">\(\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in} (t).\)</span></p>
-<p>B (matrix): The matrix multiplying the inputs to the system.</p>
-<p class="last">a_in (function): The inputs to the system <span class="math">\(\breve a\)</span>.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A function that maps <span class="math">\((t,a) \to f'(t,a)\)</span>, where t is a scalar (time), and
-a is an array representing the state of the system.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>A</strong> (<em>matrix</em>) &#8211; The matrix for the linear equations of motion:</td>
+</tr>
+</tbody>
+</table>
+<p>:param <span class="math">\(\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in}:
+:type :math:\)</span>frac{d}{dt}begin{pmatrix} a \ a^+ end{pmatrix} = A begin{pmatrix} a \ a^+ end{pmatrix}+ B breve a_{in}: t
+:param B: The matrix multiplying the inputs to the system.
+:type B: matrix
+:param a_in: The inputs to the system <span class="math">\(\breve a\)</span>.
+:type a_in: function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A function that maps <span class="math">\((t,a) \to f'(t,a)\)</span>, where t is a scalar (time), and
+a is an array representing the state of the system.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.Time_Sims_nonlin.run_ODE">
 <code class="descclassname">Potapov_Code.Time_Sims_nonlin.</code><code class="descname">run_ODE</code><span class="sig-paren">(</span><em>f</em>, <em>a_in</em>, <em>C</em>, <em>D</em>, <em>num_of_variables</em>, <em>T=10</em>, <em>dt=0.01</em>, <em>y0=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.Time_Sims_nonlin.run_ODE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the ODE for the given set of equations and record the outputs.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">f (function): Evolution of the system</p>
-<p>a_in (function): inputs as a function of time</p>
-<p>C,D (matrices): matrices to use to obtain output from system state and input</p>
-<p>num_of_variables (int): number of variables the system has</p>
-<p>T (optional[positive float]): length of simulation</p>
-<p class="last">dt (optional[float]): time step used by the simulation</p>
-</dd>
-<dt>Returns:</dt>
-<dd>An array Y of outputs</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> (<em>function</em>) &#8211; Evolution of the system</li>
+<li><strong>a_in</strong> (<em>function</em>) &#8211; inputs as a function of time</li>
+<li><strong>C,D</strong> (<em>matrices</em>) &#8211; matrices to use to obtain output from system state and input</li>
+<li><strong>num_of_variables</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of variables the system has</li>
+<li><strong>T</strong> (<em>optional[positive float]</em>) &#8211; length of simulation</li>
+<li><strong>dt</strong> (<em>optional[float]</em>) &#8211; time step used by the simulation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An array Y of outputs</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -1198,41 +1626,64 @@ a is an array representing the state of the system.</dd>
 <dt id="Potapov_Code.functions.Pade">
 <code class="descclassname">Potapov_Code.functions.</code><code class="descname">Pade</code><span class="sig-paren">(</span><em>n</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.Pade" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pade pproximation of <span class="math">\(e^z\)</span></p>
-<dl class="docutils">
-<dt>args:</dt>
-<dd>n (integer): order of approximation
-z (complex number):</dd>
-<dt>Returns:</dt>
-<dd>Value of Pade approximation.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>integer</em>) &#8211; order of approximation</li>
+<li><strong>z</strong> (<em>complex number</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of Pade approximation.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.functions.Q">
 <code class="descclassname">Potapov_Code.functions.</code><code class="descname">Q</code><span class="sig-paren">(</span><em>z</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.Q" title="Permalink to this definition">¶</a></dt>
 <dd><p>Numerator of Pade approximation of <span class="math">\(e^z\)</span>.</p>
-<dl class="docutils">
-<dt>args:</dt>
-<dd>n (integer): order of approximation
-z (complex number):</dd>
-<dt>Returns:</dt>
-<dd>Value of Numerator of Pade approximation.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>integer</em>) &#8211; order of approximation</li>
+<li><strong>z</strong> (<em>complex number</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of Numerator of Pade approximation.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.functions.der">
 <code class="descclassname">Potapov_Code.functions.</code><code class="descname">der</code><span class="sig-paren">(</span><em>f</em>, <em>z</em>, <em>eps=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.der" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the derivative of the function f at z</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">f (function): the function to use.</p>
-<p>z (complex number): point at which to evaluate derivative.</p>
-<p class="last">eps(optional[complex number]): number to perturb z to find derivative.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>Derivative of f</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> (<em>function</em>) &#8211; the function to use.</li>
+<li><strong>z</strong> (<em>complex number</em>) &#8211; point at which to evaluate derivative.</li>
+<li><strong>eps</strong> (<em>optional[complex number]</em>) &#8211; number to perturb z to find derivative.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Derivative of f</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1251,25 +1702,37 @@ is needed. i.e.</p>
     M_2^\# &amp;&amp; M_1^\#
 \end{pmatrix}\end{split}\]</div>
 <p>In the case M2 == None, it becomes replaced by the zero matrix.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>M1: matrix to double-up
-M2: optional second matrix to double-up</dd>
-<dt>Returns:</dt>
-<dd>The doubled-up matrix.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>M1</strong> &#8211; matrix to double-up</li>
+<li><strong>M2</strong> &#8211; optional second matrix to double-up</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The doubled-up matrix.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.functions.factorial">
 <code class="descclassname">Potapov_Code.functions.</code><code class="descname">factorial</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.factorial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the factorial of n.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>n (integer)</dd>
-<dt>Returns:</dt>
-<dd>factorial of n</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<em>integer</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">factorial of n</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1284,22 +1747,29 @@ M2: optional second matrix to double-up</dd>
 along the various delays of the system. Each delay follows a
 node in the system.</p>
 <p>The frequency is assumed to be the imaginary part of each root.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">root1,root2 (complex number): the two roots</p>
-<p>v1,v2 (column matrices): the amplitude of each mode at the
-various nodes</p>
-<p>delays (list of floats): The duration of each delay following
-each node in the system</p>
-<p>eps(optional[float]): cutoff for two frequencies being equal</p>
-<p class="last">func (optional[funciton]): used to transform the roots. Default
-value is set to lambda z: z.imag, meaning we take the frequency
-of each mode.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>The inner product of the two modes.
-Sanity check: if root1==root2 and v1==v2, returns real value.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>root1,root2</strong> (<em>complex number</em>) &#8211; the two roots</li>
+<li><strong>v1,v2</strong> (<em>column matrices</em>) &#8211; the amplitude of each mode at the</li>
+<li><strong>nodes</strong> (<em>various</em>) &#8211; </li>
+<li><strong>delays</strong> (<em>list of floats</em>) &#8211; The duration of each delay following</li>
+<li><strong>node in the system</strong> (<em>each</em>) &#8211; </li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; cutoff for two frequencies being equal</li>
+<li><strong>func</strong> (<em>optional[funciton]</em>) &#8211; used to transform the roots. Default</li>
+<li><strong>is set to lambda z</strong> (<em>value</em>) &#8211; z.imag, meaning we take the frequency</li>
+<li><strong>each mode.</strong> (<em>of</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The inner product of the two modes.
+Sanity check: if root1==root2 and v1==v2, returns real value.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1308,17 +1778,24 @@ Sanity check: if root1==root2 and v1==v2, returns real value.</dd>
 <dd><p>Takes possibly matrix-valued function f and its simple pole z0 and returns
 limit_{z    o val} f(z). Estimates the value based on N surrounding
 points at a distance eps.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">f (function): the function for which the limit will be found.</p>
-<p>z0 (complex number): The value at which the limit is evaluated.</p>
-<p>N (int): number of points used in the estimate.</p>
-<p class="last">eps (optional[float]): distance from z0 at which estimating points are
-placed.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>The estimated value of limit_{z        o val} f(z).</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> (<em>function</em>) &#8211; the function for which the limit will be found.</li>
+<li><strong>z0</strong> (<em>complex number</em>) &#8211; The value at which the limit is evaluated.</li>
+<li><strong>N</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of points used in the estimate.</li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; distance from z0 at which estimating points are</li>
+<li><strong>placed.</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The estimated value of limit_{z        o val} f(z).</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1336,32 +1813,39 @@ electric field integrated will be E^dag for 1 and E for -1.</p>
 k = omega / v_p = omega n(omega) / c.</p>
 <p>If the indices of refraction n(omega_i) are given, we use them to compute
 the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">natural_freqs (list of complex numbers): The natural frequencies of the
-various eigenmodes.</p>
-<p>modes (list of column matrices): the amplitudes of the modes at
-various nodes.</p>
-<p>delays (list of floats): The duration of each delay following
-each node in the system.</p>
-<p>delay_indices (int OR list/tuple of ints): the index representing the
-delay line along which the nonlinearity lies. If given a list/tuple
-then the nonlinearity interacts the N different modes.</p>
-<p>start_nonlin (float OR list/tuple of floats): the beginning of the
-nonlinearity. If a list/tuple then each nonlinearity begins at a
-different time along its corresponding delay line.</p>
-<p>length_nonlin (float): duration of the nonlinearity in terms of length.</p>
-<p>plus_or_minus_arr (array of 1s and -1s): Creation/annihilation of
-a photon in each of the given modes.</p>
-<p>indices_of_refraction (float/int or list/tuple of float/int): the
-indices of refraction corresponding to the various modes. If float
-or int then all are the same.</p>
-<p class="last">eps(optional[float]): cutoff for two frequencies being equal</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A matrix of normalized inner products representing the geometric
-overlap of the various given modes in the system.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>natural_freqs</strong> (<em>list of complex numbers</em>) &#8211; The natural frequencies of the</li>
+<li><strong>eigenmodes.</strong> (<em>various</em>) &#8211; </li>
+<li><strong>modes</strong> (<em>list of column matrices</em>) &#8211; the amplitudes of the modes at</li>
+<li><strong>nodes.</strong> (<em>various</em>) &#8211; </li>
+<li><strong>delays</strong> (<em>list of floats</em>) &#8211; The duration of each delay following</li>
+<li><strong>node in the system.</strong> (<em>each</em>) &#8211; </li>
+<li><strong>delay_indices</strong> (<em>int OR list/tuple of ints</em>) &#8211; the index representing the</li>
+<li><strong>line along which the nonlinearity lies. If given a list/tuple</strong> (<em>delay</em>) &#8211; </li>
+<li><strong>the nonlinearity interacts the N different modes.</strong> (<em>then</em>) &#8211; </li>
+<li><strong>start_nonlin</strong> (<em>float OR list/tuple of floats</em>) &#8211; the beginning of the</li>
+<li><strong>If a list/tuple then each nonlinearity begins at a</strong> (<em>nonlinearity.</em>) &#8211; </li>
+<li><strong>time along its corresponding delay line.</strong> (<em>different</em>) &#8211; </li>
+<li><strong>length_nonlin</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; duration of the nonlinearity in terms of length.</li>
+<li><strong>plus_or_minus_arr</strong> (<em>array of 1s and -1s</em>) &#8211; Creation/annihilation of</li>
+<li><strong>photon in each of the given modes.</strong> (<em>a</em>) &#8211; </li>
+<li><strong>indices_of_refraction</strong> (<em>float/int or list/tuple of float/int</em>) &#8211; the</li>
+<li><strong>of refraction corresponding to the various modes. If float</strong> (<em>indices</em>) &#8211; </li>
+<li><strong>int then all are the same.</strong> (<em>or</em>) &#8211; </li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; cutoff for two frequencies being equal</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A matrix of normalized inner products representing the geometric
+overlap of the various given modes in the system.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1372,46 +1856,61 @@ electric field at each node of the corresponding nodes, compute
 the normalized matrix representing the inner products among the
 various modes.</p>
 <p>TODO: add weights for different delays to account for geometry.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">roots (list of complex numbers): The roots of the various eigenmodes</p>
-<p>modes (list of column matrices): the amplitudes of the modes at
-various nodes</p>
-<p>delays (list of floats): The duration of each delay following
-each node in the system</p>
-<p>eps(optional[float]): cutoff for two frequencies being equal</p>
-<p class="last">func (optional[funciton]): used to transform the roots. Default
-value is set to lambda z: z.imag, meaning we take the frequency
-of each mode.</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A matrix of normalized inner products representing the geometric
-overlap of the various given modes in the system.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>roots</strong> (<em>list of complex numbers</em>) &#8211; The roots of the various eigenmodes</li>
+<li><strong>modes</strong> (<em>list of column matrices</em>) &#8211; the amplitudes of the modes at</li>
+<li><strong>nodes</strong> (<em>various</em>) &#8211; </li>
+<li><strong>delays</strong> (<em>list of floats</em>) &#8211; The duration of each delay following</li>
+<li><strong>node in the system</strong> (<em>each</em>) &#8211; </li>
+<li><strong>eps</strong> (<em>optional[float]</em>) &#8211; cutoff for two frequencies being equal</li>
+<li><strong>func</strong> (<em>optional[funciton]</em>) &#8211; used to transform the roots. Default</li>
+<li><strong>is set to lambda z</strong> (<em>value</em>) &#8211; z.imag, meaning we take the frequency</li>
+<li><strong>each mode.</strong> (<em>of</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A matrix of normalized inner products representing the geometric
+overlap of the various given modes in the system.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.functions.pade_approx">
 <code class="descclassname">Potapov_Code.functions.</code><code class="descname">pade_approx</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.pade_approx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Numerator coefficients of symmetric Pade approximation of math:<cite>e^z</cite> of order n.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>n (integer)</dd>
-<dt>Returns:</dt>
-<dd>Coefficients for Pade approximation numerator.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<em>integer</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Coefficients for Pade approximation numerator.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Potapov_Code.functions.pade_roots">
 <code class="descclassname">Potapov_Code.functions.</code><code class="descname">pade_roots</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#Potapov_Code.functions.pade_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract roots of Pade polynomial.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>n (integer).</dd>
-<dt>Returns:</dt>
-<dd>Roots of Pade polynomial.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<em>integer</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Roots of Pade polynomial.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1420,16 +1919,23 @@ overlap of the various given modes in the system.</dd>
 <dd><p>Obtain the spetial mode profile at each node up to a constant.
 If the delays are provided, the modes will be normalized using the delays.
 Otherwise, the modes will not be normalized.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><p class="first">roots (list of complex numbers): The eigenvalues of the system</p>
-<p>M1 (matrix): The connectivity matrix among internal nodes</p>
-<p>E (matrix-valued function): Time-delay matrix</p>
-<p class="last">delays (optional[list of floats]):</p>
-</dd>
-<dt>Returns:</dt>
-<dd>A list of spatial eigenvectors.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>roots</strong> (<em>list of complex numbers</em>) &#8211; The eigenvalues of the system</li>
+<li><strong>M1</strong> (<em>matrix</em>) &#8211; The connectivity matrix among internal nodes</li>
+<li><strong>E</strong> (<em>matrix-valued function</em>) &#8211; Time-delay matrix</li>
+<li><strong>delays</strong> (<em>optional[list of floats]</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of spatial eigenvectors.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
