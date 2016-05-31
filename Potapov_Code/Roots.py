@@ -38,7 +38,6 @@ def Muller(x1,x2,x3,f,tol = 1e-12,N=400,verbose=False):
     Uses three points for initial guess, x1,x2,x3.
 
     Args:
-    -----
         x1,x2,x3 (complex numbers): initial points for the algorithm
 
         f (function): complex valued function for which to find roots
@@ -110,7 +109,6 @@ def residues(f_frac,roots):
     The roots of f are the poles of f_frac.
 
     Args:
-    -----
         f_frac (function): a complex
 
         roots (a list of complex numbers): the roots of f; poles of f_frac
@@ -132,7 +130,6 @@ def new_f_frac(f_frac,z0,residues,roots,val=None):
     We assume here that the poles are of order 1.
 
     Args:
-    -----
         f_frac (function): function for which roots will be subtracted
 
         z0 (complex number): point where new_f_frac is evaluated
@@ -163,7 +160,6 @@ def new_f_frac_safe(f_frac,z0,residues,roots,max_ok,val=None,verbose=False):
     We assume here that the poles are of order 1.
 
     Args:
-    -----
         f_frac (function): function for which roots will be subtracted
 
         z0 (complex number): point where new_f_frac is evaluated
@@ -199,7 +195,6 @@ def find_roots(y_smooth,c,num_roots_to_find):
     find the roots using the polynomial trick.
 
     Args:
-    -----
         y_smooth (list of complex numbers)
     '''
     p=[0]  ##placeholder
@@ -220,7 +215,6 @@ def combine(eps=1e-5,*args):
     chain together several lists and purge redundancies.
 
     Args:
-    -----
         eps (optional[float]): tolerance for purging elements
 
         args (lists): several lists

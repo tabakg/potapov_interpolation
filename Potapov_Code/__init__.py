@@ -29,7 +29,7 @@ if __name__ == "__main__" and False:
     Mat = functions.make_normalized_inner_product_matrix(roots,modes,delays)
 
     contour_plot(Mat)
-    
+
 
     print Ex.max_freq
     print Ex.max_linewidth

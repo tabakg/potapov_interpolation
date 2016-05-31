@@ -15,7 +15,8 @@ import numpy as np
 import numpy.linalg as la
 import sympy as sp
 import scipy.constants as consts
-from scipy.optimize import minimize
+#from scipy.optimize import minimize
+import scipy.optimize.mim
 
 import itertools
 import copy
@@ -180,7 +181,6 @@ class Hamiltonian():
         get_frequency_pertub_func_z.
 
         Args:
-        -----
             perturb_func (function): the Newton's method function.
 
             eps (optional [float]): desired precision for convergence
@@ -207,7 +207,6 @@ class Hamiltonian():
         The result is an update to roots, omegas, and Delta_delays.
 
         Args:
-        -----
             func, dfuncs (functions): Functions in x,y. The first becomes
             minimized at a zero and the second is the gradient in x,y.
             These functions are generated in
@@ -242,7 +241,6 @@ class Hamiltonian():
     #     to generate the perturbation of the root.
     #
     #     Args:
-    #     -----
     #         perturb_func (function): A function whose input is a tuple of the
     #         form (z,Ts,Ts_Delta), where z is a complex number, while each
     #         Ts and Ts_Delta are lists of floats.
@@ -277,7 +275,6 @@ class Hamiltonian():
         r'''Add an instance of Chi_nonlin to Hamiltonian.
 
         Args:
-        -----
             delay_indices (int OR list/tuple of ints): the index representing the
             delay line along which the nonlinearity lies. If given a list/tuple
             then the nonlinearity interacts the N different modes.
@@ -339,11 +336,9 @@ class Hamiltonian():
                 a_1*Dagger(a_2)*Dagger(a_3)
 
         Args:
-        -----
             combination (tuple/list of integers): indices of which terms to
             include pm_arr (tuple/list of +1 and -1): creation and
             annihilation indicators for the respective terms in combination.
-
         Returns:
             symbolic expression for the combination of creation and annihilation
             operators.
@@ -362,14 +357,10 @@ class Hamiltonian():
         combination and pm_arr.
 
         Args:
-        -----
             combination (list/tuple of integers): which modes/roots to pick
-
             pm_arr (list of +1 and -1): creation and annihilation of modes
-
             chi (Chi_nonlin): the chi nonlinearity for which to compute
             the phase coefficient.
-
         Returns:
             The weight to add to the Hamiltonian
 
@@ -390,7 +381,6 @@ class Hamiltonian():
         creation/annihilation information.
 
         Args:
-        -----
             weight_keys (list of tuples): keys for weights to consider.
             Each key is a tuple consisting of two
             components: the first is a tuple of the indices of modes and the
@@ -418,7 +408,6 @@ class Hamiltonian():
         r'''Make the weights for each field component :math:`E_i(n) = [\text{weight}] (a+a^\dagger)`.
 
         Args:
-        -----
             mode_index (int): The index of the mode.
 
         Returns:
@@ -450,7 +439,6 @@ class Hamiltonian():
         second is a tuple of +1 and -1.
 
         Args:
-        -----
             chi (Chi_nonlin): the nonlinearity for which the weight will be
             found.
         Returns:
@@ -471,12 +459,9 @@ class Hamiltonian():
         '''Make a nonlinear Hamiltonian based on nonlinear interaction terms
 
         Args:
-        -----
             chi (Chi_nonlin): nonlinearity to use
-
             eps (optional[float]): Cutoff for the significance of a particular term.
         Returns:
-
             A symbolic expression for the nonlinear Hamiltonian.
 
         TODO:  Make separate dictionaries for values of chi_function,
@@ -509,7 +494,6 @@ class Hamiltonian():
         '''Make a linear Hamiltonian based on Omega.
 
         Args:
-        -----
             Omega (complex-valued matrix) describes the Hamiltonian of the system.
 
         Returns:
@@ -541,7 +525,6 @@ class Hamiltonian():
         terms due to the coupling to the environment at the input/output ports.
 
         Args:
-        -----
             Omega (complex-valued matrix) describes the Hamiltonian of the system.
             Omega = -1j*A        <--- full dynamics (not necessarily Hermitian)
             Omega = (A-A.H)/(2j) <--- closed dynamics only (Hermitian part of above)
@@ -565,7 +548,6 @@ class Hamiltonian():
         so to use it the Hamiltonian sould already be constructed and stored.
 
         Args:
-        -----
             freqs (optional [real number or list/tuple]): Frequency or list
             of frequencies to use to displace the Hamiltonian.
 

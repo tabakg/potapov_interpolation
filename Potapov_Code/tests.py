@@ -174,7 +174,6 @@ def test_altered_delay_pert(eps=1e-5):
 #     This method will NOT test the details of the nonlinear Hamiltonian.
 #
 #     Args:
-#     -----
 #         eps[optional(float)]: how closely each point in time along the two
 #         tested trajectories should match.
 #     '''
@@ -227,7 +226,6 @@ def test_altered_delay_pert(eps=1e-5):
 #     Tests if two iterables have the same elements up to some tolerance eps.
 #
 #     Args:
-#     -----
 #         S1,S2 (lists): two lists
 #         eps (optional[float]): precision for testing each elements
 #
@@ -343,7 +341,7 @@ def test_altered_delay_pert(eps=1e-5):
 
 
 
-if __name__ == "__main__" and False:
+if __name__ == "__main__":
     test_altered_delay_pert()
     #test_make_T_denom_sym_separate_delays()
     #test_Hamiltonian_with_doubled_equations()

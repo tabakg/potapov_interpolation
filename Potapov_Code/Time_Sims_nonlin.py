@@ -27,7 +27,6 @@ def make_f(eq_mot,B,a_in):
     r'''Equations of motion, including possibly nonlinear internal dynamics.
 
     Args:
-    -----
         eq_mot (function): The equations of motion, which map
         :math:`(t,a) \to v`. Here \math:`t` is a scalar corresponding to time,
         :math:`a` is an array of inputs correpsonding to the internal degrees
@@ -49,7 +48,6 @@ def make_f_lin(A,B,a_in):
     r'''Linear equations of motion
 
     Args:
-    -----
         A (matrix): The matrix for the linear equations of motion:
         :math:`\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in} (t).`
 
@@ -68,7 +66,6 @@ def run_ODE(f, a_in, C, D, num_of_variables, T = 10, dt = 0.01, y0 = None):
     '''Run the ODE for the given set of equations and record the outputs.
 
     Args:
-    -----
         f (function): Evolution of the system
 
         a_in (function): inputs as a function of time
