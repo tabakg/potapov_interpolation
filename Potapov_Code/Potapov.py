@@ -154,7 +154,7 @@ def finite_transfer_function(U,eigenvectors,eigenvalues):
     eigenvalues and eigenvectors and constant unitary factor U.
 
     Parameters:
-    -----
+    -----------
         U : complex-valued matrix
             A unitary matrix giving the overall phase of the function.
 
