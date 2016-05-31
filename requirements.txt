@@ -1,3 +1,2 @@
 sympy
 sphinxcontrib-napoleon
-sphinx-ext-viewcode
