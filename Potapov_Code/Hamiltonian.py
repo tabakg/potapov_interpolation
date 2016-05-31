@@ -35,18 +35,18 @@ class Chi_nonlin():
         delay_indices (list of indices): indices of delays to use.
 
         start_nonlin (positive float or list of positive floats): location of
-        nonlinear crystal with respect to each edge.
+            nonlinear crystal with respect to each edge.
 
         length_nonlin (float): length of the nonlinear element.
 
         refraction_index_func (function): the indices of refraction as a
-        function of the netural frequency :math:`/omega`.
+            function of the netural frequency :math:`/omega`.
 
-        chi_order (optional [int]): order of nonlinearity
+        chi_order (optional [int]): order of nonlinearity.
 
         chi_function (optional [function]): strength of nonlinearity.
-        first (chi_order+1) args are frequencies,
-        next (chi_order+1) args are indices of polarization.
+            first (chi_order+1) args are frequencies,
+            next (chi_order+1) args are indices of polarization.
 
     '''
     def __init__(self,delay_indices,start_nonlin,length_nonlin,
@@ -72,19 +72,19 @@ class Hamiltonian():
         delays (list of floats): the delays in the network.
 
         Omega (optional [matrix]): Quadratic Hamiltonian term for linear
-        dynamics.
+            dynamics.
 
         nonlin_coeff (optional [float]): overall scaling for the nonlinearities.
 
         polarizations (optional [list]): the polarizations of the respective
-        modes. These should match the arguments in Chi_nonlin.chi_func.
+            modes. These should match the arguments in Chi_nonlin.chi_func.
 
         cross_sectional_area (float): area of beams, used to determines the
-        scaling for the various modes.
+            scaling for the various modes.
 
         chi_nonlinearities (lst): a list of Chi_nonlin instances.
 
-        TODO: Return L operator for QNET
+    TODO: Return L operator for QNET.
 
     '''
     def __init__(self,roots,modes,delays,
@@ -207,9 +207,9 @@ class Hamiltonian():
 
         Args:
             func, dfuncs (functions): Functions in x,y. The first becomes
-            minimized at a zero and the second is the gradient in x,y.
-            These functions are generated in
-            Time_Delay_Network.get_minimizing_function_z.
+                minimized at a zero and the second is the gradient in x,y.
+                These functions are generated in
+                Time_Delay_Network.get_minimizing_function_z.
 
             eps (optional [float]): desired precision for convergence.
 
@@ -275,26 +275,26 @@ class Hamiltonian():
 
         Args:
             delay_indices (int OR list/tuple of ints): the index representing the
-            delay line along which the nonlinearity lies. If given a list/tuple
-            then the nonlinearity interacts the N different modes.
+                delay line along which the nonlinearity lies. If given a list/tuple
+                then the nonlinearity interacts the N different modes.
 
             start_nonlin (float OR list/tuple of floats): the beginning of the
-            nonlinearity. If a list/tuple then each nonlinearity begins at a
-            different time along its corresponding delay line.
+                nonlinearity. If a list/tuple then each nonlinearity begins at a
+                different time along its corresponding delay line.
 
             length_nonlin (float): duration of the nonlinearity in terms of
-            length. (Units in length)
+                length. (Units in length)
 
             refraction_index_func (function): the indices of refraction as a
-            function of the netural frequency :math:`/omega`.
+                function of the netural frequency :math:`/omega`.
 
             chi_order (optional [int]): order of the chi nonlinearity.
 
             chi_function (function): a function of 2*chi_order+2 parameters that
-            returns the strenght of the interaction for given frequency
-            combinations and polarizations. The first chi_order+1 parameters
-            correspond to frequencies combined the the next chi_order+1 parameters
-            correspond to the various polarizations.
+                returns the strenght of the interaction for given frequency
+                combinations and polarizations. The first chi_order+1 parameters
+                correspond to frequencies combined the the next chi_order+1 parameters
+                correspond to the various polarizations.
 
             TODO: check units everywhere, including f versus \omega = f / 2 pi.
         '''
@@ -336,8 +336,9 @@ class Hamiltonian():
 
         Args:
             combination (tuple/list of integers): indices of which terms to
-            include pm_arr (tuple/list of +1 and -1): creation and
-            annihilation indicators for the respective terms in combination.
+                include pm_arr (tuple/list of +1 and -1): creation and
+                annihilation indicators for the respective terms in combination.
+
         Returns:
             symbolic expression for the combination of creation and annihilation
             operators.
@@ -357,11 +358,12 @@ class Hamiltonian():
 
         Args:
             combination (list/tuple of integers): which modes/roots to pick
-            pm_arr (list of +1 and -1): creation and annihilation of modes
-            chi (Chi_nonlin): the chi nonlinearity for which to compute
-            the phase coefficient.
+                pm_arr (list of +1 and -1): creation and annihilation of modes
+                chi (Chi_nonlin): the chi nonlinearity for which to compute
+                the phase coefficient.
+
         Returns:
-            The weight to add to the Hamiltonian
+            The weight to add to the Hamiltonian.
 
         '''
         omegas_to_use = np.array([self.omegas[i] for i in combination])
@@ -381,13 +383,13 @@ class Hamiltonian():
 
         Args:
             weight_keys (list of tuples): keys for weights to consider.
-            Each key is a tuple consisting of two
-            components: the first is a tuple of the indices of modes and the
-            second is a tuple of +1 and -1.
+                Each key is a tuple consisting of two
+                components: the first is a tuple of the indices of modes and the
+                second is a tuple of +1 and -1.
 
             filtering_phase_weights (optional[Boolean]): Whether or not to
-            filter the phase_matching_weights by the size of their values. The
-            cutoff for their absolute value is given by eps
+                filter the phase_matching_weights by the size of their values. The
+                cutoff for their absolute value is given by eps.
 
             eps (optional [float]): Cutoff for filtering of weights.
 
@@ -410,8 +412,8 @@ class Hamiltonian():
             mode_index (int): The index of the mode.
 
         Returns:
-            The weight in the equation above. It has form:
-            :math:`sqrt[\hbar * \omega(n) / 2 V_eff(n) \epsilon]``.
+            Weight of E-field (float): It has form:
+            :math:`[\hbar * \omega(n) / 2 V_{eff}(n) \epsilon]^{1/2}`.
 
         '''
         omega = self.omegas[mode_index]
@@ -439,7 +441,8 @@ class Hamiltonian():
 
         Args:
             chi (Chi_nonlin): the nonlinearity for which the weight will be
-            found.
+                found.
+
         Returns:
             A list of keys of the type described.
 
@@ -459,7 +462,8 @@ class Hamiltonian():
 
         Args:
             chi (Chi_nonlin): nonlinearity to use
-            eps (optional[float]): Cutoff for the significance of a particular term.
+                eps (optional[float]): Cutoff for the significance of a particular term.
+
         Returns:
             A symbolic expression for the nonlinear Hamiltonian.
 
@@ -525,9 +529,9 @@ class Hamiltonian():
 
         Args:
             Omega (complex-valued matrix) describes the Hamiltonian of the system.
-            Omega = -1j*A        <--- full dynamics (not necessarily Hermitian)
-            Omega = (A-A.H)/(2j) <--- closed dynamics only (Hermitian part of above)
-            eps (optional[float]): Cutoff for the significance of a particular term.
+                Omega = -1j*A        <--- full dynamics (not necessarily Hermitian)
+                Omega = (A-A.H)/(2j) <--- closed dynamics only (Hermitian part of above)
+                eps (optional[float]): Cutoff for the significance of a particular term.
 
         Returns:
             A symbolic expression for the full Hamiltonian.
@@ -548,16 +552,16 @@ class Hamiltonian():
 
         Args:
             freqs (optional [real number or list/tuple]): Frequency or list
-            of frequencies to use to displace the Hamiltonian.
+                of frequencies to use to displace the Hamiltonian.
 
             include_time_terms (optional [boolean]): If this is set to true,
-            we include the terms :math:`e^{- i \omega_j}` in the Hamiltonian
-            resulting from a change of basis. This can be set to False if all
-            such terms have already been eliminated (i.e. if the rotating wave
-            approximation has been applied).
+                we include the terms :math:`e^{- i \omega_j}` in the Hamiltonian
+                resulting from a change of basis. This can be set to False if all
+                such terms have already been eliminated (i.e. if the rotating wave
+                approximation has been applied).
 
-            ## TODO: replace the sine and cosine stuff with something nicer.
-            ## Maybe utilize the _get_real_imag_func method in Time_Delay_Network.
+        ## TODO: replace the sine and cosine stuff with something nicer.
+        ## Maybe utilize the _get_real_imag_func method in Time_Delay_Network.
 
         '''
         if type(freqs) in [float,long,int]:

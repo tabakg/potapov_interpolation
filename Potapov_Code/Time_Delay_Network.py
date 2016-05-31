@@ -28,21 +28,22 @@ def plot_all(L,dx,labels,colors,lw,name,*args):
     of matrix-valued functions in the complex plane along an axis.
 
     Args:
-        L (float): plot from 0 to L
+        L (float): plot from 0 to L.
 
-        dx (float):  distance between points
+        dx (float):  distance between points.
 
-        labels (list of str): labels to use
+        labels (list of str): labels to use.
 
-        colors (list of srt): indicators of color for different curves
+        colors (list of srt): indicators of color for different curves.
 
-        lw (float): line width to use
+        lw (float): line width to use.
 
-        name (str): name of the file to save
-        * args (a list of functions): A list of functions to plot
+        name (str): name of the file to save.
+
+        * args (a list of functions): A list of functions to plot.
 
     Returns:
-        None
+        None.
     '''
     delta = np.pi
     x = np.linspace(0,L,2.*L/dx)
@@ -88,15 +89,15 @@ class Time_Delay_Network():
     delays.
 
     Attributes:
-        max_freq (optional [float]): maximum height in the complex plane
+        max_freq (optional [float]): maximum height in the complex plane.
 
         max_linewidth (optional [float]): maximum width in the complex plane.
 
         N (optional [int]): number of points to use on the contour for finding
-        the roots/poles of the network.
+            the roots/poles of the network.
 
         center_freq (optional [float] ): how much to move the frame up or down
-        the complex plane.
+            the complex plane.
 
     '''
     def __init__(self,max_freq=30.,max_linewidth=1.,N=1000,center_freq = 0.):
@@ -216,6 +217,10 @@ class Time_Delay_Network():
 
         This method treats the various delays as separate variables.
 
+        Returns:
+            A pair of two symbolic expressions: T_denom_sym and its derivative
+                in :math:`z`.
+
         '''
         M = len(self.delays)
         self._make_decimal_delays()
@@ -251,8 +256,15 @@ class Time_Delay_Network():
 
     def _get_newtons_func(self,expression):
         '''
-        Takes an expression in terms of Ts and sp.exp(-z*T) for T in Ts.
+        Takes an expression in terms of Ts and sp.exp(-z*T) for T in Ts,
+        and returns a complex-valued function for it.
         Here :math:`z = x + i y` is a complex number.
+
+        Args:
+            expression (sympy expression): A symbolic expression.
+
+        Returns:
+            a function in x,y,Ts that returns the value of the input expression.
         '''
         x,y = sp.symbols('x y', real = True)
         D = {sp.exp(self.z*T): sp.exp(x*T)*(1j*sp.sin(y*T)+sp.cos(y*T)) for T in self.Ts}
@@ -275,7 +287,12 @@ class Time_Delay_Network():
 
         Args:
             use_ufuncify (optional [boolean]): whether to use ufuncify
-            or not.
+                or not.
+
+        Returns:
+            Newton's method function (function):
+            The function to use for Newton's method in :math:`z`,
+            :math:`-f(z) / f'(z)`.
         '''
         sym_freq_pert = self.get_symbolic_frequency_perturbation_z()
         if not use_ufuncify:
@@ -300,6 +317,11 @@ class Time_Delay_Network():
 
         Gives a function to minimize, its arguments are
         :math:`x,y,Ts`. Also gives its derivative.
+
+        Returns:
+            Minimizing function (function):
+            A function of :math:`x,y,*Ts` to minimize in the two variables,
+            :math:`x,y`.
         '''
         expression = self.get_symbolic_frequency_perturbation_z()[0]
         x,y = sp.symbols('x y', real = True)
@@ -323,10 +345,12 @@ class Time_Delay_Network():
         Assumes the given z is in the desired frequency range.
 
         Args:
-            z (complex number)
-            freq_range (2-tuple): (minimum frequency, maximum frequency)
+            z (complex number).
+
+            freq_range (2-tuple): (minimum frequency, maximum frequency).
 
         Returns:
+            (list of complex numbers):
             list of numbers of the desired form.
         '''
         lst_in_range = [z]
@@ -344,10 +368,12 @@ class Time_Delay_Network():
         period and :math:`n` is an integer inside the given frequency range.
 
         Args:
-            z (complex number)
-            freq_range (2-tuple): (minimum frequency, maximum frequency)
+            z (complex number).
+
+            freq_range (2-tuple): (minimum frequency, maximum frequency).
 
         Returns:
+            (list of complex numbers):
             list of numbers of the desired form. Empty list if none exist.
         '''
         if z.imag >= freq_range[0] and z.imag <= freq_range[1]:
@@ -377,8 +403,11 @@ class Time_Delay_Network():
 
         Args:
             list_of_ranges (optional [list of 2-tuples]): list of frequency
-            ranges of interest in the form:
-            (minimum frequency, maximum frequency).
+                ranges of interest in the form:
+                (minimum frequency, maximum frequency).
+
+        Returns:
+            None.
         '''
 
         self._make_T_denom_sym()
@@ -403,6 +432,7 @@ class Time_Delay_Network():
                     self.map_root_to_commensurate_index[j] = i
         self.roots = lst_to_return
         self.commensurate_roots = zs
+        return
 
     def make_commensurate_vecs(self,):
         self.commensurate_vecs = Potapov.get_Potapov_vecs(
@@ -442,11 +472,14 @@ class Time_Delay_Network():
 
         Args:
             commensurate_roots (optional[boolean]): which root-finding method
-            to use.
+                to use.
 
             filtering_roots (optional[boolean]): makes sure the poles of the
-            transfer function all have negative real part. Drops ones that
-            might not.
+                transfer function all have negative real part. Drops ones that
+                might not.
+
+        Returns:
+            None.
         '''
         self.Potapov_ran = True
         if commensurate_roots:
@@ -467,9 +500,13 @@ class Time_Delay_Network():
         '''Get some of the relevant outputs from the Potapov procedure.
 
         Returns:
+            `self.T`,`self.T_testing`,`self.roots`,`self.vecs` (tuple):
             The original transfer function, the approximating generated
             transfer function, the identified poles of the transfer function,
             and the vectors representing the form of the Potapov factors.
+
+        Raises:
+            Exception: Must have `self.T,self.T_testing,self.roots,self.vecs`.
 
         '''
         if self.Potapov_ran:
@@ -486,7 +523,8 @@ class Time_Delay_Network():
             z (optional [complex number]): location where to estimate D.
 
         Return:
-            A,B,C,D matrices.
+            (tuple of matrices):
+                A,B,C,D matrices.
 
         '''
         A,B,C,D = Potapov.get_Potapov_ABCD(self.roots,self.vecs,self.T,z=z)
@@ -682,7 +720,8 @@ def example6_pade():
     This is used for figure 14 of our paper.
 
     Returns:
-        A matrix-valued function T(z,n). n is the order of the approximation
+        (matrix-valued function T(z,n)):
+        n is the order of the approximation
         and z is the location of the function to be evaluated.
     '''
     tau1 = 0.1
@@ -738,9 +777,13 @@ def plot3D(f,points = 2000):
     '''
     Make a color and hue plot in the complex plane for a given function
 
-    Givens:
-        f (function): to plot
-        points(optional[int]): number of points to use per dimension
+    Args:
+        f (function): to plot.
+
+        points(optional[int]): number of points to use per dimension.
+
+    Returns:
+        None.
 
     '''
     fig = mp.cplot(f, [-10,10], [-10, 10], points = points)

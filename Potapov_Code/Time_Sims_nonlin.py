@@ -28,18 +28,19 @@ def make_f(eq_mot,B,a_in):
 
     Args:
         eq_mot (function): The equations of motion, which map
-        :math:`(t,a) \to v`. Here \math:`t` is a scalar corresponding to time,
-        :math:`a` is an array of inputs correpsonding to the internal degrees
-        of freedom, and :math:`v` is a complex-valued column matrix describing
-        the gradient.
+            :math:`(t,a) \to v`. Here \math:`t` is a scalar corresponding to time,
+            :math:`a` is an array of inputs correpsonding to the internal degrees
+            of freedom, and :math:`v` is a complex-valued column matrix describing
+            the gradient.
 
         B (matrix): The matrix multiplying the inputs to the system.
 
-        a_in (function): The inputs to the system
+        a_in (function): The inputs to the system.
 
     Returns:
-        A function that maps :math:`(t,a) \to f'(t,a)`, where t is a scalar (time), and
-        a is an array representing the state of the system.
+        (function):
+        A function that maps :math:`(t,a) \to f'(t,a)`, where t is a scalar
+        (time), and a is an array representing the state of the system.
 
     '''
     return lambda t,a: np.asarray(eq_mot(t,a)+B*a_in(t)).T[0]
@@ -49,15 +50,16 @@ def make_f_lin(A,B,a_in):
 
     Args:
         A (matrix): The matrix for the linear equations of motion:
-        :math:`\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in} (t).`
+            :math:`\frac{d}{dt}\begin{pmatrix} a \\ a^+ \end{pmatrix} = A \begin{pmatrix} a \\ a^+ \end{pmatrix}+ B \breve a_{in} (t).`
 
         B (matrix): The matrix multiplying the inputs to the system.
 
         a_in (function): The inputs to the system :math:`\breve a`.
 
     Returns:
-        A function that maps :math:`(t,a) \to f'(t,a)`, where t is a scalar (time), and
-        a is an array representing the state of the system.
+        (function);
+        A function that maps :math:`(t,a) \to f'(t,a)`, where t is a scalar
+        (time), and a is an array representing the state of the system.
 
     '''
     return lambda t,a: np.asarray(A*np.asmatrix(a).T+B*a_in(t)).T[0]
@@ -66,20 +68,22 @@ def run_ODE(f, a_in, C, D, num_of_variables, T = 10, dt = 0.01, y0 = None):
     '''Run the ODE for the given set of equations and record the outputs.
 
     Args:
-        f (function): Evolution of the system
+        f (function): Evolution of the system.
 
-        a_in (function): inputs as a function of time
+        a_in (function): inputs as a function of time.
 
-        C,D (matrices): matrices to use to obtain output from system state and input
+        C,D (matrices): matrices to use to obtain output from system state and
+            input.
 
-        num_of_variables (int): number of variables the system has
+        num_of_variables (int): number of variables the system has.
 
-        T (optional[positive float]): length of simulation
+        T (optional[positive float]): length of simulation.
 
-        dt (optional[float]): time step used by the simulation
+        dt (optional[float]): time step used by the simulation.
 
     Returns:
-        An array Y of outputs
+        (array): 
+        An array Y of outputs.
 
     '''
     if y0 is None:

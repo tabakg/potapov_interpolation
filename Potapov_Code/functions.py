@@ -38,7 +38,7 @@ def der(f,z,eps = 1e-5):
         eps(optional[complex number]): number to perturb z to find derivative.
 
     Returns:
-        Derivative of f
+        Derivative of f. (complex):
 
     '''
     return (f(z+eps)-f(z-eps))/(2*eps)
@@ -57,10 +57,11 @@ def limit(f,z0,N=10,eps=1e-3):
         N (int): number of points used in the estimate.
 
         eps (optional[float]): distance from z0 at which estimating points are
-        placed.
+            placed.
 
     Returns:
-         The estimated value of limit_{z \to val} f(z).
+        Limit value (complex):
+        The estimated value of :math:`limit_{z -> z_0} f(z)`.
 
     '''
     t=np.linspace(0.,2.*np.pi*(N-1.)/N,num=N)
@@ -76,10 +77,10 @@ def factorial(n):
     '''Find the factorial of n.
 
     Args:
-        n (integer)
+        n (integer).
 
     Returns:
-        factorial of n
+        factorial of n. (int):
 
     '''
     end = 1
@@ -91,10 +92,10 @@ def pade_approx(n):
     '''Numerator coefficients of symmetric Pade approximation of math:`e^z` of order n.
 
     Args:
-        n (integer)
+        n (integer).
 
     Returns:
-        Coefficients for Pade approximation numerator.
+        Coefficients for Pade approximation numerator. (float):
 
     '''
     output = [0]*(n+1)
@@ -110,7 +111,7 @@ def pade_roots(n):
         n (integer).
 
     Returns:
-        Roots of Pade polynomial.
+        Roots of Pade polynomial. (list of complex numbers) :
 
     '''
     return np.roots(pade_approx(n))
@@ -119,11 +120,12 @@ def Q(z,n):
     r'''Numerator of Pade approximation of :math:`e^z`.
 
     Args:
-        n (integer): order of approximation
-        z (complex number):
+        n (integer): order of approximation.
+
+        z (complex number): point of evaluation.
 
     Returns:
-        Value of Numerator of Pade approximation.
+        Value of Numerator of Pade approximation. (float):
 
     '''
     coeffs = pade_approx(n)
@@ -137,10 +139,11 @@ def Pade(n,z):
 
     Args:
         n (integer): order of approximation
-        z (complex number):
+
+        z (complex number): point of evaluation.
 
     Returns:
-        Value of Pade approximation.
+        Value of Pade approximation. (float):
 
     '''
     return Q(z,n)/Q(-z,n)
@@ -169,7 +172,7 @@ def double_up(M1,M2=None):
         M2: optional second matrix to double-up
 
     Returns:
-        The doubled-up matrix.
+        The doubled-up matrix. (complex-valued matrix):
 
     '''
     if M2 == None:
@@ -185,16 +188,16 @@ def spatial_modes(roots,M1,E,delays=None):
     Otherwise, the modes will not be normalized.
 
     Args:
-        roots (list of complex numbers): The eigenvalues of the system
+        roots (list of complex numbers): The eigenvalues of the system.
 
-        M1 (matrix): The connectivity matrix among internal nodes
+        M1 (matrix): The connectivity matrix among internal nodes.
 
-        E (matrix-valued function): Time-delay matrix
+        E (matrix-valued function): Time-delay matrix.
 
-        delays (optional[list of floats]):
+        delays (optional[list of floats]): List of delays in the network.
 
     Returns:
-        A list of spatial eigenvectors.
+        A list of spatial eigenvectors. (list of complex-valued column matrices):
     '''
 
     spatial_vecs = []
@@ -220,23 +223,23 @@ def inner_product_of_two_modes(root1,root2,v1,v2,delays,eps=1e-7,
     The frequency is assumed to be the imaginary part of each root.
 
     Args:
-        root1,root2 (complex number): the two roots
+        root1,root2 (complex number): the two roots.
 
         v1,v2 (column matrices): the amplitude of each mode at the
-        various nodes
+            various nodes.
 
         delays (list of floats): The duration of each delay following
-        each node in the system
+            each node in the system.
 
         eps(optional[float]): cutoff for two frequencies being equal
 
         func (optional[funciton]): used to transform the roots. Default
-        value is set to lambda z: z.imag, meaning we take the frequency
-        of each mode.
+            value is set to lambda z: z.imag, meaning we take the frequency
+            of each mode.
 
     Returns:
-        The inner product of the two modes.
-        Sanity check: if root1==root2 and v1==v2, returns real value.
+        The inner product of the two modes. (complex):
+            Sanity check: if root1==root2 and v1==v2, returns real value.
     '''
     s = 0j
     for delay,e1,e2 in zip(delays,v1,v2):
@@ -253,12 +256,12 @@ def _norm_of_mode(mode,delays):
 
     Args:
         mode (vector): column of complex numbers describing the amplitude of
-        each mode at the various nodes.
+            each mode at the various nodes.
 
         delays (list of floats): time delays in the network.
 
     Returns:
-        the norm of the mode.
+        the norm of the mode. (float):
     '''
     return np.sqrt(inner_product_of_two_modes(0,0,mode,mode,delays))
 
@@ -273,23 +276,24 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
     TODO: add weights for different delays to account for geometry.
 
     Args:
-        roots (list of complex numbers): The roots of the various eigenmodes
+        roots (list of complex numbers): The roots of the various eigenmodes.
 
         modes (list of column matrices): the amplitudes of the modes at
-        various nodes
+            various nodes.
 
         delays (list of floats): The duration of each delay following
-        each node in the system
+            each node in the system.
 
-        eps(optional[float]): cutoff for two frequencies being equal
+        eps(optional[float]): cutoff for two frequencies being equal.
 
         func (optional[funciton]): used to transform the roots. Default
-        value is set to lambda z: z.imag, meaning we take the frequency
-        of each mode.
+            value is set to lambda z: z.imag, meaning we take the frequency
+            of each mode.
 
     Returns:
-        A matrix of normalized inner products representing the geometric
-        overlap of the various given modes in the system.
+        inner product matrix (complex-valued matrix):
+            A matrix of normalized inner products representing the geometric
+            overlap of the various given modes in the system.
     '''
     dim = len(roots)
     norms = [0]*dim
@@ -326,36 +330,35 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
 
     Args:
         natural_freqs (list of complex numbers): The natural frequencies of the
-        various eigenmodes.
+            various eigenmodes.
 
         modes (list of column matrices): the amplitudes of the modes at
-        various nodes.
+            various nodes.
 
         delays (list of floats): The duration of each delay following
-        each node in the system.
+            each node in the system.
 
         delay_indices (int OR list/tuple of ints): the index representing the
-        delay line along which the nonlinearity lies. If given a list/tuple
-        then the nonlinearity interacts the N different modes.
+            delay line along which the nonlinearity lies. If given a list/tuple
+            then the nonlinearity interacts the N different modes.
 
         start_nonlin (float OR list/tuple of floats): the beginning of the
-        nonlinearity. If a list/tuple then each nonlinearity begins at a
-        different time along its corresponding delay line.
+            nonlinearity. If a list/tuple then each nonlinearity begins at a
+            different time along its corresponding delay line.
 
         length_nonlin (float): duration of the nonlinearity in terms of length.
 
         plus_or_minus_arr (array of 1s and -1s): Creation/annihilation of
-        a photon in each of the given modes.
+            a photon in each of the given modes.
 
         indices_of_refraction (float/int or list/tuple of float/int): the
-        indices of refraction corresponding to the various modes. If float
-        or int then all are the same.
+            indices of refraction corresponding to the various modes. If float
+            or int then all are the same.
 
-        eps(optional[float]): cutoff for two frequencies being equal
+        eps(optional[float]): cutoff for two frequencies being equal.
 
     Returns:
-        A matrix of normalized inner products representing the geometric
-        overlap of the various given modes in the system.
+        strength of nonlienarity (complex):
     '''
 
     M = len(natural_freqs)

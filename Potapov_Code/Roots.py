@@ -38,15 +38,15 @@ def Muller(x1,x2,x3,f,tol = 1e-12,N=400,verbose=False):
     Uses three points for initial guess, x1,x2,x3.
 
     Args:
-        x1,x2,x3 (complex numbers): initial points for the algorithm
+        x1,x2,x3 (complex numbers): initial points for the algorithm.
 
-        f (function): complex valued function for which to find roots
+        f (function): complex valued function for which to find roots.
 
-        tol (optional[float]): tolerance
+        tol (optional[float]): tolerance.
 
-        N(optional[int]): maximum number of iterations
+        N(optional[int]): maximum number of iterations.
 
-        verbose (optional[boolean]): print warnings
+        verbose (optional[boolean]): print warnings.
 
     Returns:
         estimated root of the function f.
@@ -109,9 +109,9 @@ def residues(f_frac,roots):
     The roots of f are the poles of f_frac.
 
     Args:
-        f_frac (function): a complex
+        f_frac (function): a complex.
 
-        roots (a list of complex numbers): the roots of f; poles of f_frac
+        roots (a list of complex numbers): the roots of f; poles of f_frac.
 
     Returns:
         A list of residues of f_frac.
@@ -130,13 +130,13 @@ def new_f_frac(f_frac,z0,residues,roots,val=None):
     We assume here that the poles are of order 1.
 
     Args:
-        f_frac (function): function for which roots will be subtracted
+        f_frac (function): function for which roots will be subtracted.
 
-        z0 (complex number): point where new_f_frac is evaluated
+        z0 (complex number): point where new_f_frac is evaluated.
 
-        residues (list of complex numbers): The corresponding residues to subtract
+        residues (list of complex numbers): The corresponding residues to subtract.
 
-        roots (list of complex numbers): The corresponding roots to subtract
+        roots (list of complex numbers): The corresponding roots to subtract.
 
         val (optional[complex number]): We can impose a value f_frac(z0) if we wish.
 
@@ -160,19 +160,21 @@ def new_f_frac_safe(f_frac,z0,residues,roots,max_ok,val=None,verbose=False):
     We assume here that the poles are of order 1.
 
     Args:
-        f_frac (function): function for which roots will be subtracted
+        f_frac (function): function for which roots will be subtracted.
 
-        z0 (complex number): point where new_f_frac is evaluated
+        z0 (complex number): point where new_f_frac is evaluated.
 
-        residues (list of complex numbers): The corresponding residues to subtract
+        residues (list of complex numbers): The corresponding residues to
+            subtract.
 
-        roots (list of complex numbers): The corresponding roots to subtract
+        roots (list of complex numbers): The corresponding roots to subtract.
 
-        val (optional[complex number]): We can impose a value f_frac(z0) if we wish.
+        val (optional[complex number]): We can impose a value f_frac(z0) if
+            we wish.
 
-        max_ok (float) Maximum absolute value of f_frac(z0 to use)
+        max_ok (float) Maximum absolute value of f_frac(z0 to use).
 
-        verbose (optional[boolean]): print warnings
+        verbose (optional[boolean]): print warnings.
 
     Returns:
         The new value of f_frac(z0) once the chosen poles have been subtracted.
@@ -195,7 +197,7 @@ def find_roots(y_smooth,c,num_roots_to_find):
     find the roots using the polynomial trick.
 
     Args:
-        y_smooth (list of complex numbers)
+        y_smooth (list of complex numbers): poins along smoothed-out boundary.
     '''
     p=[0]  ##placeholder
     for i in xrange(1,num_roots_to_find+1):
@@ -215,9 +217,9 @@ def combine(eps=1e-5,*args):
     chain together several lists and purge redundancies.
 
     Args:
-        eps (optional[float]): tolerance for purging elements
+        eps (optional[float]): tolerance for purging elements.
 
-        args (lists): several lists
+        args (lists): several lists.
 
     Returns:
         A list of combined elements.
@@ -231,8 +233,9 @@ def purge(lst,eps=1e-5):
     Get rid of redundant elements in a list. There is a precision cutoff eps.
 
     Args:
-        lst (list): elements
-        eps (optional[float]): precision cutoff
+        lst (list): elements.
+
+        eps (optional[float]): precision cutoff.
 
     Returns:
         A list without redundant elements.
@@ -252,7 +255,7 @@ def linspace(c1,c2,num=50):
     Args:
         c1,c2 (complex numbers): The two points along which to draw a line.
 
-        num (optional [int]): number of points along the line
+        num (optional [int]): number of points along the line.
 
     Returns:
         a list of num points starting at c1 and going to c2.
@@ -271,9 +274,9 @@ def get_boundary(x_cent,y_cent,width,height,N):
     I use the convention that width/height make up half the dimensions of the rectangle.
 
     Args:
-        x_cent,y_cent (floats): the coordinates of the center of the rectangle
+        x_cent,y_cent (floats): the coordinates of the center of the rectangle.
 
-        width,height (float): The (half) width and height of the rectangle
+        width,height (float): The (half) width and height of the rectangle.
 
         N (int): number of points to use along each edge.
 
@@ -296,14 +299,14 @@ def inside_boundary(roots_near_boundary,x_cent,y_cent,width,height):
     returns the roots in the interior (and ON the boundary) of the region.
 
     Args:
-        roots_near_boundary (list of complex numbers): roots near the boundary
+        roots_near_boundary (list of complex numbers): roots near the boundary.
 
-        x_cent,y_cent (floats): coordinates of the center of the region
+        x_cent,y_cent (floats): coordinates of the center of the region.
 
-        width,height (floats): The (half) width of height of the rectangle
+        width,height (floats): The (half) width of height of the rectangle.
 
     Returns:
-        Roots in the interior and on the boundary of the rectangle
+        Roots in the interior and on the boundary of the rectangle.
     '''
     return [root for root in roots_near_boundary if
             x_cent - width <= root.real <= x_cent + width and \
@@ -324,10 +327,10 @@ def find_maxes(y):
     Given a list of numbers, find the indices where local maxima happen.
 
     Args:
-        y(list of floats)
+        y(list of floats).
 
     Returns:
-        list of indices where maxima occur
+        list of indices where maxima occur.
 
     '''
     maxes = []
@@ -346,30 +349,33 @@ def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
     extend to other kinds of functions, e.g. function with non-simple zeros.
 
     Args:
-        f (function): the function for which the roots (i.e. zeros) will be found
+        f (function): the function for which the roots (i.e. zeros) will be
+            found.
 
-        fp (function): the derivative of f
+        fp (function): the derivative of f.
 
-        x_cent,y_cent (floats): The center of the rectangle in the complex plane
+        x_cent,y_cent (floats): The center of the rectangle in the complex
+            plane.
 
-        width,height (floats): half the width and height of the rectangular region
+        width,height (floats): half the width and height of the rectangular
+            region.
 
         N (optional[int]): Number of points to sample per edge
 
         outlier_coeff (float): multiplier for coefficient used when subtracting
-        poles to improve numerical stability. See new_f_frac_safe.
+            poles to improve numerical stability. See new_f_frac_safe.
 
         max_step (optional[int]): Number of iterations allowed for algorithm to
-        repeat on smaller rectangles
+            repeat on smaller rectangles.
 
         known roots (optional[list of complex numbers]): Roots of f that are
-        already known.
+            already known.
 
-        verbose (optional[boolean]): print warnings
+        verbose (optional[boolean]): print warnings.
 
     Returns:
         A list of roots for the function f inside the rectangle determined by
-        the values x_cent,y_cent,width, and height.
+            the values x_cent,y_cent,width, and height.
     '''
 
     c = get_boundary(x_cent,y_cent,width,height,N)
