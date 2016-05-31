@@ -155,20 +155,20 @@ def finite_transfer_function(U,eigenvectors,eigenvalues):
 
     Parameters:
     -----------
-        U : complex-valued matrix
-            A unitary matrix giving the overall phase of the function.
+    U : complex-valued matrix
+        A unitary matrix giving the overall phase of the function.
 
-        eigenvectors : list of complex-valued matrices
-            eigenvectors to use
+    eigenvectors : list of complex-valued matrices
+        eigenvectors to use
 
-        eigenvalues : list of complex numebrs
-            eigenvalues to use
+    eigenvalues : list of complex numebrs
+        eigenvalues to use
 
     Returns:
     --------
-        f: function
-            A function that takes a complex number and returns the Potapov
-            product evaluated at that number.
+    f: function
+        A function that takes a complex number and returns the Potapov
+        product evaluated at that number.
 
     '''
     return lambda z: prod(z,U,eigenvectors,eigenvalues)
