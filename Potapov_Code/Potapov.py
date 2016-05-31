@@ -153,7 +153,7 @@ def finite_transfer_function(U,eigenvectors,eigenvalues):
     Give a rational Blaschke-Potapov product of z with the given
     eigenvalues and eigenvectors and constant unitary factor U.
 
-    Args:
+    Parameters:
     -----
         U : complex-valued matrix
             A unitary matrix giving the overall phase of the function.
