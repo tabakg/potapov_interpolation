@@ -63,6 +63,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinxcontrib.napoleon',
+    'sphinx.ext.viewcode',
 ]
 
 
