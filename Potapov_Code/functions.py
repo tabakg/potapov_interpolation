@@ -433,9 +433,9 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
 
     values_at_nodes = [m_vec[delay_index,0] for m_vec,delay_index
         in zip(modes,delay_indices)]
-    delta_k = sum([n*omega*sign for n,omega,sign
-           in zip(indices_of_refraction,natural_freqs,plus_or_minus_arr)])
-    delta_k /= consts.speed_of_light
+    delta_k = ( sum([n*omega*sign for n,omega,sign
+        in zip(indices_of_refraction,natural_freqs,plus_or_minus_arr)])
+        / consts.speed_of_light )
     const = np.prod([pick_conj(m*np.exp(-1j*delta_k*start_loc),sign)
             for m,sign,start_loc
             in zip(values_at_nodes,plus_or_minus_arr,start_nonlin)])

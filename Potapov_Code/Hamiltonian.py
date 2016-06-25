@@ -458,9 +458,9 @@ class Hamiltonian():
 
         '''
         omega = self.omegas[mode_index]
-        eps0 = consts.epsilon_0
+        #eps0 = consts.epsilon_0
         hbar = consts.hbar
-        return np.sqrt(hbar * abs(omega) / (2 * eps0 * self.volumes[mode_index]) )
+        return np.sqrt(hbar * abs(omega) / (2 * self.volumes[mode_index]) ) ## / eps0 
 
     def make_E_field_weights(self,):
         '''

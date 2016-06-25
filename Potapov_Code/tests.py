@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import time
 
 
-def test_altered_delay_pert(eps=1e-5):
+def test_altered_delay_pert(plot=False,eps=1e-5):
     r'''
     We will have a method to shift the delays in the network before the
     commensurate root analysis, which will be based on taking the average
@@ -57,7 +57,7 @@ def test_altered_delay_pert(eps=1e-5):
     ## This nonlinearity will depend on the frequency.
     chi_nonlin_test = Hamiltonian.Chi_nonlin(delay_indices=[0],start_nonlin=0,
                                length_nonlin=0.1*consts.c)
-    chi_nonlin_test.refraction_index_func = lambda freq, pol: 1. + abs(freq / (10*np.pi))
+    chi_nonlin_test.refraction_index_func = lambda freq, pol: 1. + abs(freq / (5000*np.pi))
     ham.chi_nonlinearities.append(chi_nonlin_test)
 
     ## update delays, which are different becuase of the nonlinearity.
@@ -74,8 +74,9 @@ def test_altered_delay_pert(eps=1e-5):
     # print ham.roots
     print len(ham.roots)
     # plt.plot(ham.omegas)
-    plt.scatter(np.asarray(ham.roots).real,np.asarray(ham.roots).imag)
-    plt.show()
+    if plot:
+        plt.scatter(np.asarray(ham.roots).real,np.asarray(ham.roots).imag)
+        plt.show()
 
     ## TODO: make a function to perturb in several steps to avoid root-skipping.
 
@@ -342,7 +343,7 @@ def test_altered_delay_pert(eps=1e-5):
 
 
 if __name__ == "__main__":
-    test_altered_delay_pert()
+    test_altered_delay_pert(plot=True)
     #test_make_T_denom_sym_separate_delays()
     #test_Hamiltonian_with_doubled_equations()
     #test_example_3()
