@@ -22,7 +22,8 @@ Simply clone the repository, open a terminal window, type:
 
 ::
 
-    cd /path/to/my/repo
+    git clone https://github.com/tabakg/potapov_interpolation
+    cd potapov_interpolation
     python setup.py install
 
 Files
