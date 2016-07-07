@@ -216,43 +216,43 @@ class Hamiltonian():
         else:
             "root adjustment aborted."
 
-    def minimize_roots_z(self,func,dfunc,eps = 1e-12):
-        '''
-        One approach to perturb the roots is to use a function in :math:`x,y`
-        that becomes minimized at a zero. This is done here.
-
-        The result is an update to roots, omegas, and Delta_delays.
-
-        Args:
-            func, dfuncs (functions):
-                Functions in x,y. The first becomes
-                minimized at a zero and the second is the gradient in x,y.
-                These functions are generated in
-                Time_Delay_Network.get_minimizing_function_z.
-
-            eps (optional [float]):
-                Desired precision for convergence.
-
-        '''
-        max_count = 1
-        for j in range(max_count):
-            self.make_Delta_delays()
-            old_roots = copy.copy(self.roots)
-            for i,root in enumerate(self.roots):
-                fun_z = lambda x,y: func(x,y,*map(sum,zip(self.delays,self.Delta_delays[i])))
-                fun_z_2 = lambda arr: fun_z(*arr)
-                dfun_z = lambda x,y: dfunc(x,y,*map(sum,zip(self.delays,self.Delta_delays[i])))
-                dfun_z_2 = lambda arr: dfun_z(*arr)
-                x0 = np.asarray([root.real,root.imag])
-                minimized = minimize(fun_z_2,x0,jac = dfun_z_2).x
-                self.roots[i] = minimized[0] + minimized[1] * 1j
-            #print self.roots
-            self._update_omegas()
-            if all([abs(new-old) < eps for new,old in zip(self.roots,old_roots)]):
-                print "root adjustment converged!"
-                break
-        else:
-            "root adjustment aborted."
+    # def minimize_roots_z(self,func,dfunc,eps = 1e-12):
+    #     '''
+    #     One approach to perturb the roots is to use a function in :math:`x,y`
+    #     that becomes minimized at a zero. This is done here.
+    #
+    #     The result is an update to roots, omegas, and Delta_delays.
+    #
+    #     Args:
+    #         func, dfuncs (functions):
+    #             Functions in x,y. The first becomes
+    #             minimized at a zero and the second is the gradient in x,y.
+    #             These functions are generated in
+    #             Time_Delay_Network.get_minimizing_function_z.
+    #
+    #         eps (optional [float]):
+    #             Desired precision for convergence.
+    #
+    #     '''
+    #     max_count = 1
+    #     for j in range(max_count):
+    #         self.make_Delta_delays()
+    #         old_roots = copy.copy(self.roots)
+    #         for i,root in enumerate(self.roots):
+    #             fun_z = lambda x,y: func(x,y,*map(sum,zip(self.delays,self.Delta_delays[i])))
+    #             fun_z_2 = lambda arr: fun_z(*arr)
+    #             dfun_z = lambda x,y: dfunc(x,y,*map(sum,zip(self.delays,self.Delta_delays[i])))
+    #             dfun_z_2 = lambda arr: dfun_z(*arr)
+    #             x0 = np.asarray([root.real,root.imag])
+    #             minimized = minimize(fun_z_2,x0,jac = dfun_z_2).x
+    #             self.roots[i] = minimized[0] + minimized[1] * 1j
+    #         #print self.roots
+    #         self._update_omegas()
+    #         if all([abs(new-old) < eps for new,old in zip(self.roots,old_roots)]):
+    #             print "root adjustment converged!"
+    #             break
+    #     else:
+    #         "root adjustment aborted."
 
     # # def perturb_roots_T_and_z(self,perturb_func,eps = 1e-15):
     #     r'''
@@ -460,7 +460,7 @@ class Hamiltonian():
         omega = self.omegas[mode_index]
         #eps0 = consts.epsilon_0
         hbar = consts.hbar
-        return np.sqrt(hbar * abs(omega) / (2 * self.volumes[mode_index]) ) ## / eps0 
+        return np.sqrt(hbar * abs(omega) / (2 * self.volumes[mode_index]) ) ## / eps0
 
     def make_E_field_weights(self,):
         '''
