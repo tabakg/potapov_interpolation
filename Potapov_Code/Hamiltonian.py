@@ -599,7 +599,7 @@ class Hamiltonian():
         H_nonlin = self.make_nonlin_H_from_chi(eps)
         H_lin = self.make_lin_H(self.Omega)
         self.H = H_lin + H_nonlin * self.nonlin_coeff
-        self.H = normal_order((self.H).expand())
+        # self.H = normal_order((self.H).expand())
         return self.H
 
     def move_to_rotating_frame(self, freqs = 0.,include_time_terms = True):
