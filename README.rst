@@ -127,4 +127,4 @@ non-classical simulations.
 Sample Usage -- Time Domain Simulation
 --------------------------------------
 
-See [Simple code example](Sample_Code_Usage.ipynb)
+See [Simple code example](https://github.com/tabakg/potapov_interpolation/blob/master/Sample_Code_Usage.ipynb)
