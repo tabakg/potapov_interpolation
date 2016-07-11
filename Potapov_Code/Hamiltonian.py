@@ -10,6 +10,7 @@ import Roots
 import Potapov
 import Time_Delay_Network
 import functions
+import phase_matching
 
 import numpy as np
 import numpy.linalg as la
@@ -44,7 +45,7 @@ class Chi_nonlin():
 
         refraction_index_func (function):
             the indices of refraction as a
-            function of the netural frequency :math:`/omega`.
+            function of the netural frequency :math:`/omega` and polarization pol.
 
         chi_order (optional [int]):
             order of nonlinearity.
@@ -100,15 +101,18 @@ class Hamiltonian():
             A list of Chi_nonlin instances.
 
     TODO: Return L operator for QNET.
+    TODO: decide what to do with roots of negative imaginary part (negative freq.)
 
     '''
     def __init__(self,roots,modes,delays,
         Omega = None,
         nonlin_coeff = 1.,polarizations = None,
         cross_sectional_area = 1e-10,
-        chi_nonlinearities = [],
+        chi_nonlinearities = None,
         using_qnet_symbols = False,
         ):
+        if chi_nonlinearities is None:
+            chi_nonlinearities = []
         self.roots = roots
         self._update_omegas()
         self.modes = modes
@@ -310,7 +314,7 @@ class Hamiltonian():
 
             refraction_index_func (function):
                 The indices of refraction as a
-                function of the netural frequency :math:`/omega`.
+                function of the natural frequency :math:`/omega`.
 
             chi_order (optional [int]):
                 Order of the chi nonlinearity.
@@ -474,7 +478,24 @@ class Hamiltonian():
             weights[mode_index] = self.E_field_weight(mode_index)
         return weights
 
-    def make_weight_keys(self,chi):
+    # def _setup_ranges(max_i,base):
+    #     ranges= {}
+    #     for i in range(max_i+1):
+    #         ranges[i] = np.linspace(6.,11.,1+pow(base,i+1))
+    #     return ranges
+
+    # def _make_positive_keys_chi2(chi):
+    #     '''
+    #     Returns:
+    #
+    #     '''
+    #     if chi.chi_order != 2:
+    #          raise Exception('chi must of order 2 for this method.')
+    #
+    #     ## TODO: get actual modes
+
+
+    def make_weight_keys(self,chi, key_types = 'all_keys'):
         r'''
         Make a list of keys for which various weights will be determined.
         Each key is a tuple consisting of two
@@ -491,14 +512,24 @@ class Hamiltonian():
                 A list of keys of the type described.
 
         '''
+
         weight_keys=[]
-        list_of_pm_arr = list(itertools.product([-1, 1],
-            repeat=chi.chi_order+1))
-        field_combinations = itertools.combinations_with_replacement(
-            range(self.m), chi.chi_order+1)  ##generator
-        for combination in field_combinations:
-            for pm_arr in list_of_pm_arr:
-                weight_keys.append( (tuple(combination),tuple(pm_arr)) )
+
+        if key_types == 'all_keys':
+            list_of_pm_arr = list(itertools.product([-1, 1],
+                repeat=chi.chi_order+1))
+            field_combinations = itertools.combinations_with_replacement(
+                range(self.m), chi.chi_order+1)  ##generator
+            for combination in field_combinations:
+                for pm_arr in list_of_pm_arr:
+                    weight_keys.append( (tuple(combination),tuple(pm_arr)) )
+
+        # elif key_types == 'search_voxels' and chi.chi_order == 2:
+        #     positive_omega1_omega2_keys = phase_matching.make_positive_keys_chi2(self)
+        #     for (omega1,omega2) in positive_omega1_omega2_keys:
+        else:
+            print "make_weight_keys is under consturction!!!"
+
         return weight_keys
 
     def make_nonlin_H_from_chi(self,chi,filtering_phase_weights=False,eps=1e-5):
