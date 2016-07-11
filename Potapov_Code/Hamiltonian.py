@@ -102,6 +102,7 @@ class Hamiltonian():
 
     TODO: Return L operator for QNET.
     TODO: decide what to do with roots of negative imaginary part (negative freq.)
+    TODO: maybe re-organize the data into a dict of the form mode_inde: (root,mode,etc)
 
     '''
     def __init__(self,roots,modes,delays,
