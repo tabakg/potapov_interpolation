@@ -45,7 +45,7 @@ class Chi_nonlin():
 
         refraction_index_func (function):
             the indices of refraction as a
-            function of the netural frequency :math:`/omega` and polarization pol.
+            function of the netural frequency :math:`/omega` AND polarization pol.
 
         chi_order (optional [int]):
             order of nonlinearity.
@@ -472,6 +472,9 @@ class Hamiltonian():
         Returns:
             Weights (dict):
                 A dictionary from mode index to the E-field weight.
+
+        TODO: In the make_positive_keys_chi2 function, generate and pass the
+        correct polarization functions.
 
         '''
         weights = {}
