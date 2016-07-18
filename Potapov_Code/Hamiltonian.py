@@ -57,14 +57,21 @@ class Chi_nonlin():
 
     '''
     def __init__(self,delay_indices,start_nonlin,length_nonlin,
-            refraction_index_func = lambda *args: 1.,
-            chi_order=3,chi_function = lambda *args: 1.):
+            refraction_index_func = None,
+            chi_order=3,chi_function = None):
         self.delay_indices = delay_indices
         self.start_nonlin = start_nonlin
         self.length_nonlin = length_nonlin
         self.chi_order = chi_order
-        self.refraction_index_func = refraction_index_func
-        self.chi_function = chi_function
+
+        if refraction_index_func is None:
+            self.refraction_index_func = lambda *args: 1.
+        else:
+            self.refraction_index_func = refraction_index_func
+        if chi_function is None:
+            self.chi_function = lambda *args: 1.
+        else:
+            self.chi_function = chi_function
 
 class Hamiltonian():
     '''A class to create a sympy expression for the Hamiltonian of a network.
@@ -113,7 +120,9 @@ class Hamiltonian():
         using_qnet_symbols = False,
         ):
         if chi_nonlinearities is None:
-            chi_nonlinearities = []
+            self.chi_nonlinearities = []
+        else:
+            self.chi_nonlinearities = chi_nonlinearities
         self.roots = roots
         self._update_omegas()
         self.modes = modes
@@ -135,7 +144,6 @@ class Hamiltonian():
         else:
             self.polarizations = polarizations
         self.E_field_weights = self.make_E_field_weights()
-        self.chi_nonlinearities = chi_nonlinearities
         self.using_qnet_symbols = using_qnet_symbols
         if self.using_qnet_symbols:
             self.a = [Destroy(i) for i in range(self.m)]
@@ -294,8 +302,8 @@ class Hamiltonian():
     #     return
 
     def make_chi_nonlinearity(self,delay_indices,start_nonlin,
-                               length_nonlin,refraction_index_func = lambda *args: 1.,
-                               chi_order=3,chi_function = lambda *args: 1):
+                               length_nonlin,refraction_index_func = None,
+                               chi_order=3,chi_function = None):
         r'''Add an instance of Chi_nonlin to Hamiltonian.
 
         Args:
