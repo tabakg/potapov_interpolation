@@ -23,7 +23,7 @@ import copy
 
 #from sympy.printing.theanocode import theano_function
 
-from sympy.physics.quantum import *
+from sympy.physics.quantum import Dagger as sp_Dagger
 from sympy.physics.quantum.boson import *
 from sympy.physics.quantum.operatorordering import *
 from qnet.algebra.circuit_algebra import *
@@ -119,40 +119,43 @@ class Hamiltonian():
         chi_nonlinearities = None,
         using_qnet_symbols = False,
         ):
+
+        self.roots = roots
+        self._update_omegas()
+        self.m = len(roots)
+        self.modes = modes
+        self.delays = delays
+        self.cross_sectional_area = cross_sectional_area
+        self.Delta_delays = np.zeros((self.m,len(self.delays)))
+        self.volumes = self.mode_volumes()
+        self.normalize_modes()
+        self.E_field_weights = self.make_E_field_weights()
+        self.using_qnet_symbols = using_qnet_symbols
+        self.t = sp.symbols('t')
+        self.H = 0.
+        self.nonlin_coeff = nonlin_coeff
+
         if chi_nonlinearities is None:
             self.chi_nonlinearities = []
         else:
             self.chi_nonlinearities = chi_nonlinearities
-        self.roots = roots
-        self._update_omegas()
-        self.modes = modes
-        self.m = len(roots)
-        self.delays = delays
-
-        self.cross_sectional_area = cross_sectional_area
-
-        self.Delta_delays = np.zeros((self.m,len(self.delays)))
-        self.volumes = self.mode_volumes()
-        self.normalize_modes()
 
         if Omega is None:
             self.Omega = np.asmatrix(np.zeros((m,m)))
         else:
             self.Omega = Omega
+
         if polarizations is None:
             self.polarizations = [1.]*len(self.delays)
         else:
             self.polarizations = polarizations
-        self.E_field_weights = self.make_E_field_weights()
-        self.using_qnet_symbols = using_qnet_symbols
+
         if self.using_qnet_symbols:
             self.a = [Destroy(i) for i in range(self.m)]
         else:
             #self.a = [sp.symbols('a_'+str(i)) for i in range(self.m)]
             self.a = [BosonOp('a_'+str(i)) for i in range(self.m)]
-        self.t = sp.symbols('t')
-        self.H = 0.
-        self.nonlin_coeff = nonlin_coeff
+
 
     def _update_omegas(self,):
         self.omegas = map(lambda z: z.imag / (2.*consts.pi), self.roots)
@@ -162,7 +165,7 @@ class Hamiltonian():
         if self.using_qnet_symbols:
             return symbol.dag()
         else:
-            return Dagger(symbol)
+            return sp_Dagger(symbol)
 
     # def adjusted_delays(self):
     #     '''
