@@ -15,6 +15,22 @@ import numpy.linalg as la
 import scipy.constants as consts
 from fractions import gcd
 
+import time
+
+
+def timeit(method):
+    '''
+    from https://www.andreas-jung.com/contents/a-python-decorator-for-measuring-the-execution-time-of-methods
+    '''
+    def timed(*args, **kw):
+        ts = time.time()
+        result = method(*args, **kw)
+        te = time.time()
+        print '%r %2.2f sec' % \
+              (method.__name__, te-ts)
+        return result
+    return timed
+
 def gcd_lst(lst):
     l = len(lst)
     if l == 0:
