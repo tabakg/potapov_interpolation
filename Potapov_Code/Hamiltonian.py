@@ -439,10 +439,10 @@ class Hamiltonian():
                 components: the first is a tuple of the indices of modes and the
                 second is a tuple of +1 and -1.
 
-            filtering_phase_weights (optional[Boolean]):
-                Whether or not to
-                filter the phase_matching_weights by the size of their values. The
-                cutoff for their absolute value is given by eps.
+            filtering_phase_weights (optional[boolean]):
+                Whether or not to filter the phase_matching_weights by the size
+                of their values. The cutoff for their absolute value is given
+                by eps.
 
             eps (optional [float]):
                 Cutoff for filtering of weights.
@@ -547,12 +547,14 @@ class Hamiltonian():
 
         return weight_keys
 
-    def make_nonlin_H_from_chi(self,chi,filtering_phase_weights=False,eps=1e-5):
+    def make_nonlin_H(self,filtering_phase_weights=False,eps=1e-5):
         '''Make a nonlinear Hamiltonian based on nonlinear interaction terms
 
         Args:
-            chi (Chi_nonlin):
-                Nonlinearity to use.
+            filtering_phase_weights (optional[boolean]):
+                Whether or not to filter the phase_matching_weights by the size
+                of their values. The cutoff for their absolute value is given
+                by eps.
 
             eps (optional[float]):
                 Cutoff for the significance of a particular term.
@@ -569,23 +571,11 @@ class Hamiltonian():
 
         '''
         H_nonlin_sp = sp.Float(0.)
-        for chi in self.chi_nonlinearities:
-            weight_keys = self.make_weight_keys(chi)
-
-            phase_matching_weights = self.make_phase_matching_weights(
-                weight_keys,chi,filtering_phase_weights,eps)
-
-            for combination,pm_arr in phase_matching_weights:
-                omegas_to_use = map(lambda i: self.omegas[i],combination)
-                omegas_with_sign = [omega * pm for omega,pm
-                                    in zip(omegas_to_use,pm_arr)]
-                pols = map(lambda i: self.polarizations[i],chi.delay_indices)
-                chi_args = omegas_with_sign + pols
-                H_nonlin_sp += ( self.make_nonlin_term_sympy(combination,pm_arr) *
-                    chi.chi_function(*chi_args) *
-                    phase_matching_weights[combination,pm_arr] *
-                    np.prod([self.E_field_weights[i] for i in combination]) )
+        self.make_dict_H_nonlin()
+        for term_identifier, value in self.Hamiltonian_dict_nonlin.iteritems():
+            H_nonlin_sp += self.make_nonlin_term_sympy(*term_identifier) * value
         return H_nonlin_sp
+
 
     def make_lin_H(self,Omega):
         '''Make a linear Hamiltonian based on Omega.
@@ -599,10 +589,11 @@ class Hamiltonian():
                 A symbolic expression for the nonlinear Hamiltonian.
 
         '''
+        self.make_dict_H_lin(Omega)
         H_lin_sp = sp.Float(0.)
         for i in range(self.m):
             for j in range(self.m):
-                H_lin_sp += self.Dagger(self.a[i])*self.a[j]*Omega[i,j]
+               H_lin_sp += self.Dagger(self.a[i])*self.a[j]*Omega[i,j]
         return H_lin_sp
 
     def make_H(self,eps=1e-5):
@@ -642,14 +633,56 @@ class Hamiltonian():
                 A symbolic expression for the full Hamiltonian.
 
         '''
-        H_nonlin = self.make_nonlin_H_from_chi(eps)
+        H_nonlin = self.make_nonlin_H(eps)
         H_lin = self.make_lin_H(self.Omega)
         self.H = H_lin + H_nonlin * self.nonlin_coeff
         # self.H = normal_order((self.H).expand())
         return self.H
 
+    def make_dict_H_lin(self,Omega):
+        r''' Using the current information about the modes and
+        chi_nonlinearities, generate a dictioanry mapping
+
+        '''
+        self.Hamiltonian_dict_lin = {}
+        for i in range(self.m):
+            for j in range(self.m):
+                combination = (i,j)
+                pm_arr = (+1,-1) ## all terms have form a_i.dag()*a_j
+                self.Hamiltonian_dict_lin[(combination,pm_arr)] = Omega[i,j]
+
+    def make_dict_H_nonlin(self,filtering_phase_weights=False,eps=1e-5):
+        r''' Using the current information about the modes and
+        chi_nonlinearities, generate a dictioanry mapping
+
+        '''
+        self.Hamiltonian_dict_nonlin = {}
+        for chi in self.chi_nonlinearities:
+            weight_keys = self.make_weight_keys(chi)
+
+            phase_matching_weights = self.make_phase_matching_weights(
+                weight_keys,chi,filtering_phase_weights,eps)
+
+            for combination,pm_arr in phase_matching_weights:
+                omegas_to_use = map(lambda i: self.omegas[i],combination)
+                omegas_with_sign = [omega * pm for omega,pm
+                                    in zip(omegas_to_use,pm_arr)]
+                pols = map(lambda i: self.polarizations[i],chi.delay_indices)
+                chi_args = omegas_with_sign + pols
+                self.Hamiltonian_dict_nonlin.setdefault( (combination,pm_arr),0.)
+                self.Hamiltonian_dict_nonlin[(combination,pm_arr)] += (
+                    chi.chi_function(*chi_args) *
+                    phase_matching_weights[combination,pm_arr] *
+                    np.prod([self.E_field_weights[i] for i in combination]) )
+
+    def make_H_from_dict_H(self,):
+        r'''
+
+        '''
+        return "not written yet!!!!!"
+
     def move_to_rotating_frame(self, freqs = 0.,include_time_terms = True):
-        r'''Moves the Hamiltonian to a rotating frame
+        r'''Moves the symbolic Hamiltonian to a rotating frame
 
         We apply a change of basis :math:`a_j \to a e^{- i \omega_j}` for
         each mode :math:`a_j`. This method modifies the symbolic Hamiltonian,

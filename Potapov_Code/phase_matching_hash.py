@@ -6,6 +6,7 @@ from scipy import interpolate
 import matplotlib.pyplot as plt
 
 from functions import timeit
+from functions import make_dict_values_to_lists_of_inputs
 
 
 def generate_k_func_4wv(pols=(-1,-1,-1,-1), n_symb = None):
@@ -16,6 +17,12 @@ def generate_k_func_4wv(pols=(-1,-1,-1,-1), n_symb = None):
         Args:
             pols (optional[tuple]): list of polarizations for the four freqs.
             n_sym (optional[function]): index of refraction as a function of omega.
+
+        Returns:
+            diff_func_4wv_1 (function):
+                a function of only two variables phi1 and phi2
+            diff_func_4wv_2 (function):
+                a function of only two variables phi1 and omega3
     '''
 
     ## from http://refractiveindex.info/?shelf=main&book=LiNbO3&page=Zelmon-o
@@ -62,25 +69,6 @@ def eps_multiply_digitize(y,eps):
     Divide input by epsilong and round.
     '''
     return  map(lambda el: int(el/eps), y)
-
-def make_dict_values_to_lists_of_inputs(values,inputs):
-    '''
-    Make a dictionary mapping value to lists of corresponding inputs.
-
-    Args:
-        values (list of floats):
-            Values in a list, corresponding to the inputs.
-        inputs (list of floats):
-            Inputs in a list.
-
-    Returns:
-        D (dict):
-            dictionary mapping value to lists of corresponding inputs.
-    '''
-    D = {}
-    for k, v in zip(values,inputs):
-        D.setdefault(k, []).append(v)
-    return D
 
 @timeit
 def make_matching_dict_hash(diff_func_4wv_1,diff_func_4wv_2,
@@ -157,7 +145,6 @@ if __name__ == "__main__":
     f_phi12_omega3 = lambda phi1,phi2,omega3 : (
         diff_func_4wv_1(phi1_range[phi1],phi2_range[phi2])
         - diff_func_4wv_2(phi1_range[phi1],omega3_range[omega3]) )
-
 
     matching_dict_hash = make_matching_dict_hash(
         diff_func_4wv_1,diff_func_4wv_2,

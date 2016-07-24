@@ -11,12 +11,28 @@ Functions used by other files.
 
 import numpy as np
 import numpy.linalg as la
-
 import scipy.constants as consts
 from fractions import gcd
-
 import time
 
+def make_dict_values_to_lists_of_inputs(values,inputs):
+    '''
+    Make a dictionary mapping value to lists of corresponding inputs.
+
+    Args:
+        values (list of floats):
+            Values in a list, corresponding to the inputs.
+        inputs (list of floats):
+            Inputs in a list.
+
+    Returns:
+        D (dict):
+            dictionary mapping value to lists of corresponding inputs.
+    '''
+    D = {}
+    for k, v in zip(values,inputs):
+        D.setdefault(k, []).append(v)
+    return D
 
 def timeit(method):
     '''
