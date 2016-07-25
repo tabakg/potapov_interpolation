@@ -110,6 +110,7 @@ class Hamiltonian():
     TODO: Return L operator for QNET.
     TODO: decide what to do with roots of negative imaginary part (negative freq.)
     TODO: maybe re-organize the data into a dict of the form mode_inde: (root,mode,etc)
+    TODO: Replace python floats by mpmath variables for arbitrary precision
 
     '''
     def __init__(self,roots,modes,delays,
@@ -538,14 +539,23 @@ class Hamiltonian():
             for combination in field_combinations:
                 for pm_arr in list_of_pm_arr:
                     weight_keys.append( (tuple(combination),tuple(pm_arr)) )
+            return weight_keys
 
-        # elif key_types == 'search_voxels' and chi.chi_order == 2:
-        #     positive_omega1_omega2_keys = phase_matching.make_positive_keys_chi2(self)
-        #     for (omega1,omega2) in positive_omega1_omega2_keys:
+        elif key_types == 'search_voxels' and chi.chi_order == 2:
+            if not all([el >= 0 for el in self.omegas]):
+                print "Not all omegas are positive!"
+            else:
+                ## ASSUME self.omegas are positive for now.
+                positive_omega_indices = phase_matching.make_positive_keys_chi2(self,chi)
+                
+            # positive_omega1_omega2_ = phase_matching.make_positive_keys_chi2(self,positive_omegas_lst,chi)
+            # for (omega1,omega2) in positive_omega1_omega2_keys:
+            #     combination = (omega1,omega2,-omega1-omega)
+            #     weight_keys.append( (tuple(combination),tuple(pm_arr)) )
+
         else:
-            print "make_weight_keys is under consturction!!!"
+            print "make_weight_keys is under consturction!!! key_types not known."
 
-        return weight_keys
 
     def make_nonlin_H(self,filtering_phase_weights=False,eps=1e-5):
         '''Make a nonlinear Hamiltonian based on nonlinear interaction terms
@@ -675,12 +685,6 @@ class Hamiltonian():
                     phase_matching_weights[combination,pm_arr] *
                     np.prod([self.E_field_weights[i] for i in combination]) )
 
-    def make_H_from_dict_H(self,):
-        r'''
-
-        '''
-        return "not written yet!!!!!"
-
     def move_to_rotating_frame(self, freqs = 0.,include_time_terms = True):
         r'''Moves the symbolic Hamiltonian to a rotating frame
 
@@ -704,6 +708,8 @@ class Hamiltonian():
         Maybe utilize the _get_real_imag_func method in Time_Delay_Network.
 
         '''
+        if not hasattr(self,H):
+            raise Exception("Please define H to use move_to_rotating_frame")
         if type(freqs) in [float,long,int]:
             if freqs == 0.:
                 return

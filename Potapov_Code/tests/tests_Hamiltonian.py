@@ -92,6 +92,5 @@ def test_Hamiltonian_with_doubled_equations(eps=1e-5):
         assert abs(sum(y_lin - y_nonlin)) < eps
 
 
-
 if __name__ == "__main__":
     test_Hamiltonian_with_doubled_equations()
