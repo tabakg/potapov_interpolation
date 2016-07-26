@@ -142,7 +142,7 @@ class Hamiltonian():
             self.chi_nonlinearities = chi_nonlinearities
 
         if Omega is None:
-            self.Omega = np.asmatrix(np.zeros((m,m)))
+            self.Omega = np.asmatrix(np.zeros((self.m,self.m)))
         else:
             self.Omega = Omega
 
@@ -511,7 +511,7 @@ class Hamiltonian():
     #     ## TODO: get actual modes
 
 
-    def make_weight_keys(self,chi, key_types = 'all_keys'):
+    def make_weight_keys(self,chi, key_types = 'all_keys',pols = (1,1,-1)):
         r'''
         Make a list of keys for which various weights will be determined.
         Each key is a tuple consisting of two
@@ -546,13 +546,15 @@ class Hamiltonian():
                 print "Not all omegas are positive!"
             else:
                 ## ASSUME self.omegas are positive for now.
-                positive_omega_indices = phase_matching.make_positive_keys_chi2(self,chi)
-                
-            # positive_omega1_omega2_ = phase_matching.make_positive_keys_chi2(self,positive_omegas_lst,chi)
-            # for (omega1,omega2) in positive_omega1_omega2_keys:
-            #     combination = (omega1,omega2,-omega1-omega)
-            #     weight_keys.append( (tuple(combination),tuple(pm_arr)) )
-
+                ## Multiplied by 1e-13 * 2 * pi for units.
+                pos_nus_lst = [ (1e-13 * 2 * consts.pi * omega) for omega in self.omegas if omega >= 0.]
+                positive_omega_indices = phase_matching.make_positive_keys_chi2(pos_nus_lst,chi,pols = pols)
+                ## filter by polarizations
+                positive_omega_indices = [indices for indices in positive_omega_indices
+                    if all([pols[j] == self.polarizations[i] for j,i in enumerate(indices)])  ]
+                weight_keys = (  [ (indices,(+1,+1,-1)) for indices in positive_omega_indices]
+                               + [ (indices,(+1,+1,-1)) for indices in positive_omega_indices] )
+                return weight_keys
         else:
             print "make_weight_keys is under consturction!!! key_types not known."
 
