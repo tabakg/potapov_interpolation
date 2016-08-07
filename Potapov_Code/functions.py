@@ -14,6 +14,7 @@ import numpy.linalg as la
 import scipy.constants as consts
 from fractions import gcd
 import time
+import math
 
 def make_dict_values_to_lists_of_inputs(values,inputs):
     '''
@@ -31,7 +32,8 @@ def make_dict_values_to_lists_of_inputs(values,inputs):
     '''
     D = {}
     for k, v in zip(values,inputs):
-        D.setdefault(k, []).append(v)
+        if not math.isnan(k):
+            D.setdefault(k, []).append(v)
     return D
 
 def timeit(method):

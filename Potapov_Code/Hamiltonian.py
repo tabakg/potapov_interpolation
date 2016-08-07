@@ -11,6 +11,7 @@ import Potapov
 import Time_Delay_Network
 import functions
 import phase_matching
+import phase_matching_hash
 
 import numpy as np
 import numpy.linalg as la
@@ -511,7 +512,7 @@ class Hamiltonian():
     #     ## TODO: get actual modes
 
 
-    def make_weight_keys(self,chi, key_types = 'all_keys',pols = (1,1,-1)):
+    def make_weight_keys(self,chi, key_types = 'all_keys',pols = (1,1,-1), res=(1e-1,1e-1,1e-1)):
         r'''
         Make a list of keys for which various weights will be determined.
         Each key is a tuple consisting of two
@@ -540,23 +541,56 @@ class Hamiltonian():
                 for pm_arr in list_of_pm_arr:
                     weight_keys.append( (tuple(combination),tuple(pm_arr)) )
             return weight_keys
+        elif not all([el >= 0 for el in self.omegas]):
+            ## We need all omegas to be positive.
+            print "Not all omegas are positive!"
+        else: ## key_types != 'all_keys' and all omegas are positive
 
-        elif key_types == 'search_voxels' and chi.chi_order == 2:
-            if not all([el >= 0 for el in self.omegas]):
-                print "Not all omegas are positive!"
-            else:
-                ## ASSUME self.omegas are positive for now.
+            def filter_by_polarization(positive_omega_indices):
+                '''Filter by polarizations.'''
+                return [indices for indices in positive_omega_indices
+                    if all([pols[j] == self.polarizations[i] for j,i in enumerate(indices)])]
+
+            def sign_tuple(indices,flip = False):
+                '''Tuple of the signs of the indices tuple.'''
+                if flip:
+                    return tuple(map(lambda z: -int(np.sign(z)),indices))
+                else:
+                    return tuple(map(lambda z: int(np.sign(z)),indices))
+
+            def generate_positive_omega_keys(chi,indices_method,pols=pols):
+                '''Make indices for weights, assuming first two are the SAME sign.'''
                 ## Multiplied by 1e-13 * 2 * pi for units.
                 pos_nus_lst = [ (1e-13 * 2 * consts.pi * omega) for omega in self.omegas if omega >= 0.]
-                positive_omega_indices = phase_matching.make_positive_keys_chi2(pos_nus_lst,chi,pols = pols)
-                ## filter by polarizations
-                positive_omega_indices = [indices for indices in positive_omega_indices
-                    if all([pols[j] == self.polarizations[i] for j,i in enumerate(indices)])  ]
-                weight_keys = (  [ (indices,(+1,+1,-1)) for indices in positive_omega_indices]
-                               + [ (indices,(+1,+1,-1)) for indices in positive_omega_indices] )
+                positive_omega_indices = indices_method(pos_nus_lst,chi,pols = pols)
+                positive_omega_indices =  filter_by_polarization(positive_omega_indices)
+                weight_keys = (  [(indices,sign_tuple(indices)) for indices in positive_omega_indices]
+                               + [(indices,sign_tuple(indices, flip = True)) for indices in positive_omega_indices] )
                 return weight_keys
-        else:
-            print "make_weight_keys is under consturction!!! key_types not known."
+
+            def generate_all_permutations_of_omega_keys(chi,indices_method,pols=pols,permutations=None):
+                weight_keys = []
+                for perm in permutations:
+                    if perm is None:
+                        weight_keys.append(generate_positive_omega_keys(chi,indices_method,pols=pols))
+                    else:
+                        pols_perm = tuple([pols[p] for p in perm])
+                        permuted_keys = generate_positive_omega_keys(chi,indices_method,pols=pols_perm)
+                        umpermuted_keys = [(el[0][p],el[1][p]) for p,el in zip(perm,permuted_keys)]
+                        weight_keys.append(umpermuted_keys)
+                return weight_keys
+
+            if key_types == 'search_voxels' and chi.chi_order == 2:
+                permutations = [None, (2,1,0), (0,2,1)]
+                return generate_all_permutations_of_omega_keys(chi,phase_matching.make_positive_keys_chi2,pols=pols,permutations=permutations)
+
+            elif key_types == 'hash_method' and chi.chi_order == 3:
+                permutations = [None, (0,2,1,3), (0,2,3,1), (2,0,1,3), (2,0,3,1), (2,3,0,1)]
+                def make_positive_keys_chi3_fixed_res(pos_nus_lst,chi,pols = pols):
+                    return phase_matching_hash.make_positive_keys_chi3(pos_nus_lst,chi,pols = pols,res = res)
+                return generate_all_permutations_of_omega_keys(chi,make_positive_keys_chi3_fixed_res,pols=pols,permutations=permutations)
+
+        print "key_types not known or doesn't match chi_order."
 
 
     def make_nonlin_H(self,filtering_phase_weights=False,eps=1e-5):
