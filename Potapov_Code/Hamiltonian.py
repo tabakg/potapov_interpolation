@@ -528,6 +528,9 @@ class Hamiltonian():
             Keys (list):
                 A list of keys of the type described.
 
+        TODO: pass the k(lambda) function from chi to the function called from
+        phase_matching or phase_matching_hash.
+
         '''
 
         weight_keys=[]

@@ -59,7 +59,7 @@ def test_Hamiltonian_calling_make_weight_keys(eps = 2e-4,
 
     ## Use the make_weight_keys() with the selected ham and chi with
     ## the correct key_types
-    weight_keys = Hamiltonian.Hamiltonian.make_weight_keys(ham, chi, key_types = 'hash_method', pols = pols )
+    weight_keys = Hamiltonian.Hamiltonian.make_weight_keys(ham, chi, key_types = 'hash_method', pols = pols,  )
 
     L = len(weight_keys)
     print L
