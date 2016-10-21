@@ -9,8 +9,11 @@ import Roots
 import Potapov
 import numpy as np
 import numpy.linalg as la
+from numpy import pi
+from colorsys import hls_to_rgb
 import sympy as sp
 import matplotlib.pyplot as plt
+
 #import mpmath as mp ## for complex-valued plots
 from functions import double_up
 from functions import der
@@ -773,22 +776,53 @@ def example6_pade():
     T = lambda z,n: M3*E(z,n)*la.inv(np.eye(dim) - M1*E(z,n))*M2+M4
     return T
 
-def plot3D(f,points = 2000):
+def plot3D(f,N = 2000,x_min = -1.5, x_max = 1.5, y_min = -25., y_max = 25., name = "complex_plane_plot.pdf",
+    title = 'Complex Frequecy Response Diagram',
+    xlabel = r'Cavity damping rate ($\kappa$)',
+    ylabel = r'Detuning ($\Delta$)'):
     '''
-    Make a color and hue plot in the complex plane for a given function
+    Make a color and hue plot in the complex plane for a given function.
+
+    Used code from http://stackoverflow.com/questions/17044052/mathplotlib-imshow-complex-2d-array
 
     Args:
         f (function): to plot.
 
-        points(optional[int]): number of points to use per dimension.
+        N(optional[int]): number of points to use per dimension.
 
     Returns:
         None.
 
     '''
-    fig = mp.cplot(f, [-10,10], [-10, 10], points = points)
-    fig.savefig("complex_plane_plot.pdf")
-    return
+    def colorize(z):
+        r = np.abs(z)
+        arg = np.angle(z)
+
+        h = (arg)  / (2 * pi) + 0.5
+        l = 1.0 - 1.0/(1.0 + r**0.3)
+        s = 0.8
+
+        c = np.vectorize(hls_to_rgb) (h,l,s) # --> tuple
+        c = np.array(c)  # -->  array of (3,n,m) shape, but need (n,m,3)
+        c = c.swapaxes(0,2)
+        return c
+
+    x,y = np.ogrid[x_min:x_max:N*1j, y_min:y_max:N*1j]
+    z = x + 1j*y
+    f_vec = np.vectorize(f)
+    w = f_vec(z)
+    img = colorize(w)
+    plt.imshow(img, extent = [x_min,x_max,y_min,y_max], aspect = 0.1)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.savefig(name)
+    plt.show()
+
+
+    #fig = mp.cplot(f, [-10,10], [-10, 10], points = points)
+    # fig.savefig("complex_plane_plot.pdf")
+    # return
 
 if __name__ == "__main__":
     print 'Running Examples.py'
@@ -805,8 +839,20 @@ if __name__ == "__main__":
     #
     # f = lambda z: (mp.exp(-z*tau) - r)/(1.-r* mp.exp(-z*tau))*mp.exp(-z*tau)
     # f2 = lambda z: (mp.exp(-z*tau) - r)/(1.-r* mp.exp(-z*tau))
-    # plot3D(f,points = 5000)
-    # plot3D(f2,points = 500000)
+    # plot3D(f,N = 50)
+    ## plot3D(f2,N = 500000)
+
+    ################
+    ## Plot for complex-valued functions for example 3.
+    ################
+    E = Example3(max_freq = 50,max_linewidth = 3.0)
+    E.run_Potapov(commensurate_roots = True)
+    T,T_1,roots1,vecs1 = E.get_outputs()
+
+    f = lambda z: la.det(T(z))
+    plot3D(f,N = 1000,x_min = 0., x_max = 3.0, y_min = -35.,y_max = 35.)
+    # plot3D(f2,N = 500000)
+
 
     ################
     ## Input/output plot for example 1
@@ -859,24 +905,24 @@ if __name__ == "__main__":
     ## Testing example 3 as above, but now using commensurate roots.
     ###########
 
-    L = 1000.
-    dx = 0.5
-    freqs = [300.,500.,800.,1000.]
-    T_ls = []; roots_ls = []; vecs_ls = []
-
-    for freq in freqs:
-        E = Example3(max_freq = freq)
-        E.run_Potapov(commensurate_roots=True)
-        T,T_,roots,vecs = E.get_outputs()
-        T_ls.append(T_)
-        roots_ls.append(roots)
-        vecs_ls.append(vecs)
-
-    labels = ['Original T'] + ['Potapov T of Order '+str(len(r))
-                                for r in roots_ls]
-    colors = ['b','r--','y--','m--','c--']
-
-    plot_all(L,dx,labels,colors,0.5,'figure_8_commensurate.pdf',T,*T_ls)
+    # L = 1000.
+    # dx = 0.5
+    # freqs = [300.,500.,800.,1000.]
+    # T_ls = []; roots_ls = []; vecs_ls = []
+    #
+    # for freq in freqs:
+    #     E = Example3(max_freq = freq)
+    #     E.run_Potapov(commensurate_roots=True)
+    #     T,T_,roots,vecs = E.get_outputs()
+    #     T_ls.append(T_)
+    #     roots_ls.append(roots)
+    #     vecs_ls.append(vecs)
+    #
+    # labels = ['Original T'] + ['Potapov T of Order '+str(len(r))
+    #                             for r in roots_ls]
+    # colors = ['b','r--','y--','m--','c--']
+    #
+    # plot_all(L,dx,labels,colors,0.5,'figure_8_commensurate.pdf',T,*T_ls)
 
 
     ################
