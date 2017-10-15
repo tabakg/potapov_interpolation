@@ -378,6 +378,8 @@ def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
             the values x_cent,y_cent,width, and height.
     '''
 
+    ret = 0
+    
     c = get_boundary(x_cent,y_cent,width,height,N)
     f_frac = lambda z: fp(z)/(2j*np.pi*f(z))
     y = [f_frac(z) for z in c]
@@ -388,7 +390,7 @@ def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
     for outlier_index in outliers:
         try:
             r = Muller(c[outlier_index-2], c[outlier_index+2],
-            (c[outlier_index])/2, f, verbose)
+            (c[outlier_index])/2, f, verbose=verbose)
             roots_near_boundary.append(r)
         except:
             pass
@@ -410,11 +412,13 @@ def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
     if I0 < 10:
         num_roots_interior = int(round(abs(I0)))
         if num_roots_interior == 0:
-            return inside_boundary(subtracted_roots,x_cent,y_cent,width,height)
-        if verbose:
-            if abs(num_roots_interior-I0)>0.005:
+            return ret, inside_boundary(subtracted_roots,x_cent,y_cent,width,height)
+        if abs(num_roots_interior-I0)>0.005:
+            ret = 1
+            if verbose:
                 print "Warning!! Number of roots may be imprecise for this N."
                 print "Increase N for greater precision."
+        if verbose:
             print "Approx number of roots in current rect = ", abs(I0)
         rough_roots = find_roots(y_smooth,c,num_roots_interior)
         Muller_all = np.vectorize(Muller)
@@ -423,7 +427,7 @@ def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
         ##TODO: catch error in case Muller diverges (unlikely for these points)
 
         interior_roots = purge(Muller_all(rough_roots-1e-5,rough_roots+1e-5,
-                        rough_roots,f,verbose).tolist())
+                        rough_roots,f,verbose=verbose).tolist())
 
         combined_roots = purge(roots_near_boundary + interior_roots)
     else:
@@ -436,12 +440,15 @@ def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
         y_list = [y_cent - height / 2.,y_cent + height / 2.,
                   y_cent - height / 2.,y_cent + height / 2.]
         for x,y in zip(x_list,y_list):
-            roots_from_subrectangle  = get_roots_rect(f,fp,x,y,
+            newRet, roots_from_subrectangle = get_roots_rect(f,fp,x,y,
                 width/2.,height/2.,N,outlier_coeff,
                 max_steps=max_steps-1,known_roots=combined_roots)
+            if ret == 0:
+                ret = newRet
             combined_roots = purge(combined_roots + roots_from_subrectangle)
     elif max_steps == 0:
+        ret = 2
         if verbose:
             print "max_steps exceeded. Some interior roots might be missing."
 
-    return inside_boundary(combined_roots,x_cent,y_cent,width,height)
+    return ret, inside_boundary(combined_roots,x_cent,y_cent,width,height)
