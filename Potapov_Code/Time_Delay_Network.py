@@ -119,7 +119,7 @@ class Time_Delay_Network():
         '''Generate the roots given the denominator of the transfer function.
 
         '''
-        self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,
+        ret, self.roots = Roots.get_roots_rect(self.T_denom,self.Tp_denom,
             -self.max_linewidth/2.,self.center_freq,
             self.max_linewidth/2.,self.max_freq,N=self.N)
         return
