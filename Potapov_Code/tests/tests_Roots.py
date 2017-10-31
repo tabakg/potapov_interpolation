@@ -98,7 +98,7 @@ def test_Roots_2():
         [-5.,-4.,-3.,-2.,-1.,-0.,1.,2.,3.,4.,5.] )
 
 def test_Poly_Roots(N, printRoots=False, printPolys=False, printParams=False, doubleOnWarning=False):
-    print "N=" + str(N)
+    print "\nN=" + str(N)
 
     coeff = []
     for n in range(N):
@@ -125,9 +125,10 @@ def test_Poly_Roots(N, printRoots=False, printPolys=False, printParams=False, do
 
     ret = -1
     while ret==-1 or (doubleOnWarning and ret!=0):
-        if ret == 1:
+        # Doubling is for test purposes.
+        if ret & Roots.warn_imprecise_roots:
             N *= 2
-        elif ret == 2:
+        elif ret & Roots.warn_max_steps_exceeded:
             max_steps *= 2
         if printParams:
             print "x_cent:" + str(x_cent)
@@ -136,7 +137,7 @@ def test_Poly_Roots(N, printRoots=False, printPolys=False, printParams=False, do
             print "height:" + str(height)
             print "N:" + str(N)
             print "max_steps:" + str(max_steps)
-        ret, roots_gil = Roots.get_roots_rect(f,fp,x_cent,y_cent,width,height,N,max_steps=max_steps,verbose=True)
+        ret, roots_gil = Roots.get_roots_rect(f,fp,x_cent,y_cent,width,height,N,max_steps=max_steps,verbose=False,summary=True)
     roots_gil = np.asarray(roots_gil)
     roots_gil = Roots.inside_boundary(roots_gil,x_cent,y_cent,width,height)
 
