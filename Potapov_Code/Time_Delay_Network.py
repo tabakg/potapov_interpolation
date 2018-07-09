@@ -599,21 +599,20 @@ class Example3(Time_Delay_Network):
 
         dim = 4
 
-        M1 = np.matrix([[0,-r1,0,0],
+        self.M1 = np.matrix([[0,-r1,0,0],
                         [-r2,0,t2,0],
                        [0,0,0,-r3],
                        [t2,0,r2,0]])
-        self.M1 = M1
 
-        M2 = np.matrix([[t1,0],
+        self.M2 = np.matrix([[t1,0],
                         [0,0],
                         [0,t3],
                         [0,0]])
 
-        M3 = np.matrix([[0,t1,0,0],
+        self.M3 = np.matrix([[0,t1,0,0],
                         [0,0,0,t3]])
 
-        M4 = np.matrix([[r1,0],
+        self.M4 = np.matrix([[r1,0],
                         [0,r3]])
 
         E = lambda z: np.matrix([[np.exp(-tau1*z),0,0,0],
@@ -622,9 +621,9 @@ class Example3(Time_Delay_Network):
                              [0,0,0,np.exp(-tau4*z)]])
         self.E = E
 
-        self.T_denom = lambda z: la.det(np.eye(dim) - M1*E(z))
+        self.T_denom = lambda z: la.det(np.eye(dim) - self.M1*E(z))
         self.Tp_denom = lambda z: der(self.T_denom,z)
-        self.T = lambda z: M3*E(z)*la.inv(np.eye(dim) - M1*E(z))*M2+M4
+        self.T = lambda z: self.M3*E(z)*la.inv(np.eye(dim) - self.M1*E(z))*self.M2+self.M4
 
 class Example4(Time_Delay_Network):
     '''

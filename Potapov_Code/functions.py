@@ -359,7 +359,7 @@ def make_normalized_inner_product_matrix(roots,modes,delays,eps=1e-12,
 def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
                                 start_nonlin,length_nonlin,plus_or_minus_arr,
                                 indices_of_refraction = None,
-                                eps=1e-12):
+                                eps=1e-5):
     '''
     This function takes several (say M) natural_freqs and their corresponding modes,
     as well as the (N) delay lengths of the network, and determines the term
@@ -377,9 +377,9 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
     the phase-mismatch delta_k. Otherwise we assume they are all equal to 1.
 
     Args:
-        natural_freqs (list of complex numbers):
+        natural_freqs (list of floats):
             The natural frequencies of the
-            various eigenmodes.
+            various eigenmodes (i.e. the imaginary component of each root).
 
         modes (list of column matrices):
             the amplitudes of the modes at
@@ -468,13 +468,13 @@ def make_nonlinear_interaction(natural_freqs, modes, delays, delay_indices,
     values_at_nodes = [m_vec[delay_index,0] for m_vec,delay_index
         in zip(modes,delay_indices)]
     delta_k = ( sum([n*omega*sign for n,omega,sign
-        in zip(indices_of_refraction,natural_freqs,plus_or_minus_arr)])
-        / consts.speed_of_light )
+        in zip(indices_of_refraction,natural_freqs,plus_or_minus_arr)]))
     const = np.prod([pick_conj(m*np.exp(-1j*delta_k*start_loc),sign)
             for m,sign,start_loc
             in zip(values_at_nodes,plus_or_minus_arr,start_nonlin)])
 
     if abs(delta_k) < eps: ## delta_k \approx 0
+        # print "delta_k is less than epsilon, approximating linearly."
         return const * length_nonlin
     else:
         return 1j*const*(np.exp(-1j*delta_k*length_nonlin) - 1 ) / delta_k

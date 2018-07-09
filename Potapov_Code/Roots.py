@@ -32,7 +32,7 @@ import math
 import cmath as cm
 from functions import limit
 
-def Muller(x1,x2,x3,f,tol = 1e-12,N=400,verbose=False):
+def Muller(x1,x2,x3,f,tol = 1e-5,N=400,verbose=False):
     '''
     A method that works well for finding roots locally in the complex plane.
     Uses three points for initial guess, x1,x2,x3.
@@ -228,7 +228,7 @@ def combine(eps=1e-5,*args):
     lst = list(chain(*args))
     return purge(lst, eps)
 
-def purge(lst,eps=1e-5):
+def purge(lst,eps=1e-14):
     '''
     Get rid of redundant elements in a list. There is a precision cutoff eps.
 
@@ -340,7 +340,7 @@ def find_maxes(y):
     return maxes
 
 def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
-    max_steps=5,known_roots=[],verbose=False):
+    max_steps=5,known_roots=None,verbose=False):
     '''
     I assume f is analytic with simple (i.e. order one) zeros.
 
@@ -393,6 +393,8 @@ def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
         except:
             pass
 
+    if known_roots is None:
+        known_roots=[]
     subtracted_roots = purge(roots_near_boundary+known_roots)
 
     ## we don't need the roots far outside the boundary
@@ -405,6 +407,8 @@ def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
                                 subtracted_roots,max_ok,y_el,verbose)
                                 for y_el,z_el in zip(y,c)]
     I0 = integrate.trapz(y_smooth, c)  ##approx number of roots not subtracted
+
+    print (I0)
 
     ## If there's only a few roots, find them.
     if I0 < 10:

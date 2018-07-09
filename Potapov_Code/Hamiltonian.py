@@ -343,6 +343,9 @@ class Hamiltonian():
             TODO: check units everywhere, including f versus \omega = f / 2 pi.
         '''
 
+        if isinstance(delay_indices, int):
+            delay_indices = [delay_indices]
+
         chi_nonlinearity = Chi_nonlin(delay_indices,start_nonlin,
                                    length_nonlin,refraction_index_func=refraction_index_func,
                                    chi_order=chi_order,chi_function=chi_function)
@@ -473,6 +476,7 @@ class Hamiltonian():
             Weight of E-field (float):
                 It has form:
                 :math:`[\hbar * \omega(n) / 2 V_{eff}(n) \epsilon]^{1/2}`.
+                Here we set \hbar = 1.
 
         '''
         omega = self.omegas[mode_index]
@@ -747,8 +751,6 @@ class Hamiltonian():
         Maybe utilize the _get_real_imag_func method in Time_Delay_Network.
 
         '''
-        if not hasattr(self,H):
-            raise Exception("Please define H to use move_to_rotating_frame")
         if type(freqs) in [float,long,int]:
             if freqs == 0.:
                 return
