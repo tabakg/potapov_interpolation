@@ -339,6 +339,53 @@ def find_maxes(y):
             maxes.append(i)
     return maxes
 
+def count_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
+    max_steps=5,known_roots=None,verbose=False):
+    '''
+    I assume f is analytic with simple (i.e. order one) zeros.
+
+    TODO:
+    save values along edges if iterating to a smaller rectangle
+    extend to other kinds of functions, e.g. function with non-simple zeros.
+
+    Args:
+        f (function): the function for which the roots (i.e. zeros) will be
+            found.
+
+        fp (function): the derivative of f.
+
+        x_cent,y_cent (floats): The center of the rectangle in the complex
+            plane.
+
+        width,height (floats): half the width and height of the rectangular
+            region.
+
+        N (optional[int]): Number of points to sample per edge
+
+        outlier_coeff (float): multiplier for coefficient used when subtracting
+            poles to improve numerical stability. See new_f_frac_safe.
+
+        max_step (optional[int]): Number of iterations allowed for algorithm to
+            repeat on smaller rectangles.
+
+        known roots (optional[list of complex numbers]): Roots of f that are
+            already known.
+
+        verbose (optional[boolean]): print warnings.
+
+    Returns:
+        A list of roots for the function f inside the rectangle determined by
+            the values x_cent,y_cent,width, and height.
+    '''
+
+    c = get_boundary(x_cent,y_cent,width,height,N)
+    f_frac = lambda z: fp(z)/(2j*np.pi*f(z))
+    y = [f_frac(z) for z in c]
+
+    I0 = integrate.trapz(y, c)  ##approx number of roots not subtracted
+
+    return I0
+
 def get_roots_rect(f,fp,x_cent,y_cent,width,height,N=10,outlier_coeff=100.,
     max_steps=5,known_roots=None,verbose=False):
     '''
