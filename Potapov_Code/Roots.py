@@ -106,7 +106,7 @@ def Muller(x1,x2,x3,f,tol=1e-12,N=400,verbose=False):
         if verbose:
             print ("Desired tolerance not reached. Please try different parameters in Muller "
                    "for better results.")
-    return converged, x
+    return x
 
 def residues(f_frac,roots):
     '''
